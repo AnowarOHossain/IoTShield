@@ -275,7 +275,7 @@ This project is developed for academic and research purposes under the **Shanto-
 
 This research and development effort is a part of the **Final Year Thesis Project** under the Department of Computer Science and Engineering (CSE).
 
-Special thanks to **Rabiul Sir** & **Tahsin Sir** for guidance in research methodology and documentation.
+Special thanks to **Tahsin Sir**, our thesis supervisor, for his invaluable guidance throughout the entire thesis journey — from topic planning and research methodology to thesis paper writing and documentation.
 
 ---
 
