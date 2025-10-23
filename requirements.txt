@@ -1,0 +1,65 @@
+# ==============================
+# IoTShield - Requirements File
+# Privacy-Preserving Real-Time Home Automation
+# Utilizing MQTT Protocol and Sensor Anomaly Detection with GenAI Integration
+# ==============================
+
+# --- Core Frameworks ---
+Django==5.1.1
+djangorestframework==3.15.2
+django-cors-headers==4.3.1
+channels==4.1.0
+asgiref==3.8.1
+
+# --- MQTT Communication ---
+paho-mqtt==1.6.1
+
+# --- Machine Learning & Data Processing ---
+numpy==1.26.4
+pandas==2.2.2
+scikit-learn==1.5.2
+joblib==1.4.2
+
+# --- Visualization / Dashboard Support ---
+matplotlib==3.9.2
+seaborn==0.13.2
+plotly==5.24.1
+
+# --- Privacy / Noise Generation ---
+scipy==1.14.1
+
+# --- Gemini API Integration ---
+requests==2.32.3
+google-generativeai==0.7.2   # Gemini API Python SDK
+
+# --- Environment / Utilities ---
+python-dotenv==1.0.1
+schedule==1.2.1
+psutil==6.0.0
+tqdm==4.66.5
+
+# --- Database Drivers (Optional) ---
+mysqlclient==2.2.4   # For MySQL
+# sqlite3 (built-in with Python)
+# psycopg2==2.9.9   # Uncomment for PostgreSQL support
+
+# --- Testing & Linting (Optional) ---
+pytest==8.3.3
+black==24.10.0
+
+# --- Edge / Raspberry Pi Support (Optional) ---
+gpiozero==2.0.1
+RPi.GPIO==0.7.1
+Adafruit-DHT==1.4.0
+
+# --- Security / Encryption ---
+cryptography==43.0.3
+pyOpenSSL==24.2.1
+
+# --- Deployment / Production ---
+gunicorn==23.0.0
+whitenoise==6.7.0
+
+# ==============================
+# End of IoTShield Requirements
+# ==============================
