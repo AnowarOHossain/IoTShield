@@ -7,7 +7,7 @@ from datetime import timedelta
 
 def get_device_statistics(device):
     """Get statistics for a specific device"""
-    from iotshield_backend.models import SensorData
+    from dashboard.models import SensorData
     
     stats = SensorData.objects.filter(device=device).aggregate(
         total_readings=Count('id'),
@@ -19,7 +19,7 @@ def get_device_statistics(device):
 
 def get_sensor_stats_by_type(sensor_type, hours=24):
     """Get statistics for a sensor type over time period"""
-    from iotshield_backend.models import SensorData
+    from dashboard.models import SensorData
     
     cutoff_time = timezone.now() - timedelta(hours=hours)
     
@@ -38,7 +38,7 @@ def get_sensor_stats_by_type(sensor_type, hours=24):
 
 def cleanup_old_data(days=30):
     """Remove sensor data older than specified days"""
-    from iotshield_backend.models import SensorData, SystemLog
+    from dashboard.models import SensorData, SystemLog
     
     cutoff_date = timezone.now() - timedelta(days=days)
     

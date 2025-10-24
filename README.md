@@ -8,7 +8,7 @@
 **IoTShield** is a smart home automation and monitoring system designed to provide **real-time, privacy-preserving data communication** and **AI-driven anomaly detection** using the **MQTT protocol**.  
 The system integrates **Generative AI (Gemini API)** to interpret and generate meaningful alerts from anomalies, ensuring an intelligent and secure home environment.
 
-IoTShield is developed as part of the **CSE Final Year Thesis Project** at **Shanto-Mariam University of Creative Technology**, under the supervision of **Tahsin Alam (Lecturer)**.
+IoTShield is developed as part of the **CSE Final Year Thesis Project** at **Shanto-Mariam University of Creative Technology**, under the supervision of **Tahsin Alam sir**.
 
 ---
 

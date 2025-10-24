@@ -1,5 +1,5 @@
 from django.contrib import admin
-from iotshield_backend.models import Device, SensorData, Alert, ControlCommand, SystemLog
+from dashboard.models import Device, SensorData, Alert, ControlCommand, SystemLog
 
 
 @admin.register(Device)

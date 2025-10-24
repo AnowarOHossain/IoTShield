@@ -8,7 +8,7 @@ from datetime import timedelta
 from django.db.models import Count, Avg
 import json
 
-from iotshield_backend.models import Device, SensorData, Alert, ControlCommand, SystemLog
+from dashboard.models import Device, SensorData, Alert, ControlCommand, SystemLog
 from iotshield_backend.mqtt_client import mqtt_client
 
 

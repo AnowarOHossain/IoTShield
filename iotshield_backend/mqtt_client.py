@@ -98,7 +98,7 @@ class IoTShieldMQTTClient:
         """Process incoming sensor data"""
         from .anomaly_detector import AnomalyDetector
         from .gemini_alerts import GeminiAlertGenerator
-        from .models import Device, SensorData, Alert
+        from dashboard.models import Device, SensorData, Alert
         
         try:
             # Get or create device

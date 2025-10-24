@@ -13,7 +13,7 @@ class IoTShieldLogger:
     
     def log_to_db(self, level, module, message, details=None):
         """Log message to database"""
-        from iotshield_backend.models import SystemLog
+        from dashboard.models import SystemLog
         
         try:
             SystemLog.objects.create(
