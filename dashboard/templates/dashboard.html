@@ -7,11 +7,41 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        .card { @apply bg-white rounded-lg shadow-md p-6 mb-4; }
-        .alert-critical { @apply bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-2; }
-        .alert-high { @apply bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4 mb-2; }
-        .alert-medium { @apply bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-2; }
-        .alert-low { @apply bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 mb-2; }
+        .card {
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .alert-critical {
+            background-color: #fee2e2;
+            border-left: 4px solid #ef4444;
+            color: #b91c1c;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        .alert-high {
+            background-color: #ffedd5;
+            border-left: 4px solid #f97316;
+            color: #c2410c;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        .alert-medium {
+            background-color: #fef3c7;
+            border-left: 4px solid #eab308;
+            color: #a16207;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        .alert-low {
+            background-color: #dbeafe;
+            border-left: 4px solid #3b82f6;
+            color: #1e40af;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+        }
     </style>
 </head>
 <body class="bg-gray-100">
