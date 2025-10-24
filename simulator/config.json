@@ -1,0 +1,52 @@
+{
+  "device": {
+    "device_id": "ESP32_SIM_001",
+    "device_name": "Living Room Sensor Hub",
+    "device_type": "SIMULATOR",
+    "location": "Living Room",
+    "publish_interval": 5
+  },
+  "mqtt": {
+    "broker_host": "localhost",
+    "broker_port": 1883,
+    "username": "",
+    "password": "",
+    "topic_sensors": "iotshield/sensors/data",
+    "topic_control": "iotshield/control/commands"
+  },
+  "privacy": {
+    "enable_noise": true,
+    "noise_epsilon": 0.5,
+    "noise_type": "gaussian"
+  },
+  "sensors": {
+    "temperature": {
+      "base_value": 25,
+      "variance": 3,
+      "anomaly_chance": 0.05
+    },
+    "humidity": {
+      "base_value": 60,
+      "variance": 10,
+      "anomaly_chance": 0.05
+    },
+    "gas": {
+      "base_value": 0.1,
+      "variance": 0.05,
+      "anomaly_chance": 0.02
+    },
+    "flame": {
+      "base_value": 0,
+      "anomaly_chance": 0.01
+    },
+    "motion": {
+      "base_value": 0,
+      "activity_chance": 0.3
+    },
+    "light": {
+      "base_value": 300,
+      "variance": 100,
+      "anomaly_chance": 0.03
+    }
+  }
+}

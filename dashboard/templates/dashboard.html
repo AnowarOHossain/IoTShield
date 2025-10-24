@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IoTShield - Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .card { @apply bg-white rounded-lg shadow-md p-6 mb-4; }
+        .alert-critical { @apply bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-2; }
+        .alert-high { @apply bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4 mb-2; }
+        .alert-medium { @apply bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-2; }
+        .alert-low { @apply bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 mb-2; }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <!-- Navigation -->
+    <nav class="bg-blue-600 text-white p-4 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center">
+                <span class="text-2xl font-bold">🛡️ IoTShield</span>
+                <span class="ml-4 text-sm">Privacy-Preserving IoT Monitoring</span>
+            </div>
+            <div class="space-x-4">
+                <a href="/" class="hover:text-blue-200">Dashboard</a>
+                <a href="/devices/" class="hover:text-blue-200">Devices</a>
+                <a href="/alerts/" class="hover:text-blue-200">Alerts</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-8">
+        <!-- Statistics Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="card">
+                <h3 class="text-gray-500 text-sm font-medium">Active Devices</h3>
+                <p class="text-3xl font-bold text-blue-600" id="total-devices">{{ total_devices|default:0 }}</p>
+            </div>
+            <div class="card">
+                <h3 class="text-gray-500 text-sm font-medium">Total Readings (24h)</h3>
+                <p class="text-3xl font-bold text-green-600" id="total-readings">{{ recent_readings|default:0 }}</p>
+            </div>
+            <div class="card">
+                <h3 class="text-gray-500 text-sm font-medium">Active Alerts</h3>
+                <p class="text-3xl font-bold text-red-600" id="total-alerts">{{ total_alerts|default:0 }}</p>
+            </div>
+            <div class="card">
+                <h3 class="text-gray-500 text-sm font-medium">System Status</h3>
+                <p class="text-3xl font-bold text-green-600">✓ Online</p>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div class="card">
+                <h3 class="text-lg font-semibold mb-4">Sensor Readings (24h)</h3>
+                <canvas id="sensorChart"></canvas>
+            </div>
+            <div class="card">
+                <h3 class="text-lg font-semibold mb-4">Alerts by Severity</h3>
+                <canvas id="alertsChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Recent Alerts -->
+        <div class="card">
+            <h3 class="text-lg font-semibold mb-4">Recent Alerts</h3>
+            <div id="recent-alerts">
+                {% if recent_alerts %}
+                    {% for alert in recent_alerts %}
+                    <div class="alert-{{ alert.severity|lower }}">
+                        <p class="font-bold">{{ alert.title }}</p>
+                        <p class="text-sm">{{ alert.description }}</p>
+                        {% if alert.ai_suggestion %}
+                        <p class="text-sm mt-2"><strong>AI Suggestion:</strong> {{ alert.ai_suggestion }}</p>
+                        {% endif %}
+                        <p class="text-xs mt-2 text-gray-600">{{ alert.created_at|date:"Y-m-d H:i:s" }}</p>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-gray-500">No recent alerts. System is operating normally.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Fetch and update data periodically
+        function updateDashboard() {
+            fetch('/api/stats/summary/')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('total-devices').textContent = data.total_devices;
+                    document.getElementById('total-readings').textContent = data.total_readings;
+                    document.getElementById('total-alerts').textContent = data.total_anomalies;
+                });
+
+            fetch('/api/alerts/list/?limit=10')
+                .then(response => response.json())
+                .then(data => {
+                    const alertsContainer = document.getElementById('recent-alerts');
+                    if (data.alerts.length === 0) {
+                        alertsContainer.innerHTML = '<p class="text-gray-500">No recent alerts. System is operating normally.</p>';
+                    } else {
+                        alertsContainer.innerHTML = data.alerts.map(alert => `
+                            <div class="alert-${alert.severity.toLowerCase()}">
+                                <p class="font-bold">${alert.title}</p>
+                                <p class="text-sm">${alert.description}</p>
+                                ${alert.ai_suggestion ? `<p class="text-sm mt-2"><strong>AI Suggestion:</strong> ${alert.ai_suggestion}</p>` : ''}
+                                <p class="text-xs mt-2 text-gray-600">${new Date(alert.created_at).toLocaleString()}</p>
+                            </div>
+                        `).join('');
+                    }
+                });
+        }
+
+        // Initialize charts
+        const sensorCtx = document.getElementById('sensorChart').getContext('2d');
+        const sensorChart = new Chart(sensorCtx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Temperature',
+                    data: [],
+                    borderColor: 'rgb(255, 99, 132)',
+                    tension: 0.1
+                }, {
+                    label: 'Humidity',
+                    data: [],
+                    borderColor: 'rgb(54, 162, 235)',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        const alertsCtx = document.getElementById('alertsChart').getContext('2d');
+        const alertsChart = new Chart(alertsCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Critical', 'High', 'Medium', 'Low'],
+                datasets: [{
+                    data: [0, 0, 0, 0],
+                    backgroundColor: [
+                        'rgb(239, 68, 68)',
+                        'rgb(249, 115, 22)',
+                        'rgb(234, 179, 8)',
+                        'rgb(59, 130, 246)'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+
+        // Update dashboard every 5 seconds
+        setInterval(updateDashboard, 5000);
+        updateDashboard();
+    </script>
+</body>
+</html>
