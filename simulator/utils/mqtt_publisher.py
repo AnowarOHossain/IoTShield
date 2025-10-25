@@ -39,17 +39,17 @@ class MQTTPublisher:
     
     def on_connect(self, client, userdata, flags, reason_code, properties):
         """Callback when connected"""
-        if reason_code == 0:
-            self.is_connected = True
-            logger.info("Successfully connected to MQTT broker")
-        else:
+        if reason_code.is_failure:
             logger.error(f"Failed to connect. Reason code: {reason_code}")
             self.is_connected = False
+        else:
+            self.is_connected = True
+            logger.info("Successfully connected to MQTT broker")
     
     def on_disconnect(self, client, userdata, flags, reason_code, properties):
         """Callback when disconnected"""
         self.is_connected = False
-        if reason_code != 0:
+        if reason_code is not None and reason_code.is_failure:
             logger.warning(f"Unexpected disconnection. Reason code: {reason_code}")
     
     def on_publish(self, client, userdata, mid, reason_code, properties):

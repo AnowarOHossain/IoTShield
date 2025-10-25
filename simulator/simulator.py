@@ -7,7 +7,7 @@ import time
 import random
 import logging
 import os
-from datetime import datetime
+from datetime import datetime, timezone
 import paho.mqtt.client as mqtt
 
 # Import simulator utilities
@@ -107,7 +107,7 @@ class IoTDeviceSimulator:
                 'value': value,
                 'unit': unit,
                 'location': self.location,
-                'timestamp': datetime.now().isoformat()
+                'timestamp': datetime.now(timezone.utc).isoformat()
             }
             
             # Publish to MQTT

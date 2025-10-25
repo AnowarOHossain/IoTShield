@@ -48,7 +48,10 @@ class IoTShieldMQTTClient:
     
     def on_connect(self, client, userdata, flags, reason_code, properties):
         """Callback when connected to broker"""
-        if reason_code == 0:
+        if reason_code.is_failure:
+            logger.error(f"Failed to connect to MQTT broker. Reason code: {reason_code}")
+            self.is_connected = False
+        else:
             self.is_connected = True
             logger.info("Successfully connected to MQTT broker")
             
@@ -61,14 +64,11 @@ class IoTShieldMQTTClient:
             for topic, qos in topics:
                 client.subscribe(topic, qos)
                 logger.info(f"Subscribed to topic: {topic}")
-        else:
-            logger.error(f"Failed to connect to MQTT broker. Reason code: {reason_code}")
-            self.is_connected = False
     
     def on_disconnect(self, client, userdata, flags, reason_code, properties):
         """Callback when disconnected from broker"""
         self.is_connected = False
-        if reason_code != 0:
+        if reason_code is not None and reason_code.is_failure:
             logger.warning(f"Unexpected disconnection from MQTT broker. Reason code: {reason_code}")
         else:
             logger.info("Cleanly disconnected from MQTT broker")

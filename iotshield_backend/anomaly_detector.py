@@ -87,9 +87,10 @@ class AnomalyDetector:
     
     def extract_features(self, sensor_data):
         """Extract features from sensor data for anomaly detection"""
-        from .models import SensorData
-        
         try:
+            # Import here to avoid circular import
+            from dashboard.models import SensorData
+            
             # Get historical data for the same sensor type
             historical_data = SensorData.objects.filter(
                 device=sensor_data.device,

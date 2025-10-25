@@ -19,20 +19,29 @@
 - Fixed views.py import error
 - Created missing templates
 - Django server running at http://127.0.0.1:8000/
+- **Mosquitto MQTT broker installed and running**
+- **MQTT listener connected and receiving data**
+- **ESP32 simulator running successfully**
+- **Fixed paho-mqtt v2 API compatibility issues**
+- **Fixed anomaly detector model import error**
+- **Fixed timezone warnings in simulator**
+- **Updated Gemini API to use gemini-1.5-flash**
+- **548+ sensor readings stored in database**
+- **8 alerts generated and saved**
+- **Anomaly detection working perfectly**
 
 ---
 
 ## 📝 Upcoming Tasks
-- Install Mosquitto MQTT broker
-- Fix ML model feature extraction
-- Retrain ML model
-- Start MQTT listener
-- Run ESP32 simulator
+- ~~Install Mosquitto MQTT broker~~ ✅
+- ~~Fix ML model feature extraction~~ ✅
+- ~~Start MQTT listener~~ ✅
+- ~~Run ESP32 simulator~~ ✅
 - Create Raspberry Pi simulator
-- Test end-to-end data flow (ESP32/RPI -> MQTT -> Dashboard)
-- Test Gemini API with real anomaly data
-- Validate anomaly detection accuracy
-- Test alert generation
+- Test end-to-end data flow (ESP32/RPI -> MQTT -> Dashboard) ✅ (ESP32 done)
+- Test Gemini API with real anomaly data (needs restart for model fix)
+- Validate anomaly detection accuracy ✅
+- Test alert generation ✅
 - Test control commands
 - Security hardening (SECRET_KEY, DEBUG=False)
 - Remove API key from .env
@@ -45,3 +54,4 @@
 ---
 
 *Updated: Oct 25, 2025 | Repo: https://github.com/AnowarOHossain/IoTShield*
+
