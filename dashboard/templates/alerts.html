@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IoTShield - Alerts</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .card {
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .alert-critical {
+            background-color: #fee2e2;
+            border-left: 4px solid #ef4444;
+            color: #b91c1c;
+        }
+        .alert-high {
+            background-color: #ffedd5;
+            border-left: 4px solid #f97316;
+            color: #c2410c;
+        }
+        .alert-medium {
+            background-color: #fef3c7;
+            border-left: 4px solid #eab308;
+            color: #a16207;
+        }
+        .alert-low {
+            background-color: #dbeafe;
+            border-left: 4px solid #3b82f6;
+            color: #1e40af;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <!-- Navigation -->
+    <nav class="bg-blue-600 text-white p-4 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center">
+                <span class="text-2xl font-bold">🛡️ IoTShield</span>
+                <span class="ml-4 text-sm">Privacy-Preserving IoT Monitoring</span>
+            </div>
+            <div class="space-x-4">
+                <a href="/" class="hover:text-blue-200">Dashboard</a>
+                <a href="/devices/" class="hover:text-blue-200">Devices</a>
+                <a href="/alerts/" class="hover:text-blue-200 font-bold">Alerts</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-8">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-3xl font-bold">Security Alerts</h1>
+            <div class="space-x-2">
+                <button onclick="filterAlerts('all')" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded">All</button>
+                <button onclick="filterAlerts('CRITICAL')" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">Critical</button>
+                <button onclick="filterAlerts('HIGH')" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded">High</button>
+                <button onclick="filterAlerts('MEDIUM')" class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded">Medium</button>
+                <button onclick="filterAlerts('LOW')" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">Low</button>
+            </div>
+        </div>
+
+        <!-- Alerts List -->
+        <div id="alerts-container">
+            {% if alerts %}
+                {% for alert in alerts %}
+                <div class="card alert-{{ alert.severity|lower }}">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-xl font-bold">{{ alert.title }}</h3>
+                        <span class="font-semibold">{{ alert.severity }}</span>
+                    </div>
+                    <p class="mb-2">{{ alert.description }}</p>
+                    {% if alert.ai_suggestion %}
+                    <p class="mb-2"><strong>AI Suggestion:</strong> {{ alert.ai_suggestion }}</p>
+                    {% endif %}
+                    <div class="text-sm text-gray-700 mt-4">
+                        <p><strong>Sensor:</strong> {{ alert.sensor_data.sensor_type }}</p>
+                        <p><strong>Device:</strong> {{ alert.sensor_data.device.name }}</p>
+                        <p><strong>Status:</strong> {{ alert.status }}</p>
+                        <p><strong>Created:</strong> {{ alert.created_at|date:"Y-m-d H:i:s" }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="card">
+                    <p class="text-gray-500 text-center py-8">No alerts found. System is operating normally.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        let currentFilter = 'all';
+
+        function filterAlerts(severity) {
+            currentFilter = severity;
+            loadAlerts();
+        }
+
+        function loadAlerts() {
+            const url = currentFilter === 'all' 
+                ? '/api/alerts/list/?limit=100'
+                : `/api/alerts/list/?severity=${currentFilter}&limit=100`;
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById('alerts-container');
+                    if (data.alerts.length === 0) {
+                        container.innerHTML = `
+                            <div class="card">
+                                <p class="text-gray-500 text-center py-8">No alerts found. System is operating normally.</p>
+                            </div>
+                        `;
+                    } else {
+                        container.innerHTML = data.alerts.map(alert => `
+                            <div class="card alert-${alert.severity.toLowerCase()}">
+                                <div class="flex justify-between items-start mb-2">
+                                    <h3 class="text-xl font-bold">${alert.title}</h3>
+                                    <span class="font-semibold">${alert.severity}</span>
+                                </div>
+                                <p class="mb-2">${alert.description}</p>
+                                ${alert.ai_suggestion ? `<p class="mb-2"><strong>AI Suggestion:</strong> ${alert.ai_suggestion}</p>` : ''}
+                                <div class="text-sm text-gray-700 mt-4">
+                                    <p><strong>Sensor:</strong> ${alert.sensor_type}</p>
+                                    <p><strong>Device:</strong> ${alert.device_name}</p>
+                                    <p><strong>Status:</strong> ${alert.status}</p>
+                                    <p><strong>Created:</strong> ${new Date(alert.created_at).toLocaleString()}</p>
+                                </div>
+                            </div>
+                        `).join('');
+                    }
+                });
+        }
+
+        // Auto-refresh every 10 seconds
+        setInterval(loadAlerts, 10000);
+    </script>
+</body>
+</html>

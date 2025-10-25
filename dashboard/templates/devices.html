@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IoTShield - Devices</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .card {
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .device-active {
+            background-color: #dcfce7;
+            border-left: 4px solid #16a34a;
+        }
+        .device-inactive {
+            background-color: #fee2e2;
+            border-left: 4px solid #ef4444;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <!-- Navigation -->
+    <nav class="bg-blue-600 text-white p-4 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center">
+                <span class="text-2xl font-bold">🛡️ IoTShield</span>
+                <span class="ml-4 text-sm">Privacy-Preserving IoT Monitoring</span>
+            </div>
+            <div class="space-x-4">
+                <a href="/" class="hover:text-blue-200">Dashboard</a>
+                <a href="/devices/" class="hover:text-blue-200 font-bold">Devices</a>
+                <a href="/alerts/" class="hover:text-blue-200">Alerts</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-6">IoT Devices</h1>
+
+        <!-- Devices List -->
+        <div id="devices-container">
+            {% if devices %}
+                {% for device in devices %}
+                <div class="card {% if device.is_active %}device-active{% else %}device-inactive{% endif %}">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-xl font-bold">{{ device.name }}</h3>
+                            <p class="text-gray-600"><strong>Device ID:</strong> {{ device.device_id }}</p>
+                            <p class="text-gray-600"><strong>Type:</strong> {{ device.device_type }}</p>
+                            <p class="text-gray-600"><strong>Location:</strong> {{ device.location }}</p>
+                            <p class="text-gray-600"><strong>Last Seen:</strong> {{ device.last_seen|date:"Y-m-d H:i:s" }}</p>
+                        </div>
+                        <div>
+                            {% if device.is_active %}
+                                <span class="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-semibold">Active</span>
+                            {% else %}
+                                <span class="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold">Inactive</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="card">
+                    <p class="text-gray-500 text-center py-8">No devices registered yet. Start the IoT simulator or register devices via admin panel.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        // Auto-refresh devices list every 10 seconds
+        function refreshDevices() {
+            fetch('/api/devices/list/')
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById('devices-container');
+                    if (data.devices.length === 0) {
+                        container.innerHTML = `
+                            <div class="card">
+                                <p class="text-gray-500 text-center py-8">No devices registered yet. Start the IoT simulator or register devices via admin panel.</p>
+                            </div>
+                        `;
+                    } else {
+                        container.innerHTML = data.devices.map(device => `
+                            <div class="card ${device.is_active ? 'device-active' : 'device-inactive'}">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <h3 class="text-xl font-bold">${device.name}</h3>
+                                        <p class="text-gray-600"><strong>Device ID:</strong> ${device.device_id}</p>
+                                        <p class="text-gray-600"><strong>Type:</strong> ${device.type}</p>
+                                        <p class="text-gray-600"><strong>Location:</strong> ${device.location}</p>
+                                        <p class="text-gray-600"><strong>Last Seen:</strong> ${new Date(device.last_seen).toLocaleString()}</p>
+                                        <p class="text-gray-600"><strong>Readings (24h):</strong> ${device.total_readings_24h}</p>
+                                        <p class="text-gray-600"><strong>Anomalies (24h):</strong> ${device.anomalies_24h}</p>
+                                    </div>
+                                    <div>
+                                        ${device.is_active 
+                                            ? '<span class="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-semibold">Active</span>'
+                                            : '<span class="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold">Inactive</span>'
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('');
+                    }
+                });
+        }
+
+        // Refresh every 10 seconds
+        setInterval(refreshDevices, 10000);
+    </script>
+</body>
+</html>

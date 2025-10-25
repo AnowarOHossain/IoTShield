@@ -5,7 +5,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 from datetime import timedelta
-from django.db.models import Count, Avg
+from django.db.models import Count, Avg, Q
 import json
 
 from dashboard.models import Device, SensorData, Alert, ControlCommand, SystemLog
@@ -178,7 +178,7 @@ def api_stats_summary(request):
     ).values('sensor_type').annotate(
         avg_value=Avg('value'),
         count=Count('id'),
-        anomalies=Count('id', filter=models.Q(is_anomaly=True))
+        anomalies=Count('id', filter=Q(is_anomaly=True))
     )
     
     summary = {
