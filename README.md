@@ -645,8 +645,8 @@ All rights reserved © 2025 Anowar Hossain & Shihab Sarker
 - 🎓 CSE Student, SMUCT
 - 💻 Full-Stack Developer
 - 📧 Email: anowarhossain.dev@gmail.com
-- 🐱 GitHub: [@AnowarOHossain](https://github.com/AnowarOHossain)
-- 🔗 LinkedIn: [Anowar Hossain](https://www.linkedin.com/in/anowarhossain/)
+- 🐱 GitHub: [Anowar Hossain](https://github.com/AnowarOHossain)
+- 🔗 LinkedIn: [Anowar Hossain](https://www.linkedin.com/in/anowarohossain/)
 
 **Shihab Sarker**
 - 🎓 CSE Student, SMUCT
@@ -691,15 +691,15 @@ We would like to express our deepest gratitude to:
 
 | Phase | Timeline | Status |
 |-------|----------|--------|
-| **Planning & Research** | Aug 2024 | ✅ Complete |
-| **System Design** | Sep 2024 | ✅ Complete |
-| **Backend Development** | Oct 2024 | ✅ Complete |
-| **ML Model Training** | Nov 2024 | ✅ Complete |
-| **Dashboard Implementation** | Dec 2024 | ✅ Complete |
-| **Integration & Testing** | Jan 2025 | ✅ Complete |
-| **Documentation** | Feb 2025 | 🔄 In Progress |
-| **Thesis Writing** | Mar 2025 | 📅 Planned |
-| **Final Presentation** | Apr 2025 | 📅 Planned |
+| **Planning & Research** | Sep 2025 | ✅ Complete |
+| **System Design** | Oct 2025 | ✅ Complete |
+| **Backend Development** | Oct 2025 | ✅ Complete |
+| **ML Model Training** | Oct 2025 | ✅ Complete |
+| **Dashboard Implementation** | Oct 2025 | ✅ Complete |
+| **Integration & Testing** | Oct 2025 | ✅ Complete |
+| **Documentation** | Nov 2025 | 🔄 In Progress |
+| **Thesis Writing** | Dec 2025 | 📅 Planned |
+| **Final Presentation** | Jan 2026 | 📅 Planned |
 
 ---
 
