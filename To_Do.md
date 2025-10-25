@@ -1,6 +1,48 @@
 # 📋 IoTShield - To-Do List
 
-## ⚠️ System Status (Oct 25, 2025)
+## ✅ Completed Tasks
+- Django project setup with all models
+- Database migrations applied
+- Admin user created (username: anowar)
+- Dashboard UI with Tailwind CSS + Chart.js
+- Devices page
+- Alerts page
+- REST API endpoints
+- MQTT client implementation
+- Anomaly detection engine (Isolation Forest)
+- Gemini AI integration
+- Privacy-preserving mechanism
+- IoT simulator code
+- ML model trained with 10k dataset
+- Jupyter notebook for analysis
+- Model evaluation script
+- Fixed views.py import error
+- Created missing templates
+- Django server running at http://127.0.0.1:8000/
+
+---
+
+## 📝 Upcoming Tasks
+- Install Mosquitto MQTT broker
+- Fix ML model feature extraction
+- Retrain ML model
+- Start MQTT listener
+- Run IoT simulator
+- Test Gemini API with real data
+- Test end-to-end data flow
+- Validate anomaly detection
+- Test alert generation
+- Security hardening (SECRET_KEY, DEBUG=False)
+- Remove API key from .env
+- Enable MQTT TLS/SSL
+- Switch to PostgreSQL (production)
+- Email/SMS notifications
+- Hardware integration (ESP32)
+- Production deployment
+
+---
+
+*Updated: Oct 25, 2025 | Repo: https://github.com/AnowarOHossain/IoTShield*
 - ✅ Django Server: http://127.0.0.1:8000/ (Working)
 - ✅ Dashboard, Devices, Alerts pages (Working)
 - ✅ Admin Panel: /admin/ (username: anowar)
