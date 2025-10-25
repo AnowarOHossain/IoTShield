@@ -26,17 +26,15 @@ def generate_training_data(n_samples=10000):
     normal_light = np.random.normal(300, 100, int(n_samples * 0.9))
     
     # Anomalous data (10%)
-    anomaly_temp = np.random.choice([
-        np.random.uniform(40, 50, int(n_samples * 0.05)),
-        np.random.uniform(5, 15, int(n_samples * 0.05))
-    ]).flatten()
+    anomaly_temp_high = np.random.uniform(40, 50, int(n_samples * 0.05))
+    anomaly_temp_low = np.random.uniform(5, 15, int(n_samples * 0.05))
+    anomaly_temp = np.concatenate([anomaly_temp_high, anomaly_temp_low])
     
     anomaly_humidity = np.random.uniform(85, 95, int(n_samples * 0.1))
     anomaly_gas = np.random.uniform(0.7, 0.95, int(n_samples * 0.1))
-    anomaly_light = np.random.choice([
-        np.random.uniform(0, 50, int(n_samples * 0.05)),
-        np.random.uniform(900, 1500, int(n_samples * 0.05))
-    ]).flatten()
+    anomaly_light_low = np.random.uniform(0, 50, int(n_samples * 0.05))
+    anomaly_light_high = np.random.uniform(900, 1500, int(n_samples * 0.05))
+    anomaly_light = np.concatenate([anomaly_light_low, anomaly_light_high])
     
     # Combine normal and anomalous data
     temperature = np.concatenate([normal_temp, anomaly_temp])
