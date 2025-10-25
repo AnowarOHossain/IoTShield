@@ -2,14 +2,22 @@
 
 import random
 import json
+import os
 
 
 class SensorSimulator:
     """Simulates various IoT sensors"""
     
     def __init__(self, config_file='config.json'):
-        with open(config_file, 'r') as f:
-            config = json.load(f)
+        # Handle both string path and dict config
+        if isinstance(config_file, dict):
+            config = config_file
+        else:
+            # If it's a relative path, make it relative to simulator directory
+            if not os.path.isabs(config_file):
+                config_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), config_file)
+            with open(config_file, 'r') as f:
+                config = json.load(f)
         
         self.sensor_config = config.get('sensors', {})
         self.privacy_config = config.get('privacy', {})

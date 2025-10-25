@@ -13,7 +13,7 @@ class MQTTPublisher:
     def __init__(self, broker_host, broker_port, client_id):
         self.broker_host = broker_host
         self.broker_port = broker_port
-        self.client = mqtt.Client(client_id=client_id)
+        self.client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, client_id=client_id)
         
         self.client.on_connect = self.on_connect
         self.client.on_disconnect = self.on_disconnect
@@ -37,22 +37,22 @@ class MQTTPublisher:
         self.client.disconnect()
         logger.info("Disconnected from MQTT broker")
     
-    def on_connect(self, client, userdata, flags, rc):
+    def on_connect(self, client, userdata, flags, reason_code, properties):
         """Callback when connected"""
-        if rc == 0:
+        if reason_code == 0:
             self.is_connected = True
             logger.info("Successfully connected to MQTT broker")
         else:
-            logger.error(f"Failed to connect. Return code: {rc}")
+            logger.error(f"Failed to connect. Reason code: {reason_code}")
             self.is_connected = False
     
-    def on_disconnect(self, client, userdata, rc):
+    def on_disconnect(self, client, userdata, flags, reason_code, properties):
         """Callback when disconnected"""
         self.is_connected = False
-        if rc != 0:
-            logger.warning(f"Unexpected disconnection. Return code: {rc}")
+        if reason_code != 0:
+            logger.warning(f"Unexpected disconnection. Reason code: {reason_code}")
     
-    def on_publish(self, client, userdata, mid):
+    def on_publish(self, client, userdata, mid, reason_code, properties):
         """Callback when message published"""
         logger.debug(f"Message {mid} published")
     

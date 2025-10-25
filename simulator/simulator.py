@@ -6,6 +6,7 @@ import json
 import time
 import random
 import logging
+import os
 from datetime import datetime
 import paho.mqtt.client as mqtt
 
@@ -15,7 +16,8 @@ from utils.mqtt_publisher import MQTTPublisher
 from utils.logger import setup_logger
 
 # Load configuration
-with open('config.json', 'r') as f:
+config_path = os.path.join(os.path.dirname(__file__), 'config.json')
+with open(config_path, 'r') as f:
     config = json.load(f)
 
 # Setup logging
@@ -31,8 +33,8 @@ class IoTDeviceSimulator:
         self.device_type = device_config.get('device_type', 'SIMULATOR')
         self.location = device_config.get('location', 'Unknown')
         
-        # Initialize sensors
-        self.sensor_simulator = SensorSimulator()
+        # Initialize sensors - pass config dict
+        self.sensor_simulator = SensorSimulator(config)
         
         # Initialize MQTT publisher
         self.mqtt_publisher = MQTTPublisher(
@@ -54,6 +56,10 @@ class IoTDeviceSimulator:
         
         # Connect to MQTT broker
         self.mqtt_publisher.connect()
+        
+        # Wait for connection to establish
+        logger.info("Waiting for MQTT connection...")
+        time.sleep(2)  # Give time for async connection
         
         try:
             while self.is_running:
