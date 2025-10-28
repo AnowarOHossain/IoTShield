@@ -31,7 +31,6 @@ IoTShield is developed as part of the **CSE Final Year Thesis Project** at **Sha
 | **Team Members** | Anowar Hossain & Shihab Sarker |
 | **Supervisor** | Tahsin Alam, Lecturer |
 | **Institution** | Shanto-Mariam University of Creative Technology |
-| **Thesis Instructor** | Rabiul Sir |
 | **Base Paper** | [Internet of Things-based Home Automation with Network Mapper and MQTT Protocol (Elsevier, 2024)](https://www.sciencedirect.com/science/article/pii/S0045790624007341) |
 
 ---
@@ -664,8 +663,6 @@ All rights reserved © 2025 Anowar Hossain & Shihab Sarker
 We would like to express our deepest gratitude to:
 
 - **Tahsin Alam Sir** - Our thesis supervisor, for his exceptional guidance, continuous support, and invaluable insights throughout the entire thesis journey — from initial topic selection and research methodology to implementation, thesis paper writing, and documentation.
-
-- **Rabiul Sir** - Our thesis instructor, for his constructive feedback and academic guidance.
 
 - **Department of CSE, SMUCT** - For providing resources and support for this research project.
 
