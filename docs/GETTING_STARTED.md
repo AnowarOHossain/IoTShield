@@ -1,6 +1,6 @@
 # IoTShield - Getting Started Guide
 
-## 🚀 Quick Start
+##  Quick Start
 
 ### 1. Install Dependencies
 
@@ -69,7 +69,7 @@ cd simulator
 python simulator.py
 ```
 
-## 📊 System Components
+##  System Components
 
 1. **Django Backend** - Main application server
 2. **MQTT Broker** - Message queue for IoT communication
@@ -77,7 +77,7 @@ python simulator.py
 4. **Dashboard** - Web interface for monitoring
 5. **ML Engine** - Anomaly detection
 
-## 🔧 Troubleshooting
+##  Troubleshooting
 
 ### MQTT Connection Issues
 - Ensure Mosquitto is running
@@ -93,7 +93,7 @@ python simulator.py
 - Run migrations: `python manage.py migrate`
 - Delete `db.sqlite3` and recreate
 
-## 📚 Next Steps
+##  Next Steps
 
 - Configure real ESP32 devices
 - Setup Raspberry Pi edge gateway
@@ -101,6 +101,6 @@ python simulator.py
 - Configure SSL/TLS for MQTT
 - Setup automated backups
 
-## 🆘 Support
+##  Support
 
 For issues, contact: anowarhossain.dev@gmail.com

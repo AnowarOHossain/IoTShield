@@ -21,7 +21,7 @@ class Command(BaseCommand):
             # Connect to MQTT broker
             mqtt_client.connect()
             
-            self.stdout.write(self.style.SUCCESS('✓ MQTT listener is running'))
+            self.stdout.write(self.style.SUCCESS('MQTT listener is running'))
             self.stdout.write(self.style.WARNING('Press Ctrl+C to stop'))
             
             # Keep running
@@ -31,7 +31,7 @@ class Command(BaseCommand):
         except KeyboardInterrupt:
             self.stdout.write(self.style.WARNING('\nStopping MQTT listener...'))
             mqtt_client.disconnect()
-            self.stdout.write(self.style.SUCCESS('✓ MQTT listener stopped'))
+            self.stdout.write(self.style.SUCCESS('MQTT listener stopped'))
         
         except Exception as e:
             self.stdout.write(self.style.ERROR(f'Error: {e}'))

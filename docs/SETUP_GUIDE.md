@@ -1,6 +1,6 @@
 # IoTShield - Complete Setup and Testing Guide
 
-## 📋 Prerequisites
+##  Prerequisites
 
 - Python 3.10 or higher
 - pip (Python package manager)
@@ -9,7 +9,7 @@
 
 ---
 
-## 🛠️ Complete Setup Instructions
+##  Complete Setup Instructions
 
 ### Step 1: Install Mosquitto MQTT Broker
 
@@ -93,7 +93,7 @@ cd ..
 
 ---
 
-## 🚀 Running the System
+##  Running the System
 
 ### Terminal 1: Start MQTT Broker
 ```bash
@@ -133,7 +133,7 @@ python simulator.py
 
 ---
 
-## 🌐 Accessing the System
+##  Accessing the System
 
 - **Dashboard**: http://localhost:8000
 - **Admin Panel**: http://localhost:8000/admin
@@ -141,7 +141,7 @@ python simulator.py
 
 ---
 
-## 🧪 Testing the System
+##  Testing the System
 
 ### 1. Verify MQTT Connection
 
@@ -188,18 +188,18 @@ curl http://localhost:8000/api/stats/summary/
 
 ---
 
-## 📊 System Components Status Check
+##  System Components Status Check
 
 ### Check if all components are running:
 
-1. ✅ **MQTT Broker**: `mosquitto_sub -h localhost -t "#" -v`
-2. ✅ **Django Server**: Visit http://localhost:8000
-3. ✅ **MQTT Listener**: Check terminal for connection message
-4. ✅ **Simulator**: Check terminal for publishing messages
+1.  **MQTT Broker**: `mosquitto_sub -h localhost -t "#" -v`
+2.  **Django Server**: Visit http://localhost:8000
+3.  **MQTT Listener**: Check terminal for connection message
+4.  **Simulator**: Check terminal for publishing messages
 
 ---
 
-## 🐛 Common Issues and Solutions
+##  Common Issues and Solutions
 
 ### Issue: MQTT Connection Failed
 
@@ -242,7 +242,7 @@ python manage.py createsuperuser
 
 ---
 
-## 📈 Performance Tips
+##  Performance Tips
 
 1. **For Production:**
    - Set `DEBUG=False` in settings
@@ -258,7 +258,7 @@ python manage.py createsuperuser
 
 ---
 
-## 🔒 Security Recommendations
+##  Security Recommendations
 
 1. Change SECRET_KEY in production
 2. Use strong passwords for admin
@@ -269,9 +269,9 @@ python manage.py createsuperuser
 
 ---
 
-## 📝 Next Steps
+##  Next Steps
 
-1. ✅ **Basic Setup Complete**
+1.  **Basic Setup Complete**
 2. Configure real ESP32 devices
 3. Setup Raspberry Pi gateway
 4. Customize privacy parameters
@@ -281,7 +281,7 @@ python manage.py createsuperuser
 
 ---
 
-## 🆘 Support
+##  Support
 
 - **Email**: anowarhossain.dev@gmail.com
 - **GitHub Issues**: https://github.com/AnowarOHossain/IoTShield/issues
@@ -289,17 +289,17 @@ python manage.py createsuperuser
 
 ---
 
-## ✅ Success Indicators
+##  Success Indicators
 
 Your system is working correctly when:
 
-- ✓ Dashboard shows active devices
-- ✓ Sensor data appears in real-time
-- ✓ Charts update automatically
-- ✓ Alerts appear for anomalous readings
-- ✓ Admin panel shows database entries
-- ✓ MQTT messages flowing (check with mosquitto_sub)
+-  Dashboard shows active devices
+-  Sensor data appears in real-time
+-  Charts update automatically
+-  Alerts appear for anomalous readings
+-  Admin panel shows database entries
+-  MQTT messages flowing (check with mosquitto_sub)
 
 ---
 
-**Congratulations! Your IoTShield system is now operational! 🎉**
+**Congratulations! Your IoTShield system is now operational! **

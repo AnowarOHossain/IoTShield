@@ -1,6 +1,6 @@
-# 📋 IoTShield - To-Do List
+#  IoTShield - To-Do List
 
-## ✅ Completed Tasks
+##  Completed Tasks
 
 ### Core System Setup
 - Django project setup with all models
@@ -50,7 +50,7 @@
 
 ---
 
-## 📝 Upcoming Tasks
+##  Upcoming Tasks
 
 ### High Priority
 - [ ] **Create Raspberry Pi simulator** - Additional device type for testing
@@ -111,22 +111,22 @@
 
 ---
 
-## 🎯 Current Focus
+##  Current Focus
 
-**Active Development:** ✅ System fully operational and tested  
+**Active Development:**  System fully operational and tested  
 **Next Milestone:** Complete remaining high-priority tasks before thesis defense  
 **Timeline:** March 2025 - Thesis writing, April 2025 - Final presentation
 
 ---
 
-## 📊 Progress Summary
+##  Progress Summary
 
-- **Core Features:** 100% Complete ✅
-- **Integration & Testing:** 100% Complete ✅
-- **Documentation:** 95% Complete 🔄
-- **Security Hardening:** 20% Complete 📅
-- **Production Readiness:** 40% Complete 📅
-- **Advanced Features:** 0% Complete 📅
+- **Core Features:** 100% Complete 
+- **Integration & Testing:** 100% Complete 
+- **Documentation:** 95% Complete 
+- **Security Hardening:** 20% Complete 
+- **Production Readiness:** 40% Complete 
+- **Advanced Features:** 0% Complete 
 
 ---
 

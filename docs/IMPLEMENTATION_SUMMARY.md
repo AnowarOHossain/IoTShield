@@ -1,59 +1,59 @@
-# 🛡️ IoTShield Project - Implementation Summary
+#  IoTShield Project - Implementation Summary
 
-## ✅ Project Successfully Created and Pushed to GitHub!
+##  Project Successfully Created and Pushed to GitHub!
 
-### 📊 Project Statistics
+###  Project Statistics
 - **Total Files Created**: 42+
 - **Lines of Code**: 3,152+
 - **GitHub Repository**: https://github.com/AnowarOHossain/IoTShield
-- **Implementation Status**: ✅ Complete
+- **Implementation Status**:  Complete
 
 ---
 
-## 📁 Project Structure Created
+##  Project Structure Created
 
 ```
 IoTShield/
-├── iotshield_backend/          ✅ Django Backend Core
-│   ├── settings.py             ✅ Complete configuration
-│   ├── models.py               ✅ Database models
-│   ├── mqtt_client.py          ✅ MQTT communication
-│   ├── anomaly_detector.py     ✅ ML anomaly detection
-│   ├── gemini_alerts.py        ✅ AI alert generation
-│   ├── privacy_engine.py       ✅ Privacy mechanisms
-│   └── utils/                  ✅ Helper utilities
-│
-├── dashboard/                  ✅ Web Dashboard
-│   ├── views.py                ✅ API endpoints
-│   ├── templates/              ✅ HTML templates
-│   ├── admin.py                ✅ Admin interface
-│   └── management/commands/    ✅ MQTT listener command
-│
-├── simulator/                  ✅ IoT Simulator
-│   ├── simulator.py            ✅ Main simulator
-│   ├── config.json             ✅ Configuration
-│   └── utils/                  ✅ Sensor simulators
-│
-├── ml_models/                  ✅ Machine Learning
-│   ├── train_model.py          ✅ Training script
-│   └── README.md               ✅ Documentation
-│
-├── scripts/                    ✅ Utility Scripts
-│   ├── run_mqtt_broker.sh      ✅ MQTT broker starter
-│   └── start_dashboard.sh      ✅ Dashboard starter
-│
-└── Documentation               ✅ Complete Guides
-    ├── README.md               ✅ Project overview
-    ├── SETUP_GUIDE.md          ✅ Detailed setup
-    ├── QUICK_START.md          ✅ Quick commands
-    └── GETTING_STARTED.md      ✅ Getting started
+ iotshield_backend/           Django Backend Core
+    settings.py              Complete configuration
+    models.py                Database models
+    mqtt_client.py           MQTT communication
+    anomaly_detector.py      ML anomaly detection
+    gemini_alerts.py         AI alert generation
+    privacy_engine.py        Privacy mechanisms
+    utils/                   Helper utilities
+
+ dashboard/                   Web Dashboard
+    views.py                 API endpoints
+    templates/               HTML templates
+    admin.py                 Admin interface
+    management/commands/     MQTT listener command
+
+ simulator/                   IoT Simulator
+    simulator.py             Main simulator
+    config.json              Configuration
+    utils/                   Sensor simulators
+
+ ml_models/                   Machine Learning
+    train_model.py           Training script
+    README.md                Documentation
+
+ scripts/                     Utility Scripts
+    run_mqtt_broker.sh       MQTT broker starter
+    start_dashboard.sh       Dashboard starter
+
+ Documentation                Complete Guides
+     README.md                Project overview
+     SETUP_GUIDE.md           Detailed setup
+     QUICK_START.md           Quick commands
+     GETTING_STARTED.md       Getting started
 ```
 
 ---
 
-## 🎯 Implemented Features
+##  Implemented Features
 
-### 1. Backend System ✅
+### 1. Backend System 
 - [x] Django 5.x configuration
 - [x] Database models (Device, SensorData, Alert, ControlCommand, SystemLog)
 - [x] MQTT client integration
@@ -61,14 +61,14 @@ IoTShield/
 - [x] RESTful API endpoints
 - [x] Admin panel integration
 
-### 2. MQTT Communication ✅
+### 2. MQTT Communication 
 - [x] MQTT client with auto-reconnect
 - [x] Topic-based message routing
 - [x] Sensor data subscription
 - [x] Control command publishing
 - [x] Alert broadcasting
 
-### 3. Anomaly Detection ✅
+### 3. Anomaly Detection 
 - [x] Isolation Forest ML model
 - [x] Real-time anomaly detection
 - [x] Feature extraction from sensor data
@@ -76,21 +76,21 @@ IoTShield/
 - [x] Anomaly score calculation
 - [x] Model training script
 
-### 4. AI Integration ✅
+### 4. AI Integration 
 - [x] Gemini API integration
 - [x] Natural language alert generation
 - [x] Context-aware suggestions
 - [x] Fallback alert system
 - [x] Alert severity classification
 
-### 5. Privacy Preservation ✅
+### 5. Privacy Preservation 
 - [x] Differential privacy implementation
 - [x] Gaussian noise addition
 - [x] Laplace noise mechanism
 - [x] Privacy budget calculation
 - [x] Data anonymization
 
-### 6. Dashboard ✅
+### 6. Dashboard 
 - [x] Real-time monitoring interface
 - [x] Device management
 - [x] Alert visualization
@@ -98,14 +98,14 @@ IoTShield/
 - [x] Chart.js integration
 - [x] Responsive design (Tailwind CSS)
 
-### 7. IoT Simulator ✅
+### 7. IoT Simulator 
 - [x] Multi-sensor simulation
 - [x] Configurable parameters
 - [x] Anomaly injection
 - [x] Privacy noise addition
 - [x] MQTT publishing
 
-### 8. Documentation ✅
+### 8. Documentation 
 - [x] Comprehensive README
 - [x] Setup guide
 - [x] Quick start guide
@@ -114,7 +114,7 @@ IoTShield/
 
 ---
 
-## 🚀 How to Run the Project
+##  How to Run the Project
 
 ### Prerequisites Installation
 
@@ -162,22 +162,22 @@ python simulator.py
 
 ---
 
-## 🔧 System Components
+##  System Components
 
 | Component | Status | Description |
 |-----------|--------|-------------|
-| Django Backend | ✅ Ready | Core application server |
-| MQTT Client | ✅ Ready | Message broker integration |
-| ML Engine | ✅ Ready | Anomaly detection |
-| Gemini AI | ✅ Ready | Alert generation |
-| Privacy Engine | ✅ Ready | Data protection |
-| Dashboard | ✅ Ready | Web interface |
-| Simulator | ✅ Ready | IoT device simulation |
-| Database | ✅ Ready | SQLite/PostgreSQL |
+| Django Backend |  Ready | Core application server |
+| MQTT Client |  Ready | Message broker integration |
+| ML Engine |  Ready | Anomaly detection |
+| Gemini AI |  Ready | Alert generation |
+| Privacy Engine |  Ready | Data protection |
+| Dashboard |  Ready | Web interface |
+| Simulator |  Ready | IoT device simulation |
+| Database |  Ready | SQLite/PostgreSQL |
 
 ---
 
-## 📡 MQTT Topics
+##  MQTT Topics
 
 | Topic | Purpose |
 |-------|---------|
@@ -189,7 +189,7 @@ python simulator.py
 
 ---
 
-## 🎓 Academic Context
+##  Academic Context
 
 **Thesis Title**: Privacy-Preserving Real-Time Home Automation Utilizing MQTT Protocol and Sensor Anomaly Detection with GenAI Integration
 
@@ -205,7 +205,7 @@ python simulator.py
 
 ---
 
-## 📊 Technology Stack
+##  Technology Stack
 
 ### Backend
 - Python 3.10+
@@ -241,18 +241,18 @@ python simulator.py
 
 ---
 
-## 🔐 Security Features
+##  Security Features
 
-- ✅ Differential privacy implementation
-- ✅ Noise-based data protection
-- ✅ Secure MQTT communication support
-- ✅ Environment-based configuration
-- ✅ CSRF protection
-- ✅ SQL injection prevention
+-  Differential privacy implementation
+-  Noise-based data protection
+-  Secure MQTT communication support
+-  Environment-based configuration
+-  CSRF protection
+-  SQL injection prevention
 
 ---
 
-## 📈 Future Enhancements
+##  Future Enhancements
 
 - [ ] Blockchain integration for decentralized trust
 - [ ] TinyML on-device anomaly detection
@@ -266,7 +266,7 @@ python simulator.py
 
 ---
 
-## 📞 Support & Contact
+##  Support & Contact
 
 - **Developer**: Anowar Hossain
 - **Email**: anowarhossain.dev@gmail.com
@@ -275,16 +275,16 @@ python simulator.py
 
 ---
 
-## 🎉 Project Status: COMPLETE AND READY!
+##  Project Status: COMPLETE AND READY!
 
-✅ All core features implemented
-✅ Documentation complete
-✅ Code pushed to GitHub
-✅ Ready for testing and deployment
+ All core features implemented
+ Documentation complete
+ Code pushed to GitHub
+ Ready for testing and deployment
 
 ---
 
-## 📝 Next Steps
+##  Next Steps
 
 1. **Install Mosquitto MQTT Broker**
 2. **Create virtual environment and install dependencies**
@@ -303,7 +303,7 @@ python simulator.py
 
 <div align="center">
 
-### 💡 **IoTShield — Privacy-Preserving IoT Monitoring System**
+###  **IoTShield — Privacy-Preserving IoT Monitoring System**
 ### **Powered by AI, Edge Computing, and Generative Intelligence**
 
 </div>

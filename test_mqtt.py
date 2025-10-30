@@ -6,9 +6,9 @@ import time
 def on_connect(client, userdata, flags, reason_code, properties):
     print(f"Connected with result code {reason_code}")
     if reason_code == 0:
-        print("✅ Connection successful!")
+        print(" Connection successful!")
     else:
-        print(f"❌ Connection failed with code {reason_code}")
+        print(f" Connection failed with code {reason_code}")
 
 client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, "test_client_123")
 client.on_connect = on_connect
@@ -28,7 +28,7 @@ try:
     time.sleep(1)
     client.loop_stop()
     client.disconnect()
-    print("✅ Test completed")
+    print(" Test completed")
     
 except Exception as e:
-    print(f"❌ Error: {e}")
+    print(f" Error: {e}")
