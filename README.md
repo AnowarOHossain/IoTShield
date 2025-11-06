@@ -15,7 +15,7 @@
 
 The system integrates **Generative AI (Google Gemini 1.5)** to interpret and generate meaningful alerts from sensor anomalies, ensuring an intelligent and secure home environment. With **1000+ sensor readings** collected, **150+ alerts generated** across all severity levels, and **real-time chart visualization**, IoTShield demonstrates a complete end-to-end IoT solution.
 
-**✅ Current Status:**  **Fully Operational** - All core features implemented, tested, and working perfectly!
+** Current Status:**  **Fully Operational** - All core features implemented, tested, and working perfectly!
 
 IoTShield is developed as part of the **CSE Final Year Thesis Project** at **Shanto-Mariam University of Creative Technology**, under the supervision of **Tahsin Alam sir**.
 
