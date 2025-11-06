@@ -113,14 +113,22 @@ venv\Scripts\activate  # Windows
 python manage.py mqtt_listener
 ```
 
-### Terminal 4: Start IoT Simulator
+### Terminal 4: Start IoT Simulators
 ```bash
 # Activate venv first
 venv\Scripts\activate  # Windows
 
-# Run simulator
+# Option 1: Run ESP32 simulator only
 cd simulator
 python simulator.py
+
+# Option 2: Run Raspberry Pi simulator only
+cd simulator
+python rpi_simulator.py
+
+# Option 3: Run both simulators together (Recommended)
+cd simulator
+python run_all_simulators.py
 ```
 
 ---
@@ -148,10 +156,11 @@ mosquitto_sub -h localhost -t "iotshield/sensors/data" -v
 
 1. Open http://localhost:8000
 2. You should see:
-   - Active devices counter updating
-   - Sensor readings appearing
-   - Real-time charts updating
-   - Alerts appearing when anomalies detected
+   - Active devices counter (should show 2 devices)
+   - Sensor readings appearing in real-time
+   - Real-time charts updating (Temperature, Humidity, Alerts)
+   - Alerts appearing when anomalies detected with severity levels
+   - All 4 severity levels: LOW, MEDIUM, HIGH, CRITICAL
 
 ### 3. Test API Endpoints
 
@@ -285,12 +294,15 @@ python manage.py createsuperuser
 
 Your system is working correctly when:
 
--  Dashboard shows active devices
--  Sensor data appears in real-time
--  Charts update automatically
--  Alerts appear for anomalous readings
--  Admin panel shows database entries
--  MQTT messages flowing (check with mosquitto_sub)
+✅  Dashboard shows 2 active devices (ESP32 + Raspberry Pi)
+✅  Sensor data appears in real-time
+✅  Charts update automatically every 5 seconds
+✅  All severity levels visible (LOW, MEDIUM, HIGH, CRITICAL)
+✅  Alerts appear for anomalous readings
+✅  Admin panel shows database entries
+✅  MQTT messages flowing (check with mosquitto_sub)
+✅  Temperature and Humidity charts populated with data
+✅  Alerts by Severity doughnut chart showing distribution
 
 ---
 
