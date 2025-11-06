@@ -1,0 +1,52 @@
+{
+  "device": {
+    "device_id": "RPI_SIM_001",
+    "device_name": "Kitchen Edge Gateway",
+    "device_type": "RASPBERRY_PI",
+    "location": "Kitchen",
+    "publish_interval": 5
+  },
+  "mqtt": {
+    "broker_host": "localhost",
+    "broker_port": 1883,
+    "username": "",
+    "password": "",
+    "topic_sensors": "iotshield/sensors/data",
+    "topic_control": "iotshield/control/commands"
+  },
+  "privacy": {
+    "enable_noise": true,
+    "noise_epsilon": 0.5,
+    "noise_type": "gaussian"
+  },
+  "sensors": {
+    "temperature": {
+      "base_value": 23,
+      "variance": 2.5,
+      "anomaly_chance": 0.05
+    },
+    "humidity": {
+      "base_value": 55,
+      "variance": 8,
+      "anomaly_chance": 0.05
+    },
+    "gas": {
+      "base_value": 0.08,
+      "variance": 0.04,
+      "anomaly_chance": 0.02
+    },
+    "flame": {
+      "base_value": 0,
+      "anomaly_chance": 0.01
+    },
+    "motion": {
+      "base_value": 0,
+      "activity_chance": 0.4
+    },
+    "light": {
+      "base_value": 400,
+      "variance": 120,
+      "anomaly_chance": 0.03
+    }
+  }
+}
