@@ -13,9 +13,9 @@
 
 **IoTShield** is a fully-functional smart home automation and monitoring system that provides **real-time, privacy-preserving data communication** and **AI-driven anomaly detection** using the **MQTT protocol**.
 
-The system integrates **Generative AI (Google Gemini 1.5)** to interpret and generate meaningful alerts from sensor anomalies, ensuring an intelligent and secure home environment. With **566+ sensor readings** already collected and **26 alerts generated**, IoTShield demonstrates a complete end-to-end IoT solution.
+The system integrates **Generative AI (Google Gemini 1.5)** to interpret and generate meaningful alerts from sensor anomalies, ensuring an intelligent and secure home environment. With **1000+ sensor readings** collected, **150+ alerts generated** across all severity levels, and **real-time chart visualization**, IoTShield demonstrates a complete end-to-end IoT solution.
 
-** Current Status:**  **Fully Operational** - All core features implemented and tested!
+**✅ Current Status:**  **Fully Operational** - All core features implemented, tested, and working perfectly!
 
 IoTShield is developed as part of the **CSE Final Year Thesis Project** at **Shanto-Mariam University of Creative Technology**, under the supervision of **Tahsin Alam sir**.
 
@@ -189,36 +189,39 @@ ESP32 Sensors → MQTT Broker → Django Backend → Gemini AI → Dashboard →
 As of November 6, 2025:
 
 ```
- Active Devices: 2
-    Living Room Sensor Hub (ESP32_SIM_001) 
-    Kitchen Edge Gateway (RPI_SIM_001) 
+✅ Active Devices: 2
+    Living Room Sensor Hub (ESP32_SIM_001) - ✅ Online
+    Kitchen Edge Gateway (RPI_SIM_001) - ✅ Online
 
- Total Sensor Types: 9
+✅ Total Sensor Types: 9
     ESP32: Temperature, Humidity, Gas, Flame, Motion, Light
     RPI: All above + CPU Temperature, Memory Usage, Disk Usage
 
- Total Sensor Readings: 1000+
+✅ Total Sensor Readings: 1000+
     Environmental sensor readings (both devices)
     System metrics from Raspberry Pi
     Real-time data every 5 seconds
 
- Total Alerts Generated: 50+
-    Critical alerts
-    High priority alerts
-    Medium priority alerts
-    AI-powered alert descriptions
+✅ Total Alerts Generated: 150+
+    Critical alerts - Immediate threats
+    High priority alerts - Significant issues
+    Medium priority alerts - Notable anomalies
+    Low priority alerts - Minor deviations
+    AI-powered alert descriptions with actionable suggestions
 
- Anomalies Detected: Multiple
+✅ Anomalies Detected: Multiple severities
     Temperature anomalies (both devices)
     Humidity anomalies
     Gas leak detections
     Motion detection events
     System performance anomalies (RPI)
 
- Detection Accuracy: Validated with real-time data
- Data Flow: End-to-end operational
- Average Response Time: < 2 seconds
- Multi-Device Support: Fully operational
+✅ Detection Accuracy: Validated with real-time data
+✅ Data Flow: End-to-end operational
+✅ Average Response Time: < 2 seconds
+✅ Multi-Device Support: Fully operational
+✅ Dashboard Charts: Real-time visualization working
+✅ All Severity Levels: LOW, MEDIUM, HIGH, CRITICAL detected
 ```
 
 ---
@@ -731,34 +734,40 @@ We would like to express our deepest gratitude to:
 
 ##  Achievements
 
--  Successfully implemented complete IoT pipeline
--  Integrated cutting-edge Gemini AI technology
--  Achieved real-time anomaly detection with < 2s latency
--  Built multi-device architecture (ESP32 + Raspberry Pi)
--  Collected 1000+ sensor readings with 50+ alerts
--  Implemented edge gateway with system monitoring
--  Built production-ready web dashboard
--  Implemented privacy-preserving mechanisms
--  Created comprehensive documentation
--  Multi-device simultaneous operation support
+✅  Successfully implemented complete IoT pipeline
+✅  Integrated cutting-edge Gemini AI technology
+✅  Achieved real-time anomaly detection with < 2s latency
+✅  Built multi-device architecture (ESP32 + Raspberry Pi)
+✅  Collected 1000+ sensor readings with 150+ alerts
+✅  Implemented edge gateway with system monitoring
+✅  Built production-ready web dashboard
+✅  Implemented privacy-preserving mechanisms
+✅  Created comprehensive documentation
+✅  Multi-device simultaneous operation support
+✅  Real-time chart visualization with Chart.js
+✅  All 4 severity levels (LOW, MEDIUM, HIGH, CRITICAL) working
+✅  Fixed and optimized dashboard data visualization
+✅  Complete screenshot documentation added
 
 ---
 
 ##  Screenshots
 
 ### Dashboard Homepage
-*Real-time system statistics and sensor data visualization*
+![Dashboard Homepage](Screenshots/Dashboard-Homepage.png)
+*Real-time system statistics with active device count, total readings, active alerts, and system status indicator*
 
 ### Devices Page
-*Connected IoT device management interface*
+![Devices Page](Screenshots/Devices-Page.png)
+*Connected IoT device management interface showing ESP32 and Raspberry Pi simulators with real-time status*
 
 ### Alerts Page
-*AI-generated anomaly alerts with severity indicators*
+![Alerts Page](Screenshots/Alerts-Page.png)
+*AI-generated anomaly alerts with severity indicators (Critical, High, Medium, Low) and detailed descriptions*
 
 ### Sensor Charts
-*Historical data visualization with Chart.js*
-
-*(Screenshots to be added)*
+![Sensor Charts](Screenshots/Sensor-Charts.png)
+*Real-time sensor data visualization with Chart.js - Temperature and Humidity trends, plus Alerts by Severity distribution*
 
 ---
 

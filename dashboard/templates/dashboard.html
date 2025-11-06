@@ -194,9 +194,71 @@
             }
         });
 
+        // Update sensor chart with real data
+        function updateSensorChart() {
+            fetch('/api/sensors/data/?limit=20')
+                .then(response => response.json())
+                .then(response => {
+                    if (response.data && response.data.length > 0) {
+                        // Group data by sensor type
+                        const tempData = response.data.filter(d => d.sensor_type === 'TEMPERATURE');
+                        const humidityData = response.data.filter(d => d.sensor_type === 'HUMIDITY');
+                        
+                        // Get labels from timestamps (use temperature data for labels)
+                        const labels = tempData.slice(0, 20).map(d => {
+                            const date = new Date(d.timestamp);
+                            return date.toLocaleTimeString();
+                        }).reverse();
+                        
+                        // Update chart data
+                        sensorChart.data.labels = labels;
+                        sensorChart.data.datasets[0].data = tempData.slice(0, 20).map(d => d.value).reverse();
+                        sensorChart.data.datasets[1].data = humidityData.slice(0, 20).map(d => d.value).reverse();
+                        sensorChart.update();
+                    }
+                })
+                .catch(error => console.error('Error fetching sensor data:', error));
+        }
+
+        // Update alerts chart with severity counts
+        function updateAlertsChart() {
+            fetch('/api/alerts/list/?limit=100')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.alerts && data.alerts.length > 0) {
+                        const severityCounts = {
+                            'CRITICAL': 0,
+                            'HIGH': 0,
+                            'MEDIUM': 0,
+                            'LOW': 0
+                        };
+                        
+                        data.alerts.forEach(alert => {
+                            severityCounts[alert.severity] = (severityCounts[alert.severity] || 0) + 1;
+                        });
+                        
+                        alertsChart.data.datasets[0].data = [
+                            severityCounts['CRITICAL'],
+                            severityCounts['HIGH'],
+                            severityCounts['MEDIUM'],
+                            severityCounts['LOW']
+                        ];
+                        alertsChart.update();
+                    }
+                })
+                .catch(error => console.error('Error fetching alerts data:', error));
+        }
+
+        // Update all charts and data
+        function updateAll() {
+            updateDashboard();
+            updateSensorChart();
+            updateAlertsChart();
+        }
+
         // Update dashboard every 5 seconds
-        setInterval(updateDashboard, 5000);
-        updateDashboard();
+        setInterval(updateAll, 5000);
+        updateAll();
     </script>
 </body>
 </html>
