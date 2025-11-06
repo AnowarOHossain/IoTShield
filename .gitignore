@@ -22,11 +22,6 @@ db.sqlite3-journal
 /media/
 *.pot
 
-# ML Models
-ml_models/model.pkl
-ml_models/score_distribution.png
-ml_models/dataset/*.csv
-
 # Simulator
 simulator/*.log
 simulator/__pycache__/

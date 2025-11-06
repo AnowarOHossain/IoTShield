@@ -11,19 +11,15 @@
 - Alerts page with severity levels
 - REST API endpoints (devices, sensors, alerts, stats)
 - MQTT client implementation with paho-mqtt 2.1.0
-- Anomaly detection engine (Isolation Forest)
-- Gemini AI integration (1.5-flash model)
+- Gemini AI anomaly detection (1.5-flash model)
 - Privacy-preserving mechanism with differential privacy
 - IoT simulator code for ESP32/RPI
-- ML model trained with 10k dataset
 - Jupyter notebook for analysis
-- Model evaluation script
 
 ### Bug Fixes & Issues Resolved
 - Fixed views.py import error (Q from django.db.models)
 - Created missing templates (devices.html, alerts.html)
 - Fixed paho-mqtt v2 API compatibility issues
-- Fixed anomaly detector model import error (dashboard.models)
 - Fixed timezone warnings in simulator (datetime.now(timezone.utc))
 - Updated Gemini API to use gemini-1.5-flash
 - Fixed MQTT disconnect loop with reason_code.is_failure checks

@@ -14,11 +14,9 @@ asgiref==3.8.1
 # --- MQTT Communication ---
 paho-mqtt==1.6.1
 
-# --- Machine Learning & Data Processing ---
+# --- Data Processing ---
 numpy==1.26.4
 pandas==2.2.2
-scikit-learn==1.5.2
-joblib==1.4.2
 
 # --- Visualization / Dashboard Support ---
 matplotlib==3.9.2

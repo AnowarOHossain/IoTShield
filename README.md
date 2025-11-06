@@ -358,27 +358,55 @@ Latest 10 readings:
 
 ##  AI Integration Details
 
-###  Anomaly Detection (Isolation Forest)
+###  Gemini-Based Anomaly Detection
 
-**Training:**
-- 10,000 synthetic sensor readings
-- Features: sensor value, historical mean, std, max, min, deviation
-- Contamination rate: 10%
-- 100 decision trees
+**Overview:**
+IoTShield uses Google Gemini 1.5 Flash AI model for intelligent, context-aware anomaly detection. Unlike traditional ML models, Gemini analyzes sensor data with human-like reasoning and provides detailed explanations.
 
-**Detection Process:**
-1. Extract features from current reading
-2. Compare with 100 recent readings (1-hour window)
-3. Calculate statistical features
-4. Predict anomaly score (0-1 range)
-5. Flag if score > threshold (0.5)
+**How It Works:**
+1. New sensor data arrives via MQTT
+2. Data saved to database immediately
+3. Gemini API called asynchronously (non-blocking)
+4. AI analyzes sensor reading with contextual understanding
+5. Returns anomaly detection + explanation + severity + suggestions
+6. Alert created if anomalous
+
+**API Request Format:**
+```python
+{
+    "sensor_type": "TEMPERATURE",
+    "value": 45.3,
+    "unit": "°C",
+    "device_name": "Kitchen Sensor",
+    "location": "Kitchen",
+    "timestamp": "2025-10-31T16:45:12+00:00"
+}
+```
+
+**Gemini Analysis Response:**
+```json
+{
+    "anomaly": true,
+    "explanation": "Temperature of 45.3°C is critically high and could indicate a fire hazard or severe HVAC malfunction. Immediate investigation required.",
+    "severity": "CRITICAL",
+    "suggestion": "Check for fire hazards, inspect HVAC system, and ensure proper ventilation. Consider evacuation if smoke detected."
+}
+```
+
+**Key Features:**
+- **Context-Aware**: Understands sensor types and their normal ranges
+- **Async Processing**: Non-blocking background analysis (< 10s timeout)
+- **Fallback System**: Rule-based detection if API fails
+- **Error Handling**: Graceful degradation with threshold-based detection
+- **Real-time**: Analysis triggered on every sensor reading
 
 **Performance:**
-- Real-time detection: < 100ms
-- Accuracy: Validated with live data
-- False positive rate: Optimized
+- API Response Time: 2-5 seconds
+- Timeout Protection: 10 seconds max
+- Fallback Latency: < 50ms
+- Accuracy: Enhanced with AI reasoning
 
-###  Generative AI (Google Gemini 1.5 Flash)
+###  Alert Generation (Google Gemini 1.5 Flash)
 
 **Configuration:**
 ```python
@@ -387,27 +415,18 @@ temperature = 0.7
 max_output_tokens = 150
 ```
 
-**Input Context:**
-```json
-{
-  "sensor_type": "TEMPERATURE",
-  "current_value": 45.3,
-  "normal_range": "20-30°C",
-  "location": "Living Room",
-  "timestamp": "2025-10-25T16:45:12+00:00",
-  "anomaly_score": 0.89
-}
-```
+**Alert Generation Process:**
+- Gemini detector provides anomaly + explanation + severity
+- Alert created automatically if anomaly detected
+- Stored in database with AI-generated details
+- Published to MQTT for real-time notifications
+- Displayed on dashboard with severity indicators
 
-**Output Example:**
-```json
-{
-  "title": "Critical Temperature Alert",
-  "description": "Abnormally high temperature detected at 45.3°C",
-  "suggestion": "Check for fire hazards or HVAC malfunction",
-  "severity": "CRITICAL"
-}
-```
+**Severity Levels:**
+- **LOW**: Minor deviations, monitoring recommended
+- **MEDIUM**: Notable anomalies requiring attention
+- **HIGH**: Significant issues needing prompt action
+- **CRITICAL**: Immediate threats requiring urgent response
 
 ---
 
@@ -667,20 +686,6 @@ We would like to express our deepest gratitude to:
 - **Department of CSE, SMUCT** - For providing resources and support for this research project.
 
 - **Our Families** - For their unwavering support and encouragement.
-
----
-
-##  Research & References
-
-### Base Paper
-[Internet of Things-based Home Automation with Network Mapper and MQTT Protocol](https://www.sciencedirect.com/science/article/pii/S0045790624007341)  
-*Published in Microelectronics and Reliability, Elsevier, 2024*
-
-### Related Research
-- MQTT Protocol Specification v5.0
-- Isolation Forest Algorithm (Liu et al., 2008)
-- Differential Privacy (Dwork, 2006)
-- IoT Security Best Practices (OWASP IoT Top 10)
 
 ---
 

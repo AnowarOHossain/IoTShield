@@ -20,7 +20,6 @@ IoTShield/
 
  README.md
  requirements.txt
- project_structure.md
  .env
  manage.py
 
@@ -31,8 +30,8 @@ IoTShield/
     asgi.py                       # For Django Channels (MQTT real-time)
     wsgi.py                       # For production (Gunicorn/Whitenoise)
     mqtt_client.py                # MQTT Subscriber (receives device data)
+    gemini_anomaly_detector.py    # Gemini AI anomaly detection
     gemini_alerts.py              # Gemini API alert generation logic
-    anomaly_detector.py           # ML model: Isolation Forest / Autoencoder
     privacy_engine.py             # Privacy-preserving (noise & encryption)
     utils/
        db_helpers.py
@@ -70,17 +69,6 @@ IoTShield/
         mqtt_publisher.py         # Paho-MQTT publisher
         logger.py
 
- ml_models/                        # ML Model for anomaly detection
-    __init__.py
-    train_model.py                # Offline training script
-    evaluate_model.py
-    model.pkl                     # Trained model (e.g., IsolationForest)
-    dataset/
-       sensor_data.csv
-    notebooks/
-        anomaly_detection.ipynb
-        feature_engineering.ipynb
-
  edge_integration/                 # Raspberry Pi / ESP32 integration
     esp32_client.py               # MicroPython-based MQTT publisher
     raspberry_pi_gateway.py       # Edge AI processing and forwarding
@@ -111,8 +99,7 @@ IoTShield/
 | **Component** | **Description** |
 |---------------|-----------------|
 | `simulator/` | Python-based ESP32 simulator for sensor data with privacy noise. |
-| `iotshield_backend/` | Core Django backend (MQTT listener, ML detection, Gemini alerts). |
-| `ml_models/` | Machine Learning models for real-time anomaly detection. |
+| `iotshield_backend/` | Core Django backend (MQTT listener, Gemini AI detection, alerts). |
 | `dashboard/` | Django app for front-end visualization & control dashboard. |
 | `edge_integration/` | Scripts for physical ESP32/Raspberry Pi integration. |
 | `docs/` | All thesis-related documentation and diagrams. |
@@ -125,7 +112,7 @@ IoTShield/
 | **Topic** | **Description** |
 |-----------|-----------------|
 | `iotshield/sensors/data` | Raw (noisy) sensor data published from ESP32/simulator |
-| `iotshield/anomalies` | ML-generated anomaly events |
+| `iotshield/anomalies` | Gemini AI-generated anomaly events |
 | `iotshield/alerts` | Gemini-generated human-readable alerts |
 | `iotshield/control/commands` | Commands to actuators |
 | `iotshield/logs` | Internal system logs & events |
@@ -137,7 +124,7 @@ IoTShield/
 ```
 [ESP32 or Simulator] 
      ↓ (via MQTT)
-[IoTShield Backend (Django + ML + Privacy)]
+[IoTShield Backend (Django + Gemini AI + Privacy)]
      ↓ (via Gemini API)
 [Dashboard Alert Display]
      ↓

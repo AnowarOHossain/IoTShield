@@ -96,9 +96,9 @@ class IoTShieldMQTTClient:
     
     def handle_sensor_data(self, data):
         """Process incoming sensor data"""
-        from .anomaly_detector import AnomalyDetector
-        from .gemini_alerts import GeminiAlertGenerator
+        from .gemini_anomaly_detector import GeminiAnomalyDetector
         from dashboard.models import Device, SensorData, Alert
+        import threading
         
         try:
             # Get or create device
@@ -120,32 +120,53 @@ class IoTShieldMQTTClient:
                 timestamp=datetime.fromisoformat(data.get('timestamp', datetime.now().isoformat()))
             )
             
-            # Check for anomalies
-            detector = AnomalyDetector()
-            is_anomaly, score = detector.detect_anomaly(sensor_data)
+            # Analyze with Gemini API in background thread to avoid blocking
+            def analyze_and_alert():
+                try:
+                    # Initialize Gemini detector
+                    detector = GeminiAnomalyDetector()
+                    
+                    # Prepare sensor data dict for Gemini
+                    sensor_dict = {
+                        'sensor_type': sensor_data.sensor_type,
+                        'value': sensor_data.value,
+                        'unit': sensor_data.unit,
+                        'device_name': device.name,
+                        'location': device.location,
+                        'timestamp': sensor_data.timestamp.isoformat(),
+                    }
+                    
+                    # Call Gemini API for anomaly analysis
+                    analysis_result = detector.analyze_with_gemini(sensor_dict)
+                    
+                    # Update sensor data with analysis results
+                    sensor_data.is_anomaly = analysis_result.get('anomaly', False)
+                    sensor_data.anomaly_score = 1.0 if analysis_result.get('anomaly') else 0.0
+                    sensor_data.save()
+                    
+                    # Create alert if anomalous
+                    if analysis_result.get('anomaly', False):
+                        alert = Alert.objects.create(
+                            sensor_data=sensor_data,
+                            title=f"{sensor_data.sensor_type} Anomaly Detected",
+                            description=analysis_result.get('explanation', 'Anomalous sensor reading detected'),
+                            ai_suggestion=analysis_result.get('suggestion', ''),
+                            severity=analysis_result.get('severity', 'MEDIUM')
+                        )
+                        
+                        # Publish alert to MQTT
+                        self.publish_alert(alert)
+                        
+                        logger.info(f"Anomaly detected by Gemini: {alert.title}")
+                    else:
+                        logger.debug(f"Normal reading: {sensor_data.sensor_type}={sensor_data.value}")
+                
+                except Exception as e:
+                    logger.error(f"Error in anomaly analysis: {e}")
             
-            if is_anomaly:
-                sensor_data.is_anomaly = True
-                sensor_data.anomaly_score = score
-                sensor_data.save()
-                
-                # Generate AI alert
-                alert_generator = GeminiAlertGenerator()
-                alert_data = alert_generator.generate_alert(sensor_data, score)
-                
-                # Create alert
-                alert = Alert.objects.create(
-                    sensor_data=sensor_data,
-                    title=alert_data.get('title'),
-                    description=alert_data.get('description'),
-                    ai_suggestion=alert_data.get('suggestion', ''),
-                    severity=alert_data.get('severity', 'MEDIUM')
-                )
-                
-                # Publish alert to MQTT
-                self.publish_alert(alert)
-                
-                logger.info(f"Anomaly detected: {alert.title}")
+            # Run analysis in background thread
+            analysis_thread = threading.Thread(target=analyze_and_alert, daemon=True)
+            analysis_thread.start()
             
         except Exception as e:
             logger.error(f"Error handling sensor data: {e}")

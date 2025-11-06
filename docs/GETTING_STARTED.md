@@ -33,15 +33,7 @@ python manage.py migrate
 python manage.py createsuperuser
 ```
 
-### 4. Train ML Model
-
-```bash
-cd ml_models
-python train_model.py
-cd ..
-```
-
-### 5. Start MQTT Broker
+### 4. Start MQTT Broker
 
 Install Mosquitto:
 - **Windows**: Download from https://mosquitto.org/download/
@@ -53,7 +45,7 @@ Start broker:
 mosquitto -v -p 1883
 ```
 
-### 6. Run Django Server
+### 5. Run Django Server
 
 ```bash
 python manage.py runserver
@@ -61,7 +53,7 @@ python manage.py runserver
 
 Access dashboard at: http://localhost:8000
 
-### 7. Start Simulator
+### 6. Start Simulator
 
 In a new terminal:
 ```bash
@@ -75,7 +67,7 @@ python simulator.py
 2. **MQTT Broker** - Message queue for IoT communication
 3. **Simulator** - Generates sensor data
 4. **Dashboard** - Web interface for monitoring
-5. **ML Engine** - Anomaly detection
+5. **Gemini AI** - Anomaly detection and alert generation
 
 ##  Troubleshooting
 

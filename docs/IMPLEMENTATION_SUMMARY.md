@@ -18,7 +18,7 @@ IoTShield/
     settings.py              Complete configuration
     models.py                Database models
     mqtt_client.py           MQTT communication
-    anomaly_detector.py      ML anomaly detection
+    gemini_anomaly_detector.py  Gemini AI anomaly detection
     gemini_alerts.py         AI alert generation
     privacy_engine.py        Privacy mechanisms
     utils/                   Helper utilities
@@ -33,10 +33,6 @@ IoTShield/
     simulator.py             Main simulator
     config.json              Configuration
     utils/                   Sensor simulators
-
- ml_models/                   Machine Learning
-    train_model.py           Training script
-    README.md                Documentation
 
  scripts/                     Utility Scripts
     run_mqtt_broker.sh       MQTT broker starter
@@ -69,12 +65,12 @@ IoTShield/
 - [x] Alert broadcasting
 
 ### 3. Anomaly Detection 
-- [x] Isolation Forest ML model
-- [x] Real-time anomaly detection
-- [x] Feature extraction from sensor data
-- [x] Threshold-based detection
-- [x] Anomaly score calculation
-- [x] Model training script
+- [x] Gemini AI-powered detection
+- [x] Real-time anomaly analysis
+- [x] Context-aware detection
+- [x] Severity classification
+- [x] Async background processing
+- [x] Fallback rule-based detection
 
 ### 4. AI Integration 
 - [x] Gemini API integration
@@ -138,18 +134,13 @@ pip install -r requirements.txt
 python manage.py migrate
 python manage.py createsuperuser
 
-# 4. Train ML model
-cd ml_models
-python train_model.py
-cd ..
-
-# 5. Start Django server (Terminal 1)
+# 4. Start Django server (Terminal 1)
 python manage.py runserver
 
-# 6. Start MQTT listener (Terminal 2)
+# 5. Start MQTT listener (Terminal 2)
 python manage.py mqtt_listener
 
-# 7. Start simulator (Terminal 3)
+# 6. Start simulator (Terminal 3)
 cd simulator
 python simulator.py
 ```
@@ -168,8 +159,7 @@ python simulator.py
 |-----------|--------|-------------|
 | Django Backend |  Ready | Core application server |
 | MQTT Client |  Ready | Message broker integration |
-| ML Engine |  Ready | Anomaly detection |
-| Gemini AI |  Ready | Alert generation |
+| Gemini AI |  Ready | Anomaly detection & alerts |
 | Privacy Engine |  Ready | Data protection |
 | Dashboard |  Ready | Web interface |
 | Simulator |  Ready | IoT device simulation |
@@ -214,17 +204,14 @@ python simulator.py
 - Channels (WebSocket)
 
 ### IoT & Communication
-- Paho-MQTT 1.6.1
+- Paho-MQTT 2.1.0
 - Mosquitto MQTT Broker
 
-### Machine Learning
-- scikit-learn 1.5.2
+### AI & Data Processing
+- Google Generative AI (Gemini 1.5 Flash)
+- google-generativeai 0.8.3
 - NumPy 1.26.4
 - Pandas 2.2.2
-
-### AI Integration
-- Google Generative AI (Gemini)
-- google-generativeai 0.7.2
 
 ### Privacy
 - SciPy 1.14.1 (noise generation)
@@ -288,8 +275,8 @@ python simulator.py
 
 1. **Install Mosquitto MQTT Broker**
 2. **Create virtual environment and install dependencies**
-3. **Run database migrations**
-4. **Train the ML model**
+3. **Configure Gemini API key in .env file**
+4. **Run database migrations**
 5. **Start all system components**
 6. **Access dashboard and start testing**
 

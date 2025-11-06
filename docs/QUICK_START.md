@@ -19,18 +19,13 @@ python manage.py migrate
 # 5. Create superuser (optional)
 python manage.py createsuperuser
 
-# 6. Train ML model
-cd ml_models
-python train_model.py
-cd ..
-
-# 7. Start Django server (Terminal 1)
+# 6. Start Django server (Terminal 1)
 python manage.py runserver
 
-# 8. Start MQTT listener (Terminal 2 - after activating venv)
+# 7. Start MQTT listener (Terminal 2 - after activating venv)
 python manage.py mqtt_listener
 
-# 9. Start simulator (Terminal 3 - after activating venv)
+# 8. Start simulator (Terminal 3 - after activating venv)
 cd simulator
 python simulator.py
 ```
@@ -48,21 +43,21 @@ Before running the system, make sure Mosquitto MQTT Broker is installed and runn
 netstat -an | findstr "1883"
 ```
 
-## Project Status
+##  Project Status
 
  Project structure created
  Core backend modules implemented
+ Gemini AI integration complete
  Dashboard application ready
  IoT simulator configured
- ML model training script ready
  Documentation complete
 
 ## Next Steps After Setup
 
 1. Install and start Mosquitto
 2. Create virtual environment and install dependencies
-3. Run migrations
-4. Train ML model
+3. Configure Gemini API key in .env file
+4. Run migrations
 5. Start all components
 6. Access dashboard at http://localhost:8000
 

@@ -83,14 +83,6 @@ python manage.py createsuperuser
 # Enter username, email, and password when prompted
 ```
 
-### Step 5: Train ML Model
-
-```bash
-cd ml_models
-python train_model.py
-cd ..
-```
-
 ---
 
 ##  Running the System
@@ -272,10 +264,10 @@ python manage.py createsuperuser
 ##  Next Steps
 
 1.  **Basic Setup Complete**
-2. Configure real ESP32 devices
-3. Setup Raspberry Pi gateway
-4. Customize privacy parameters
-5. Tune ML model for your environment
+2. Configure Gemini API key for AI-powered detection
+3. Configure real ESP32 devices
+4. Setup Raspberry Pi gateway
+5. Customize privacy parameters
 6. Add more sensor types
 7. Deploy to cloud server
 

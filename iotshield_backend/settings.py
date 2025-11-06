@@ -141,10 +141,6 @@ GEMINI_API_KEY = os.getenv('GEMINI_API_KEY', '')
 PRIVACY_NOISE_EPSILON = float(os.getenv('PRIVACY_NOISE_EPSILON', 0.5))
 PRIVACY_NOISE_DELTA = float(os.getenv('PRIVACY_NOISE_DELTA', 1e-5))
 
-# ML Model Settings
-ANOMALY_THRESHOLD = float(os.getenv('ANOMALY_THRESHOLD', 0.7))
-MODEL_PATH = BASE_DIR / os.getenv('MODEL_PATH', 'ml_models/model.pkl')
-
 # Logging configuration
 LOGGING = {
     'version': 1,
