@@ -31,7 +31,6 @@ IoTShield is developed as part of the **CSE Final Year Thesis Project** at **Sha
 | **Team Members** | Anowar Hossain & Shihab Sarker |
 | **Supervisor** | Tahsin Alam, Lecturer |
 | **Institution** | Shanto-Mariam University of Creative Technology |
-| **Base Paper** | [Internet of Things-based Home Automation with Network Mapper and MQTT Protocol (Elsevier, 2024)](https://www.sciencedirect.com/science/article/pii/S0045790624007341) |
 
 ---
 
@@ -41,8 +40,8 @@ IoTShield is developed as part of the **CSE Final Year Thesis Project** at **Sha
 
 -  **Privacy-Preserving Data Collection** with differential privacy noise
 -  **MQTT Protocol Communication** using Mosquitto broker
--  **Real-Time Anomaly Detection** with Isolation Forest ML model
--  **AI-Powered Alert Generation** via Google Gemini 1.5 Flash
+-  **AI-Powered Anomaly Detection** with Google Gemini 1.5 Flash
+-  **Intelligent Alert Generation** with context-aware AI analysis
 -  **Interactive Dashboard** with Tailwind CSS & Chart.js
 -  **Data Persistence** with Django ORM and SQLite
 -  **IoT Device Simulator** for ESP32 and Raspberry Pi
@@ -59,7 +58,7 @@ IoTShield is developed as part of the **CSE Final Year Thesis Project** at **Sha
 IoTShield follows a **hybrid edge-cloud architecture** integrating IoT devices, an MQTT-based communication layer, a Django web server, and GenAI services for intelligent insights.
 
 ```
-ESP32 Sensors → MQTT Broker → Django Backend → ML Anomaly Engine → Gemini API → Dashboard → MQTT Control
+ESP32 Sensors → MQTT Broker → Django Backend → Gemini AI → Dashboard → MQTT Control
 ```
 
 ### Architecture Diagram
@@ -91,16 +90,8 @@ ESP32 Sensors → MQTT Broker → Django Backend → ML Anomaly Engine → Gemin
            
            ↓
 
- Anomaly Detection   
- (Isolation Forest)  
-  Feature Extract  
-  Predict Anomaly  
-  Calculate Score  
-
-            If Anomaly Detected
-           ↓
-
    Gemini AI 1.5     
+  Anomaly Detection
   Context Analysis 
   Alert Generation 
   Suggestions      
@@ -139,18 +130,19 @@ ESP32 Sensors → MQTT Broker → Django Backend → ML Anomaly Engine → Gemin
    - Manages devices, sensor readings, and alerts
    - Real-time data processing with timezone-aware timestamps
 
-4. **Anomaly Detection Engine**  *Working & Validated*
-   - Implements **Isolation Forest** algorithm using scikit-learn
-   - Trained on 10,000+ synthetic sensor readings
-   - Real-time anomaly scoring with 0-1 normalized confidence
-   - Statistical feature extraction (mean, std, deviation)
-   - Threshold-based violation detection for critical values
-
-5. **Generative AI Integration (Gemini 1.5 Flash)**  *Integrated*
-   - Converts anomaly context into human-readable alerts
-   - Provides intelligent suggestions for detected anomalies
-   - Natural language descriptions of sensor events
+4. **Gemini AI Anomaly Detection**  *Working & Validated*
+   - Uses **Google Gemini 1.5 Flash** for intelligent anomaly detection
+   - Context-aware analysis with human-like reasoning
+   - Real-time anomaly detection with detailed explanations
    - Severity classification (LOW, MEDIUM, HIGH, CRITICAL)
+   - Async processing with fallback system
+
+5. **Alert Generation System**  *Integrated*
+   - AI-generated alerts with actionable suggestions
+   - Natural language descriptions of sensor events
+   - Automatic alert creation for detected anomalies
+   - Real-time notifications via MQTT
+   - Dashboard integration with severity indicators
 
 6. **Web Dashboard**  *Live & Interactive*
    - Modern UI with Tailwind CSS
@@ -175,8 +167,8 @@ ESP32 Sensors → MQTT Broker → Django Backend → ML Anomaly Engine → Gemin
 | **MQTT Communication** |  Complete | Secure publish/subscribe messaging | Mosquitto, paho-mqtt 2.1.0 |
 | **Edge Processing** |  Complete | Local MQTT broker and caching | Raspberry Pi compatible |
 | **Backend & Storage** |  Complete | Data ingestion, storage, management | Django 5.2.7, SQLite |
-| **Anomaly Detection** |  Complete | ML-based pattern recognition | scikit-learn, Isolation Forest |
-| **GenAI Alert** |  Complete | Natural language alert generation | Google Gemini 1.5 Flash |
+| **Anomaly Detection** |  Complete | AI-powered anomaly detection | Google Gemini 1.5 Flash |
+| **Alert Generation** |  Complete | Intelligent alert system with AI | Google Gemini 1.5 Flash |
 | **Dashboard** |  Complete | Real-time visualization | Django, Tailwind CSS, Chart.js |
 | **REST API** |  Complete | Data access endpoints | Django REST Framework |
 | **Actuation** |  Planned | Remote device control | MQTT Commands, ESP32 |
@@ -256,10 +248,8 @@ pip install -r requirements.txt
 **Key Dependencies:**
 - Django 5.2.7
 - paho-mqtt 2.1.0
-- scikit-learn 1.5.2
 - google-generativeai 0.8.3
 - numpy, pandas
-- joblib
 
 #### 4⃣ Setup Django Database
 ```bash
@@ -486,7 +476,7 @@ IoTShield/
  iotshield_backend/         # Django backend app
     settings.py            # Django configuration
     mqtt_client.py         # MQTT subscriber client
-    anomaly_detector.py    # ML anomaly detection
+    gemini_anomaly_detector.py  # Gemini AI anomaly detection
     gemini_alerts.py       # Gemini AI integration
     management/
         commands/
@@ -498,12 +488,10 @@ IoTShield/
         sensors.py         # Sensor simulation
         mqtt_publisher.py  # MQTT client
         logger.py          # Logging utility
- ml_models/                 # Machine learning models
-    model.pkl              # Trained Isolation Forest
-    train_model.py         # Model training script
-    evaluate_model.py      # Model evaluation
- notebooks/                 # Jupyter notebooks
-    iot_analysis.ipynb     # Data analysis
+ docs/                      # Documentation
+    GETTING_STARTED.md     # Getting started guide
+    SETUP_GUIDE.md         # Setup instructions
+    QUICK_START.md         # Quick commands
  check_data.py              # Database utility script
  manage.py                  # Django management
  requirements.txt           # Python dependencies
@@ -558,10 +546,10 @@ IoTShield/
    - Data validation 
 
 3. **Anomaly Detection**
-   - Model loading 
-   - Feature extraction 
-   - Real-time prediction 
-   - Threshold validation 
+   - Gemini API integration 
+   - Context-aware analysis 
+   - Real-time detection 
+   - Severity classification 
 
 4. **AI Integration**
    - Gemini API connectivity 
@@ -606,7 +594,7 @@ IoTShield/
 - [ ] Implement data export functionality
 
 ### Phase 2 (Mid-term)
-- [ ] Deploy trained anomaly models on-device (TinyML)
+- [ ] Enhance Gemini AI prompts for better accuracy
 - [ ] Add voice control via Google Assistant
 - [ ] Implement blockchain for decentralized IoT trust
 - [ ] Create mobile app (Flutter/React Native)
@@ -616,7 +604,7 @@ IoTShield/
 - [ ] Support for multiple homes/users
 - [ ] Integration with commercial smart home devices
 - [ ] Advanced analytics dashboard
-- [ ] Federated learning for privacy-preserving ML
+- [ ] Multi-model AI ensemble for improved detection
 - [ ] Energy consumption optimization
 
 ---
@@ -696,7 +684,7 @@ We would like to express our deepest gratitude to:
 | **Planning & Research** | Sep 2025 |  Complete |
 | **System Design** | Oct 2025 |  Complete |
 | **Backend Development** | Oct 2025 |  Complete |
-| **ML Model Training** | Oct 2025 |  Complete |
+| **Gemini AI Integration** | Oct-Nov 2025 |  Complete |
 | **Dashboard Implementation** | Oct 2025 |  Complete |
 | **Integration & Testing** | Nov 2025 |  In Progress |
 | **Documentation** | Nov 2025 |  In Progress |
