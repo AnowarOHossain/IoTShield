@@ -769,6 +769,14 @@ We would like to express our deepest gratitude to:
 ![Sensor Charts](Screenshots/Sensor-Charts.png)
 *Real-time sensor data visualization with Chart.js - Temperature and Humidity trends, plus Alerts by Severity distribution*
 
+### Sensor Data Records
+![Sensor Data](Screenshots/sensor-data.png)
+*Complete sensor data records showing 3000+ readings from both ESP32 and Raspberry Pi devices with timestamps and values*
+
+### Sensor Data Details
+![Sensor Data Details](Screenshots/sensor-data2.png)
+*Detailed sensor data view displaying device information, sensor types, measurements, and anomaly detection results*
+
 ---
 
 ##  Project Goals & Objectives
