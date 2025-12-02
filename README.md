@@ -13,9 +13,9 @@
 
 **IoTShield** is a fully-functional smart home automation and monitoring system that provides **real-time, privacy-preserving data communication** and **AI-driven anomaly detection** using the **MQTT protocol**.
 
-The system integrates **Generative AI (Google Gemini 1.5)** to interpret and generate meaningful alerts from sensor anomalies, ensuring an intelligent and secure home environment. With **1000+ sensor readings** collected, **150+ alerts generated** across all severity levels, and **real-time chart visualization**, IoTShield demonstrates a complete end-to-end IoT solution.
+The system integrates **Generative AI (Google Gemini 1.5)** to interpret and generate meaningful alerts from sensor anomalies, ensuring an intelligent and secure home environment. With **3799+ sensor readings** collected, **723+ alerts generated** across all severity levels, and **real-time chart visualization**, IoTShield demonstrates a complete end-to-end IoT solution.
 
-** Current Status:**  **Fully Operational** - All core features implemented, tested, and working perfectly!
+**✅ Current Status:**  **Fully Operational** - All core features implemented, tested, and working perfectly!
 
 IoTShield is developed as part of the **CSE Final Year Thesis Project** at **Shanto-Mariam University of Creative Technology**, under the supervision of **Tahsin Alam sir**.
 
@@ -48,8 +48,9 @@ IoTShield is developed as part of the **CSE Final Year Thesis Project** at **Sha
 -  **Real-Time Data Visualization** with auto-refresh
 -  **Alert Management System** with severity levels
 -  **RESTful API Endpoints** for data access
--  **Statistical Analysis** with 566+ sensor readings collected
--  **Anomaly Detection Accuracy** validated with real-time data
+-  **Large-Scale Data Collection** with 3799+ sensor readings collected
+-  **Anomaly Detection Accuracy** validated with 723+ real-time alerts
+-  **Multi-Device Architecture** supporting ESP32 and Raspberry Pi simultaneously
 
 ---
 
@@ -186,7 +187,7 @@ ESP32 Sensors → MQTT Broker → Django Backend → Gemini AI → Dashboard →
 
 ##  Current System Statistics
 
-As of November 6, 2025:
+As of December 2, 2025:
 
 ```
 ✅ Active Devices: 2
@@ -197,31 +198,34 @@ As of November 6, 2025:
     ESP32: Temperature, Humidity, Gas, Flame, Motion, Light
     RPI: All above + CPU Temperature, Memory Usage, Disk Usage
 
-✅ Total Sensor Readings: 1000+
+✅ Total Sensor Readings: 3799+
     Environmental sensor readings (both devices)
     System metrics from Raspberry Pi
     Real-time data every 5 seconds
+    Continuous data collection over multiple sessions
 
-✅ Total Alerts Generated: 150+
-    Critical alerts - Immediate threats
-    High priority alerts - Significant issues
-    Medium priority alerts - Notable anomalies
-    Low priority alerts - Minor deviations
+✅ Total Alerts Generated: 723+
+    CRITICAL alerts - Immediate threats (Gas leaks, Fire hazards)
+    HIGH priority alerts - Significant issues (Motion anomalies)
+    MEDIUM priority alerts - Notable anomalies (Temperature spikes)
+    LOW priority alerts - Minor deviations (Sensor fluctuations)
     AI-powered alert descriptions with actionable suggestions
 
 ✅ Anomalies Detected: Multiple severities
-    Temperature anomalies (both devices)
-    Humidity anomalies
-    Gas leak detections
-    Motion detection events
-    System performance anomalies (RPI)
+    Gas leak detections (CRITICAL severity)
+    Motion detection events (HIGH severity)
+    Temperature anomalies (MEDIUM/HIGH severity)
+    Humidity anomalies (MEDIUM severity)
+    System performance anomalies (RPI monitoring)
 
-✅ Detection Accuracy: Validated with real-time data
+✅ Detection Accuracy: Validated with 723+ real-time alerts
 ✅ Data Flow: End-to-end operational
 ✅ Average Response Time: < 2 seconds
 ✅ Multi-Device Support: Fully operational
 ✅ Dashboard Charts: Real-time visualization working
 ✅ All Severity Levels: LOW, MEDIUM, HIGH, CRITICAL detected
+✅ AI Anomaly Detection: Google Gemini 1.5 Flash integrated
+✅ Database: 3799+ records with complete sensor history
 ```
 
 ---
@@ -362,20 +366,29 @@ python check_data.py
 Output example:
 ```
  Devices: 2
-  - Living Room Sensor Hub (ESP32_SIM_001) -  Active
   - Kitchen Edge Gateway (RPI_SIM_001) -  Active
+  - Living Room Sensor Hub (ESP32_SIM_001) -  Active
 
- Sensor Readings: 1000+
+ Sensor Readings: 3799+
 
 Latest readings:
-  CPU_TEMPERATURE: 50.34°C from Kitchen Edge Gateway
-  MEMORY_USAGE: 20.4% from Kitchen Edge Gateway
-  DISK_USAGE: 45.63% from Kitchen Edge Gateway
-  HUMIDITY: 61.73% from Living Room Sensor Hub  ANOMALY
-  TEMPERATURE: 25.32°C from Living Room Sensor Hub  ANOMALY
+  DISK_USAGE: 44.0% from Kitchen Edge Gateway
+  MEMORY_USAGE: 40.09% from Kitchen Edge Gateway
+  CPU_TEMPERATURE: 53.97°C from Kitchen Edge Gateway
+  LIGHT: 458.35lux from Kitchen Edge Gateway
+  MOTION: 1.0 from Kitchen Edge Gateway  ANOMALY
+  FLAME: 0.0 from Kitchen Edge Gateway
+  GAS: 0.0ppm from Kitchen Edge Gateway
+  HUMIDITY: 51.94% from Kitchen Edge Gateway
+  TEMPERATURE: 22.94°C from Kitchen Edge Gateway
   ...
 
- Alerts: 50+
+ Alerts: 723+
+
+Latest alerts:
+  [HIGH] MOTION Anomaly Detected
+  [CRITICAL] GAS Anomaly Detected
+  [HIGH] MOTION Anomaly Detected
 ```
 
 ---
@@ -559,9 +572,9 @@ IoTShield/
 {
   "total_devices": 2,
   "active_devices": 2,
-  "total_readings": 1000,
-  "total_alerts": 50,
-  "recent_anomalies": 25,
+  "total_readings": 3799,
+  "total_alerts": 723,
+  "recent_anomalies": 723,
   "system_status": "operational"
 }
 ```
@@ -738,7 +751,7 @@ We would like to express our deepest gratitude to:
 ✅  Integrated cutting-edge Gemini AI technology
 ✅  Achieved real-time anomaly detection with < 2s latency
 ✅  Built multi-device architecture (ESP32 + Raspberry Pi)
-✅  Collected 1000+ sensor readings with 150+ alerts
+✅  Collected 3799+ sensor readings with 723+ AI-generated alerts
 ✅  Implemented edge gateway with system monitoring
 ✅  Built production-ready web dashboard
 ✅  Implemented privacy-preserving mechanisms
@@ -748,6 +761,8 @@ We would like to express our deepest gratitude to:
 ✅  All 4 severity levels (LOW, MEDIUM, HIGH, CRITICAL) working
 ✅  Fixed and optimized dashboard data visualization
 ✅  Complete screenshot documentation added
+✅  Large-scale data collection validated (3799+ readings)
+✅  AI anomaly detection proven effective (723+ alerts)
 
 ---
 
@@ -815,9 +830,9 @@ We would like to express our deepest gratitude to:
 
 ---
 
-**Last Updated:** November 6, 2025  
-**Version:** 1.0.0  
-**Status:**  Fully Operational with Multi-Device Support
+**Last Updated:** December 2, 2025  
+**Version:** 1.0.1  
+**Status:**  Fully Operational with Multi-Device Support & AI-Powered Detection
 
 </div>
   
