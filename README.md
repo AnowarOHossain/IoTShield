@@ -15,7 +15,7 @@
 
 The system integrates **Generative AI (Google Gemini 1.5)** to interpret and generate meaningful alerts from sensor anomalies, ensuring an intelligent and secure home environment. With **3799+ sensor readings** collected, **723+ alerts generated** across all severity levels, and **real-time chart visualization**, IoTShield demonstrates a complete end-to-end IoT solution.
 
-**✅ Current Status:**  **Fully Operational** - All core features implemented, tested, and working perfectly!
+**Current Status:**  **Fully Operational** - All core features implemented, tested, and working perfectly!
 
 IoTShield is developed as part of the **CSE Final Year Thesis Project** at **Shanto-Mariam University of Creative Technology**, under the supervision of **Tahsin Alam sir**.
 
@@ -36,21 +36,21 @@ IoTShield is developed as part of the **CSE Final Year Thesis Project** at **Sha
 
 ##  Key Features
 
-###  Implemented & Tested
+### Implemented & Tested
 
--  **Privacy-Preserving Data Collection** with differential privacy noise
--  **MQTT Protocol Communication** using Mosquitto broker
--  **AI-Powered Anomaly Detection** with Google Gemini 1.5 Flash
--  **Intelligent Alert Generation** with context-aware AI analysis
--  **Interactive Dashboard** with Tailwind CSS & Chart.js
--  **Data Persistence** with Django ORM and SQLite
--  **IoT Device Simulator** for ESP32 and Raspberry Pi
--  **Real-Time Data Visualization** with auto-refresh
--  **Alert Management System** with severity levels
--  **RESTful API Endpoints** for data access
--  **Large-Scale Data Collection** with 3799+ sensor readings collected
--  **Anomaly Detection Accuracy** validated with 723+ real-time alerts
--  **Multi-Device Architecture** supporting ESP32 and Raspberry Pi simultaneously
+- **Privacy-Preserving Data Collection** with differential privacy noise
+- **MQTT Protocol Communication** using Mosquitto broker
+- **AI-Powered Anomaly Detection** with Google Gemini 1.5 Flash
+- **Intelligent Alert Generation** with context-aware AI analysis
+- **Interactive Dashboard** with Tailwind CSS & Chart.js
+- **Data Persistence** with Django ORM and SQLite
+- **IoT Device Simulator** for ESP32 and Raspberry Pi
+- **Real-Time Data Visualization** with auto-refresh
+- **Alert Management System** with severity levels
+- **RESTful API Endpoints** for data access
+- **Large-Scale Data Collection** with 3799+ sensor readings collected
+- **Anomaly Detection Accuracy** validated with 723+ real-time alerts
+- **Multi-Device Architecture** supporting ESP32 and Raspberry Pi simultaneously
 
 ---
 
@@ -113,9 +113,9 @@ ESP32 Sensors → MQTT Broker → Django Backend → Gemini AI → Dashboard →
 
 ---
 
-###  System Components
+### System Components
 
-1. **IoT Device Simulators**  *Fully Implemented*
+1. **IoT Device Simulators** *Fully Implemented*
    - **ESP32 Simulator (Living Room)**: ESP32_SIM_001
      - Collects 6 sensor types: Temperature, Humidity, Gas, Flame, Motion, Light
      - Publishes data every 5 seconds
@@ -127,34 +127,34 @@ ESP32 Sensors → MQTT Broker → Django Backend → Gemini AI → Dashboard →
      - Disk Usage monitoring (~45%)
      - Edge gateway capabilities
 
-2. **Mosquitto MQTT Broker**  *Installed & Running*
+2. **Mosquitto MQTT Broker** *Installed & Running*
    - Acts as message broker between IoT devices and backend
    - Runs on localhost:1883
    - Handles pub/sub for `iotshield/sensors/data` and `iotshield/control/commands` topics
    - Supports QoS levels for reliable message delivery
 
-3. **Django Backend (Server Layer)**  *Fully Operational*
+3. **Django Backend (Server Layer)** *Fully Operational*
    - Subscribes to MQTT topics using paho-mqtt 2.1.0
    - Stores sensor data in SQLite database
    - Implements RESTful API endpoints
    - Manages devices, sensor readings, and alerts
    - Real-time data processing with timezone-aware timestamps
 
-4. **Gemini AI Anomaly Detection**  *Working & Validated*
+4. **Gemini AI Anomaly Detection** *Working & Validated*
    - Uses **Google Gemini 1.5 Flash** for intelligent anomaly detection
    - Context-aware analysis with human-like reasoning
    - Real-time anomaly detection with detailed explanations
    - Severity classification (LOW, MEDIUM, HIGH, CRITICAL)
    - Async processing with fallback system
 
-5. **Alert Generation System**  *Integrated*
+5. **Alert Generation System** *Integrated*
    - AI-generated alerts with actionable suggestions
    - Natural language descriptions of sensor events
    - Automatic alert creation for detected anomalies
    - Real-time notifications via MQTT
    - Dashboard integration with severity indicators
 
-6. **Web Dashboard**  *Live & Interactive*
+6. **Web Dashboard** *Live & Interactive*
    - Modern UI with Tailwind CSS
    - Real-time data visualization with Chart.js
    - Device management interface
@@ -162,7 +162,7 @@ ESP32 Sensors → MQTT Broker → Django Backend → Gemini AI → Dashboard →
    - System statistics dashboard
    - Auto-refresh every 5 seconds
 
-7. **Control Module**  *Architecture Ready*
+7. **Control Module** *Architecture Ready*
    - MQTT command publishing capability
    - Control message format defined
    - Backend support for actuator commands
@@ -173,15 +173,15 @@ ESP32 Sensors → MQTT Broker → Django Backend → Gemini AI → Dashboard →
 
 | **Module** | **Status** | **Description** | **Technologies** |
 |-------------|------------|------------------|------------------|
-| **Data Acquisition** |  Complete | Sensor data simulation with privacy noise | Python, datetime, random |
-| **MQTT Communication** |  Complete | Secure publish/subscribe messaging | Mosquitto, paho-mqtt 2.1.0 |
-| **Edge Processing** |  Complete | Local MQTT broker and caching | Raspberry Pi compatible |
-| **Backend & Storage** |  Complete | Data ingestion, storage, management | Django 5.2.7, SQLite |
-| **Anomaly Detection** |  Complete | AI-powered anomaly detection | Google Gemini 1.5 Flash |
-| **Alert Generation** |  Complete | Intelligent alert system with AI | Google Gemini 1.5 Flash |
-| **Dashboard** |  Complete | Real-time visualization | Django, Tailwind CSS, Chart.js |
-| **REST API** |  Complete | Data access endpoints | Django REST Framework |
-| **Actuation** |  Planned | Remote device control | MQTT Commands, ESP32 |
+| **Data Acquisition** | Complete | Sensor data simulation with privacy noise | Python, datetime, random |
+| **MQTT Communication** | Complete | Secure publish/subscribe messaging | Mosquitto, paho-mqtt 2.1.0 |
+| **Edge Processing** | Complete | Local MQTT broker and caching | Raspberry Pi compatible |
+| **Backend & Storage** | Complete | Data ingestion, storage, management | Django 5.2.7, SQLite |
+| **Anomaly Detection** | Complete | AI-powered anomaly detection | Google Gemini 1.5 Flash |
+| **Alert Generation** | Complete | Intelligent alert system with AI | Google Gemini 1.5 Flash |
+| **Dashboard** | Complete | Real-time visualization | Django, Tailwind CSS, Chart.js |
+| **REST API** | Complete | Data access endpoints | Django REST Framework |
+| **Actuation** | Planned | Remote device control | MQTT Commands, ESP32 |
 
 ---
 
@@ -190,49 +190,49 @@ ESP32 Sensors → MQTT Broker → Django Backend → Gemini AI → Dashboard →
 As of December 2, 2025:
 
 ```
-✅ Active Devices: 2
-    Living Room Sensor Hub (ESP32_SIM_001) - ✅ Online
-    Kitchen Edge Gateway (RPI_SIM_001) - ✅ Online
+Active Devices: 2
+   Living Room Sensor Hub (ESP32_SIM_001) - Online
+   Kitchen Edge Gateway (RPI_SIM_001) - Online
 
-✅ Total Sensor Types: 9
-    ESP32: Temperature, Humidity, Gas, Flame, Motion, Light
-    RPI: All above + CPU Temperature, Memory Usage, Disk Usage
+Total Sensor Types: 9
+   ESP32: Temperature, Humidity, Gas, Flame, Motion, Light
+   RPI: All above + CPU Temperature, Memory Usage, Disk Usage
 
-✅ Total Sensor Readings: 3799+
-    Environmental sensor readings (both devices)
-    System metrics from Raspberry Pi
-    Real-time data every 5 seconds
-    Continuous data collection over multiple sessions
+Total Sensor Readings: 3799+
+   Environmental sensor readings (both devices)
+   System metrics from Raspberry Pi
+   Real-time data every 5 seconds
+   Continuous data collection over multiple sessions
 
-✅ Total Alerts Generated: 723+
-    CRITICAL alerts - Immediate threats (Gas leaks, Fire hazards)
-    HIGH priority alerts - Significant issues (Motion anomalies)
-    MEDIUM priority alerts - Notable anomalies (Temperature spikes)
-    LOW priority alerts - Minor deviations (Sensor fluctuations)
-    AI-powered alert descriptions with actionable suggestions
+Total Alerts Generated: 723+
+   CRITICAL alerts - Immediate threats (Gas leaks, Fire hazards)
+   HIGH priority alerts - Significant issues (Motion anomalies)
+   MEDIUM priority alerts - Notable anomalies (Temperature spikes)
+   LOW priority alerts - Minor deviations (Sensor fluctuations)
+   AI-powered alert descriptions with actionable suggestions
 
-✅ Anomalies Detected: Multiple severities
-    Gas leak detections (CRITICAL severity)
-    Motion detection events (HIGH severity)
-    Temperature anomalies (MEDIUM/HIGH severity)
-    Humidity anomalies (MEDIUM severity)
-    System performance anomalies (RPI monitoring)
+Anomalies Detected: Multiple severities
+   Gas leak detections (CRITICAL severity)
+   Motion detection events (HIGH severity)
+   Temperature anomalies (MEDIUM/HIGH severity)
+   Humidity anomalies (MEDIUM severity)
+   System performance anomalies (RPI monitoring)
 
-✅ Detection Accuracy: Validated with 723+ real-time alerts
-✅ Data Flow: End-to-end operational
-✅ Average Response Time: < 2 seconds
-✅ Multi-Device Support: Fully operational
-✅ Dashboard Charts: Real-time visualization working
-✅ All Severity Levels: LOW, MEDIUM, HIGH, CRITICAL detected
-✅ AI Anomaly Detection: Google Gemini 1.5 Flash integrated
-✅ Database: 3799+ records with complete sensor history
+Detection Accuracy: Validated with 723+ real-time alerts
+Data Flow: End-to-end operational
+Average Response Time: < 2 seconds
+Multi-Device Support: Fully operational
+Dashboard Charts: Real-time visualization working
+All Severity Levels: LOW, MEDIUM, HIGH, CRITICAL detected
+AI Anomaly Detection: Google Gemini 1.5 Flash integrated
+Database: 3799+ records with complete sensor history
 ```
 
 ---
 
-##  Installation & Setup
+## Installation & Setup
 
-###  Prerequisites
+### Prerequisites
 
 Ensure the following are installed:
 - **Python 3.10+** (Tested with Python 3.13.7)
@@ -242,15 +242,15 @@ Ensure the following are installed:
 
 ---
 
-###  Quick Start Guide
+### Quick Start Guide
 
-#### 1⃣ Clone the Repository
+#### 1. Clone the Repository
 ```bash
 git clone https://github.com/AnowarOHossain/IoTShield.git
 cd IoTShield
 ```
 
-#### 2⃣ Create Virtual Environment
+#### 2. Create Virtual Environment
 ```bash
 # Windows
 python -m venv .venv
@@ -261,7 +261,7 @@ python3 -m venv .venv
 source .venv/bin/activate
 ```
 
-#### 3⃣ Install Dependencies
+#### 3. Install Dependencies
 ```bash
 pip install -r requirements.txt
 ```
@@ -272,14 +272,14 @@ pip install -r requirements.txt
 - google-generativeai 0.8.3
 - numpy, pandas
 
-#### 4⃣ Setup Django Database
+#### 4. Setup Django Database
 ```bash
 python manage.py makemigrations
 python manage.py migrate
 python manage.py createsuperuser  # Optional: Create admin user
 ```
 
-#### 5⃣ Install & Start Mosquitto MQTT Broker
+#### 5. Install & Start Mosquitto MQTT Broker
 
 **Windows:**
 ```bash
@@ -295,7 +295,7 @@ sudo systemctl start mosquitto
 sudo systemctl enable mosquitto
 ```
 
-#### 6⃣ Configure Environment Variables
+#### 6. Configure Environment Variables
 
 Create a `.env` file in the root directory:
 ```env
@@ -306,7 +306,7 @@ MQTT_BROKER_HOST=localhost
 MQTT_BROKER_PORT=1883
 ```
 
-#### 7⃣ Run the Complete System
+#### 7. Run the Complete System
 
 **Terminal 1: Django Web Server**
 ```bash
@@ -339,16 +339,16 @@ python run_all_simulators.py
 
 ---
 
-##  Usage Guide
+## Usage Guide
 
-###  Access the Dashboard
+### Access the Dashboard
 
 1. Open your browser and navigate to: `http://127.0.0.1:8000/`
 2. View real-time sensor data on the homepage
 3. Click "View Devices" to see all connected IoT devices
 4. Click "View Alerts" to see anomaly alerts
 
-###  View System Statistics
+### View System Statistics
 
 Visit the API endpoints:
 - **Summary Stats:** `http://127.0.0.1:8000/api/stats/summary/`
@@ -356,7 +356,7 @@ Visit the API endpoints:
 - **Recent Readings:** `http://127.0.0.1:8000/api/sensors/recent/`
 - **Alert List:** `http://127.0.0.1:8000/api/alerts/list/`
 
-###  Check Database
+### Check Database
 
 Run the utility script:
 ```bash
@@ -393,9 +393,9 @@ Latest alerts:
 
 ---
 
-##  AI Integration Details
+## AI Integration Details
 
-###  Gemini-Based Anomaly Detection
+### Gemini-Based Anomaly Detection
 
 **Overview:**
 IoTShield uses Google Gemini 1.5 Flash AI model for intelligent, context-aware anomaly detection. Unlike traditional ML models, Gemini analyzes sensor data with human-like reasoning and provides detailed explanations.
@@ -443,7 +443,7 @@ IoTShield uses Google Gemini 1.5 Flash AI model for intelligent, context-aware a
 - Fallback Latency: < 50ms
 - Accuracy: Enhanced with AI reasoning
 
-###  Alert Generation (Google Gemini 1.5 Flash)
+### Alert Generation (Google Gemini 1.5 Flash)
 
 **Configuration:**
 ```python
@@ -467,7 +467,7 @@ max_output_tokens = 150
 
 ---
 
-##  Privacy-Preserving Mechanisms
+## Privacy-Preserving Mechanisms
 
 IoTShield implements multiple privacy layers:
 
@@ -495,7 +495,7 @@ private_value = original_value + noise
 
 ---
 
-##  System Performance Metrics
+## System Performance Metrics
 
 | **Metric** | **Value** | **Description** |
 |------------|-----------|-----------------|
@@ -512,7 +512,7 @@ private_value = original_value + noise
 
 ---
 
-##  Project Structure
+## Project Structure
 
 ```
 IoTShield/
@@ -553,7 +553,7 @@ IoTShield/
 
 ---
 
-##  API Endpoints
+## API Endpoints
 
 ### Dashboard Endpoints
 - `GET /` - Homepage with real-time stats
@@ -581,43 +581,43 @@ IoTShield/
 
 ---
 
-##  Testing & Validation
+## Testing & Validation
 
-###  Completed Tests
+### Completed Tests
 
 1. **MQTT Communication**
-   - Broker connectivity 
-   - Message publishing 
-   - Message subscription 
-   - QoS levels 
+   - Broker connectivity
+   - Message publishing
+   - Message subscription
+   - QoS levels
 
 2. **Data Processing**
-   - Sensor data parsing 
-   - Database storage 
-   - Timezone handling 
-   - Data validation 
+   - Sensor data parsing
+   - Database storage
+   - Timezone handling
+   - Data validation
 
 3. **Anomaly Detection**
-   - Gemini API integration 
-   - Context-aware analysis 
-   - Real-time detection 
-   - Severity classification 
+   - Gemini API integration
+   - Context-aware analysis
+   - Real-time detection
+   - Severity classification
 
 4. **AI Integration**
-   - Gemini API connectivity 
-   - Context generation 
-   - Alert formatting 
-   - Error handling 
+   - Gemini API connectivity
+   - Context generation
+   - Alert formatting
+   - Error handling
 
 5. **Dashboard**
-   - Page rendering 
-   - Real-time updates 
-   - Data visualization 
+   - Page rendering
+   - Real-time updates
+   - Data visualization
    - Responsive design 
 
 ---
 
-##  Known Issues & Limitations
+## Known Issues & Limitations
 
 1. **MQTT Disconnections**
    - Minor periodic disconnects every ~1 second
@@ -636,7 +636,7 @@ IoTShield/
 
 ---
 
-##  Future Enhancements
+## Future Enhancements
 
 ### Phase 1 (Short-term)
 - [ ] Fix MQTT periodic disconnection issue
@@ -661,7 +661,7 @@ IoTShield/
 
 ---
 
-##  Documentation
+## Documentation
 
 ### For Developers
 - [API Documentation](docs/API.md) *(Coming soon)*
@@ -675,7 +675,7 @@ IoTShield/
 
 ---
 
-##  Contributing
+## Contributing
 
 This is an academic project, but suggestions and improvements are welcome!
 
@@ -687,7 +687,7 @@ This is an academic project, but suggestions and improvements are welcome!
 
 ---
 
-##  License
+## License
 
 This project is developed for **academic and research purposes** under the **Shanto-Mariam University of Creative Technology**.
 
@@ -695,29 +695,29 @@ All rights reserved © 2025 Anowar Hossain & Shihab Sarker
 
 ---
 
-##  Contact & Credits
+## Contact & Credits
 
-###  Development Team
+### Development Team
 
 **Anowar Hossain**
--  CSE Student, SMUCT
--  Full-Stack Developer
--  Email: anowarhossain.dev@gmail.com
--  GitHub: [Anowar Hossain](https://github.com/AnowarOHossain)
--  LinkedIn: [Anowar Hossain](https://www.linkedin.com/in/anowarohossain/)
+- CSE Student, SMUCT
+- Full-Stack Developer
+- Email: anowarhossain.dev@gmail.com
+- GitHub: [Anowar Hossain](https://github.com/AnowarOHossain)
+- LinkedIn: [Anowar Hossain](https://www.linkedin.com/in/anowarohossain/)
 
 **Shihab Sarker**
--  CSE Student, SMUCT
--  IoT & Hardware Specialist
+- CSE Student, SMUCT
+- IoT & Hardware Specialist
 
-###  Academic Supervision
+### Academic Supervision
 
 **Tahsin Alam**
--  Lecturer, Department of CSE & CSIT
+- Lecturer, Department of CSE & CSIT
 -  Shanto-Mariam University of Creative Technology
 -  Email: tahsin029@gmail.com
 
-###  Special Thanks
+### Special Thanks
 
 We would like to express our deepest gratitude to:
 
@@ -729,44 +729,44 @@ We would like to express our deepest gratitude to:
 
 ---
 
-##  Project Timeline
+## Project Timeline
 
 | Phase | Timeline | Status |
 |-------|----------|--------|
-| **Planning & Research** | Sep 2025 |  Complete |
-| **System Design** | Oct 2025 |  Complete |
-| **Backend Development** | Oct 2025 |  Complete |
-| **Gemini AI Integration** | Oct-Nov 2025 |  Complete |
-| **Dashboard Implementation** | Oct 2025 |  Complete |
-| **Integration & Testing** | Nov 2025 |  In Progress |
-| **Documentation** | Nov 2025 |  In Progress |
-| **Thesis Writing** | Dec 2025 |  Planned |
-| **Final Presentation** | Jan 2026 |  Planned |
+| **Planning & Research** | Sep 2025 | Complete |
+| **System Design** | Oct 2025 | Complete |
+| **Backend Development** | Oct 2025 | Complete |
+| **Gemini AI Integration** | Oct-Nov 2025 | Complete |
+| **Dashboard Implementation** | Oct 2025 | Complete |
+| **Integration & Testing** | Nov 2025 | In Progress |
+| **Documentation** | Nov 2025 | In Progress |
+| **Thesis Writing** | Dec 2025 | Planned |
+| **Final Presentation** | Jan 2026 | Planned |
 
 ---
 
-##  Achievements
+## Achievements
 
-✅  Successfully implemented complete IoT pipeline
-✅  Integrated cutting-edge Gemini AI technology
-✅  Achieved real-time anomaly detection with < 2s latency
-✅  Built multi-device architecture (ESP32 + Raspberry Pi)
-✅  Collected 3799+ sensor readings with 723+ AI-generated alerts
-✅  Implemented edge gateway with system monitoring
-✅  Built production-ready web dashboard
-✅  Implemented privacy-preserving mechanisms
-✅  Created comprehensive documentation
-✅  Multi-device simultaneous operation support
-✅  Real-time chart visualization with Chart.js
-✅  All 4 severity levels (LOW, MEDIUM, HIGH, CRITICAL) working
-✅  Fixed and optimized dashboard data visualization
-✅  Complete screenshot documentation added
-✅  Large-scale data collection validated (3799+ readings)
-✅  AI anomaly detection proven effective (723+ alerts)
+- Successfully implemented complete IoT pipeline
+- Integrated cutting-edge Gemini AI technology
+- Achieved real-time anomaly detection with < 2s latency
+- Built multi-device architecture (ESP32 + Raspberry Pi)
+- Collected 3799+ sensor readings with 723+ AI-generated alerts
+- Implemented edge gateway with system monitoring
+- Built production-ready web dashboard
+- Implemented privacy-preserving mechanisms
+- Created comprehensive documentation
+- Multi-device simultaneous operation support
+- Real-time chart visualization with Chart.js
+- All 4 severity levels (LOW, MEDIUM, HIGH, CRITICAL) working
+- Fixed and optimized dashboard data visualization
+- Complete screenshot documentation added
+- Large-scale data collection validated (3799+ readings)
+- AI anomaly detection proven effective (723+ alerts)
 
 ---
 
-##  Screenshots
+## Screenshots
 
 ### Dashboard Homepage
 ![Dashboard Homepage](Screenshots/Dashboard-Homepage.png)
@@ -794,36 +794,36 @@ We would like to express our deepest gratitude to:
 
 ---
 
-##  Project Goals & Objectives
+## Project Goals & Objectives
 
-### Primary Goals 
-1.  Implement privacy-preserving IoT data collection
-2.  Develop real-time anomaly detection system
-3.  Integrate generative AI for intelligent alerts
-4.  Create user-friendly web dashboard
-5.  Ensure system scalability and reliability
+### Primary Goals
+1. Implement privacy-preserving IoT data collection
+2. Develop real-time anomaly detection system
+3. Integrate generative AI for intelligent alerts
+4. Create user-friendly web dashboard
+5. Ensure system scalability and reliability
 
-### Research Objectives 
-1.  Evaluate MQTT protocol for IoT communication
-2.  Assess ML models for anomaly detection
-3.  Measure privacy preservation effectiveness
-4.  Analyze system performance metrics
-5.  Validate real-world applicability
+### Research Objectives
+1. Evaluate MQTT protocol for IoT communication
+2. Assess ML models for anomaly detection
+3. Measure privacy preservation effectiveness
+4. Analyze system performance metrics
+5. Validate real-world applicability
 
 ---
 
 <div align="center">
 
-##  **IoTShield — Combining Privacy, Intelligence, and Automation for the Next Generation of Smart Homes**
+## **IoTShield — Combining Privacy, Intelligence, and Automation for the Next Generation of Smart Homes**
 
-###  Built with  by Anowar Hossain & Shihab Sarker
+### Built with by Anowar Hossain & Shihab Sarker
 
 **Shanto-Mariam University of Creative Technology**  
 *Department of Computer Science and Engineering*
 
 ---
 
-###  If you find this project useful, please consider giving it a star on GitHub!
+### If you find this project useful, please consider giving it a star on GitHub!
 
 [![GitHub Stars](https://img.shields.io/github/stars/AnowarOHossain/IoTShield?style=social)](https://github.com/AnowarOHossain/IoTShield/stargazers)
 [![GitHub Forks](https://img.shields.io/github/forks/AnowarOHossain/IoTShield?style=social)](https://github.com/AnowarOHossain/IoTShield/network/members)
@@ -832,7 +832,7 @@ We would like to express our deepest gratitude to:
 
 **Last Updated:** December 2, 2025  
 **Version:** 1.0.1  
-**Status:**  Fully Operational with Multi-Device Support & AI-Powered Detection
+**Status:** Fully Operational with Multi-Device Support & AI-Powered Detection
 
 </div>
   
