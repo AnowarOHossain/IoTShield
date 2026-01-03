@@ -25,16 +25,23 @@
 </head>
 <body class="bg-gray-100">
     <!-- Navigation -->
-    <nav class="bg-blue-600 text-white p-4 shadow-lg">
+    <nav class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-4 shadow-lg">
         <div class="container mx-auto flex justify-between items-center">
-            <div class="flex items-center">
-                <span class="text-2xl font-bold">IoTShield</span>
-                <span class="ml-4 text-sm">Privacy-Preserving IoT Monitoring</span>
+            <div class="flex items-center space-x-2">
+                <span class="text-2xl font-bold">🛡️ IoTShield</span>
+                <span class="ml-4 text-sm text-blue-100">Privacy-Preserving IoT Monitoring</span>
             </div>
-            <div class="space-x-4">
-                <a href="/" class="hover:text-blue-200">Dashboard</a>
-                <a href="/devices/" class="hover:text-blue-200 font-bold">Devices</a>
-                <a href="/alerts/" class="hover:text-blue-200">Alerts</a>
+            <div class="flex items-center space-x-2">
+                <a href="/" class="px-4 py-2 rounded-lg hover:bg-white hover:bg-opacity-20 transition duration-200 font-medium">Dashboard</a>
+                <a href="/devices/" class="px-4 py-2 rounded-lg bg-white bg-opacity-20 transition duration-200 font-medium">Devices</a>
+                <a href="/alerts/" class="px-4 py-2 rounded-lg hover:bg-white hover:bg-opacity-20 transition duration-200 font-medium">Alerts</a>
+                
+                {% if user.is_authenticated %}
+                    <span class="px-3 py-1 bg-blue-500 bg-opacity-30 rounded-lg text-blue-100 text-sm">Welcome, {{ user.username }}</span>
+                    <a href="{% url 'dashboard:logout' %}" class="ml-2 px-4 py-2 bg-red-500 hover:bg-red-600 rounded-lg transition duration-200 font-medium shadow-md">Logout</a>
+                {% else %}
+                    <a href="{% url 'dashboard:login' %}" class="ml-2 px-4 py-2 bg-white text-blue-600 hover:bg-blue-50 rounded-lg transition duration-200 font-medium shadow-md">Login</a>
+                {% endif %}
             </div>
         </div>
     </nav>

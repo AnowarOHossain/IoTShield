@@ -38,6 +38,7 @@ IoTShield is developed as part of the **CSE Final Year Thesis Project** at **Sha
 
 ### Implemented & Tested
 
+- **User Authentication System** with login/register functionality and JWT token support
 - **Privacy-Preserving Data Collection** with differential privacy noise
 - **MQTT Protocol Communication** using Mosquitto broker
 - **AI-Powered Anomaly Detection** with Google Gemini 1.5 Flash
@@ -162,7 +163,15 @@ ESP32 Sensors → MQTT Broker → Django Backend → Gemini AI → Dashboard →
    - System statistics dashboard
    - Auto-refresh every 5 seconds
 
-7. **Control Module** *Architecture Ready*
+7. **User Authentication System** *Fully Operational*
+   - User registration with email validation
+   - Secure login/logout functionality
+   - Session-based authentication
+   - JWT token support for REST API access
+   - Modern responsive UI with gradient design
+   - Ready for email notification integration
+
+8. **Control Module** *Architecture Ready*
    - MQTT command publishing capability
    - Control message format defined
    - Backend support for actuator commands
@@ -179,6 +188,7 @@ ESP32 Sensors → MQTT Broker → Django Backend → Gemini AI → Dashboard →
 | **Backend & Storage** | Complete | Data ingestion, storage, management | Django 5.2.7, SQLite |
 | **Anomaly Detection** | Complete | AI-powered anomaly detection | Google Gemini 1.5 Flash |
 | **Alert Generation** | Complete | Intelligent alert system with AI | Google Gemini 1.5 Flash |
+| **User Authentication** | Complete | User registration and login system | Django Auth, JWT, Tailwind CSS |
 | **Dashboard** | Complete | Real-time visualization | Django, Tailwind CSS, Chart.js |
 | **REST API** | Complete | Data access endpoints | Django REST Framework |
 | **Actuation** | Planned | Remote device control | MQTT Commands, ESP32 |
@@ -559,6 +569,13 @@ IoTShield/
 - `GET /` - Homepage with real-time stats
 - `GET /devices/` - Device list page
 - `GET /alerts/` - Alert history page
+- `GET /login/` - User login page
+- `GET /register/` - User registration page
+- `GET /logout/` - User logout
+
+### Authentication API
+- `POST /api/auth/register/` - Register new user (returns JWT tokens)
+- `POST /api/auth/login/` - User login (returns JWT tokens)
 
 ### REST API Endpoints
 - `GET /api/stats/summary/` - System statistics
@@ -613,7 +630,14 @@ IoTShield/
    - Page rendering
    - Real-time updates
    - Data visualization
-   - Responsive design 
+   - Responsive design
+
+6. **User Authentication**
+   - Registration functionality
+   - Login/logout system
+   - Session management
+   - JWT token generation
+   - Password security 
 
 ---
 
@@ -754,6 +778,7 @@ We would like to express our deepest gratitude to:
 - Collected 3799+ sensor readings with 723+ AI-generated alerts
 - Implemented edge gateway with system monitoring
 - Built production-ready web dashboard
+- Implemented user authentication system with JWT support
 - Implemented privacy-preserving mechanisms
 - Created comprehensive documentation
 - Multi-device simultaneous operation support

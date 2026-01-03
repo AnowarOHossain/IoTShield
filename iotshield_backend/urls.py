@@ -10,6 +10,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('dashboard.urls')),
     path('api/', include('dashboard.urls')),
+    path('api/auth/', include('iotshield_backend.auth_urls')),
 ]
 
 # Serve static and media files in development
