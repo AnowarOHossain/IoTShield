@@ -96,7 +96,7 @@ ESP32 Sensors → MQTT Broker → Django Backend → Gemini AI → Dashboard →
            
            ↓
 
-   Gemini AI 1.5     
+   Gemini AI 2.5     
   Anomaly Detection
   Context Analysis 
   Alert Generation 
@@ -420,7 +420,7 @@ Latest alerts:
 ### Gemini-Based Anomaly Detection
 
 **Overview:**
-IoTShield uses Google Gemini 1.5 Flash AI model for intelligent, context-aware anomaly detection. Unlike traditional ML models, Gemini analyzes sensor data with human-like reasoning and provides detailed explanations.
+IoTShield uses Google Gemini 2.5 Flash AI model for intelligent, context-aware anomaly detection. Unlike traditional ML models, Gemini analyzes sensor data with human-like reasoning and provides detailed explanations.
 
 **How It Works:**
 1. New sensor data arrives via MQTT
@@ -465,11 +465,11 @@ IoTShield uses Google Gemini 1.5 Flash AI model for intelligent, context-aware a
 - Fallback Latency: < 50ms
 - Accuracy: Enhanced with AI reasoning
 
-### Alert Generation (Google Gemini 1.5 Flash)
+### Alert Generation (Google Gemini 2.5 Flash)
 
 **Configuration:**
 ```python
-model = genai.GenerativeModel('gemini-1.5-flash')
+model = genai.GenerativeModel('gemini-2.5-flash')
 temperature = 0.7
 max_output_tokens = 150
 ```
@@ -601,6 +601,7 @@ IoTShield/
 │   ├── QUICK_START.md              # Quick commands reference
 │   ├── QUICK_START_GEMINI.md       # Gemini AI setup guide
 │   ├── AUTHENTICATION_GUIDE.md     # Authentication documentation
+│   ├── EMAIL_ALERTS_GUIDE.md       # Email notifications documentation
 │   ├── IMPLEMENTATION_SUMMARY.md   # Technical implementation details
 │   └── project_structure.md        # Project structure overview
 │
@@ -755,6 +756,15 @@ IoTShield/
 ---
 
 ## Documentation
+
+### Available Guides
+- [Getting Started Guide](docs/GETTING_STARTED.md)
+- [Setup Guide](docs/SETUP_GUIDE.md)
+- [Quick Start Guide](docs/QUICK_START.md)
+- [Gemini AI Setup Guide](docs/QUICK_START_GEMINI.md)
+- [Authentication Guide](docs/AUTHENTICATION_GUIDE.md)
+- [Email Alerts Guide](docs/EMAIL_ALERTS_GUIDE.md)
+- [Implementation Summary](docs/IMPLEMENTATION_SUMMARY.md)
 
 ### For Developers
 - [API Documentation](docs/API.md) *(Coming soon)*
