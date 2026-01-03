@@ -49,6 +49,16 @@
 - Navigation bar integration with user status
 - Ready for email notification integration
 
+### Email Alert System
+- Gmail SMTP integration with app password authentication
+- Automated email notifications for CRITICAL and HIGH severity alerts
+- Professional HTML email templates with responsive design
+- AI-generated alert descriptions in emails
+- Asynchronous email sending (non-blocking)
+- Configurable severity-based filtering
+- Test script for email configuration validation
+- Comprehensive email alerts documentation (EMAIL_ALERTS_GUIDE.md)
+
 ### Documentation
 - README.md completely updated with full documentation
 - System architecture diagrams added
@@ -64,8 +74,8 @@
 ##  Upcoming Tasks / Remaining Tasks
 
 ### New Features to Implement
-1. **Email alerts (Zoho Mail)** - Send email notifications to authenticated users when anomalies are detected
-2. **ESP32 real hardware implementation** - Deploy system on actual ESP32 devices with real sensors
+1. **ESP32 real hardware implementation** - Deploy system on actual ESP32 devices with real sensors
+2. **SMS alerts integration** - Add SMS notifications via Twilio for critical alerts (optional enhancement)
 
 ### Thesis Related
 4. **Complete thesis paper writing** - Final documentation for thesis defense
@@ -85,5 +95,5 @@
 
 ---
 
-*Last Updated: Nov 6, 2025 | Repo: https://github.com/AnowarOHossain/IoTShield*
+*Last Updated: January 4, 2026 | Repo: https://github.com/AnowarOHossain/IoTShield*
 

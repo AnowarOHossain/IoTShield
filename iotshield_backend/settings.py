@@ -152,6 +152,20 @@ GEMINI_API_KEY = os.getenv('GEMINI_API_KEY', '')
 PRIVACY_NOISE_EPSILON = float(os.getenv('PRIVACY_NOISE_EPSILON', 0.5))
 PRIVACY_NOISE_DELTA = float(os.getenv('PRIVACY_NOISE_DELTA', 1e-5))
 
+# Email Configuration (Gmail SMTP)
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', 'anowar44400@gmail.com')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', 'bftzaloifudlpvrx')
+DEFAULT_FROM_EMAIL = 'IoTShield Alerts <anowar44400@gmail.com>'
+ALERT_RECIPIENT_EMAIL = os.getenv('ALERT_RECIPIENT_EMAIL', 'anowar44400@gmail.com')
+
+# Email Alert Settings
+EMAIL_ALERT_ENABLED = os.getenv('EMAIL_ALERT_ENABLED', 'True') == 'True'
+EMAIL_ALERT_SEVERITIES = ['CRITICAL', 'HIGH']  # Send emails only for these severities
+
 # Logging configuration
 LOGGING = {
     'version': 1,

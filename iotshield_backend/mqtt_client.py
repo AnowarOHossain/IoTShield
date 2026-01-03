@@ -158,6 +158,31 @@ class IoTShieldMQTTClient:
                         self.publish_alert(alert)
                         
                         logger.info(f"Anomaly detected by Gemini: {alert.title}")
+                        
+                        # Send email notification for CRITICAL/HIGH alerts
+                        from iotshield_backend.utils.email_alerts import send_alert_email
+                        
+                        # Prepare email data
+                        email_data = {
+                            'device_name': device.name,
+                            'severity': alert.severity,
+                            'sensor_type': sensor_data.sensor_type,
+                            'sensor_value': f"{sensor_data.value} {sensor_data.unit}",
+                            'description': alert.description,
+                            'timestamp': alert.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+                            'additional_data': {
+                                'Device ID': device.device_id,
+                                'Device Type': device.device_type,
+                                'Location': device.location or 'Not specified',
+                                'Sensor Type': sensor_data.sensor_type,
+                                'Reading': f"{sensor_data.value} {sensor_data.unit}",
+                                'AI Suggestion': alert.ai_suggestion or 'No suggestion available'
+                            }
+                        }
+                        
+                        # Send email asynchronously
+                        email_thread = threading.Thread(target=send_alert_email, args=(email_data,), daemon=True)
+                        email_thread.start()
                     else:
                         logger.debug(f"Normal reading: {sensor_data.sensor_type}={sensor_data.value}")
                 
