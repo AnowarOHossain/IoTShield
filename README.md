@@ -4,7 +4,7 @@
 [![Python](https://img.shields.io/badge/Python-3.13-blue.svg)](https://www.python.org/)
 [![Django](https://img.shields.io/badge/Django-5.2.7-green.svg)](https://www.djangoproject.com/)
 [![MQTT](https://img.shields.io/badge/MQTT-Mosquitto-orange.svg)](https://mosquitto.org/)
-[![AI](https://img.shields.io/badge/AI-Gemini%201.5-purple.svg)](https://ai.google.dev/)
+[![AI](https://img.shields.io/badge/AI-Gemini%202.5-purple.svg)](https://ai.google.dev/)
 [![License](https://img.shields.io/badge/License-Academic-red.svg)](LICENSE)
 
 ---
@@ -13,7 +13,7 @@
 
 **IoTShield** is a fully-functional smart home automation and monitoring system that provides **real-time, privacy-preserving data communication** and **AI-driven anomaly detection** using the **MQTT protocol**.
 
-The system integrates **Generative AI (Google Gemini 1.5)** to interpret and generate meaningful alerts from sensor anomalies, ensuring an intelligent and secure home environment. With **3799+ sensor readings** collected, **723+ alerts generated** across all severity levels, and **real-time chart visualization**, IoTShield demonstrates a complete end-to-end IoT solution.
+The system integrates **Generative AI (Google Gemini 2.5 Flash)** to interpret and generate meaningful alerts from sensor anomalies, ensuring an intelligent and secure home environment. With **6769+ sensor readings** collected, **1132+ alerts generated** across all severity levels, and **real-time chart visualization**, IoTShield demonstrates a complete end-to-end IoT solution.
 
 **Current Status:**  **Fully Operational** - All core features implemented, tested, and working perfectly!
 
@@ -41,7 +41,7 @@ IoTShield is developed as part of the **CSE Final Year Thesis Project** at **Sha
 - **User Authentication System** with login/register functionality and JWT token support
 - **Privacy-Preserving Data Collection** with differential privacy noise
 - **MQTT Protocol Communication** using Mosquitto broker
-- **AI-Powered Anomaly Detection** with Google Gemini 1.5 Flash
+- **AI-Powered Anomaly Detection** with Google Gemini 2.5 Flash
 - **Intelligent Alert Generation** with context-aware AI analysis
 - **Interactive Dashboard** with Tailwind CSS & Chart.js
 - **Data Persistence** with Django ORM and SQLite
@@ -142,7 +142,7 @@ ESP32 Sensors → MQTT Broker → Django Backend → Gemini AI → Dashboard →
    - Real-time data processing with timezone-aware timestamps
 
 4. **Gemini AI Anomaly Detection** *Working & Validated*
-   - Uses **Google Gemini 1.5 Flash** for intelligent anomaly detection
+   - Uses **Google Gemini 2.5 Flash** for intelligent anomaly detection
    - Context-aware analysis with human-like reasoning
    - Real-time anomaly detection with detailed explanations
    - Severity classification (LOW, MEDIUM, HIGH, CRITICAL)
@@ -186,8 +186,8 @@ ESP32 Sensors → MQTT Broker → Django Backend → Gemini AI → Dashboard →
 | **MQTT Communication** | Complete | Secure publish/subscribe messaging | Mosquitto, paho-mqtt 2.1.0 |
 | **Edge Processing** | Complete | Local MQTT broker and caching | Raspberry Pi compatible |
 | **Backend & Storage** | Complete | Data ingestion, storage, management | Django 5.2.7, SQLite |
-| **Anomaly Detection** | Complete | AI-powered anomaly detection | Google Gemini 1.5 Flash |
-| **Alert Generation** | Complete | Intelligent alert system with AI | Google Gemini 1.5 Flash |
+| **Anomaly Detection** | Complete | AI-powered anomaly detection | Google Gemini 2.5 Flash |
+| **Alert Generation** | Complete | Intelligent alert system with AI | Google Gemini 2.5 Flash |
 | **User Authentication** | Complete | User registration and login system | Django Auth, JWT, Tailwind CSS |
 | **Dashboard** | Complete | Real-time visualization | Django, Tailwind CSS, Chart.js |
 | **REST API** | Complete | Data access endpoints | Django REST Framework |
@@ -197,7 +197,7 @@ ESP32 Sensors → MQTT Broker → Django Backend → Gemini AI → Dashboard →
 
 ##  Current System Statistics
 
-As of December 2, 2025:
+As of January 4, 2026:
 
 ```
 Active Devices: 2
@@ -208,13 +208,13 @@ Total Sensor Types: 9
    ESP32: Temperature, Humidity, Gas, Flame, Motion, Light
    RPI: All above + CPU Temperature, Memory Usage, Disk Usage
 
-Total Sensor Readings: 3799+
+Total Sensor Readings: 6769+
    Environmental sensor readings (both devices)
    System metrics from Raspberry Pi
    Real-time data every 5 seconds
    Continuous data collection over multiple sessions
 
-Total Alerts Generated: 723+
+Total Alerts Generated: 1132+
    CRITICAL alerts - Immediate threats (Gas leaks, Fire hazards)
    HIGH priority alerts - Significant issues (Motion anomalies)
    MEDIUM priority alerts - Notable anomalies (Temperature spikes)
@@ -228,14 +228,14 @@ Anomalies Detected: Multiple severities
    Humidity anomalies (MEDIUM severity)
    System performance anomalies (RPI monitoring)
 
-Detection Accuracy: Validated with 723+ real-time alerts
+Detection Accuracy: Validated with 1132+ real-time alerts
 Data Flow: End-to-end operational
 Average Response Time: < 2 seconds
 Multi-Device Support: Fully operational
 Dashboard Charts: Real-time visualization working
 All Severity Levels: LOW, MEDIUM, HIGH, CRITICAL detected
-AI Anomaly Detection: Google Gemini 1.5 Flash integrated
-Database: 3799+ records with complete sensor history
+AI Anomaly Detection: Google Gemini 2.5 Flash integrated
+Database: 6769+ records with complete sensor history
 ```
 
 ---
@@ -772,10 +772,10 @@ We would like to express our deepest gratitude to:
 ## Achievements
 
 - Successfully implemented complete IoT pipeline
-- Integrated cutting-edge Gemini AI technology
+- Integrated cutting-edge Gemini 2.5 Flash AI technology
 - Achieved real-time anomaly detection with < 2s latency
 - Built multi-device architecture (ESP32 + Raspberry Pi)
-- Collected 3799+ sensor readings with 723+ AI-generated alerts
+- Collected 6769+ sensor readings with 1132+ AI-generated alerts
 - Implemented edge gateway with system monitoring
 - Built production-ready web dashboard
 - Implemented user authentication system with JWT support
@@ -786,8 +786,9 @@ We would like to express our deepest gratitude to:
 - All 4 severity levels (LOW, MEDIUM, HIGH, CRITICAL) working
 - Fixed and optimized dashboard data visualization
 - Complete screenshot documentation added
-- Large-scale data collection validated (3799+ readings)
-- AI anomaly detection proven effective (723+ alerts)
+- Large-scale data collection validated (6769+ readings)
+- AI anomaly detection proven effective (1132+ alerts)
+- Upgraded to latest Gemini 2.5 Flash model
 
 ---
 
@@ -797,25 +798,29 @@ We would like to express our deepest gratitude to:
 ![Dashboard Homepage](Screenshots/Dashboard-Homepage.png)
 *Real-time system statistics with active device count, total readings, active alerts, and system status indicator*
 
+### User Authentication - Login
+![Login Page](Screenshots/Login-Page.png)
+*Secure user login interface with modern gradient design and session-based authentication*
+
+### User Authentication - Register
+![Register Page](Screenshots/Register-Page.png)
+*User registration page with email validation and password security*
+
 ### Devices Page
-![Devices Page](Screenshots/Devices-Page.png)
+![Devices Page](Screenshots/Device-Page.png)
 *Connected IoT device management interface showing ESP32 and Raspberry Pi simulators with real-time status*
 
 ### Alerts Page
 ![Alerts Page](Screenshots/Alerts-Page.png)
 *AI-generated anomaly alerts with severity indicators (Critical, High, Medium, Low) and detailed descriptions*
 
-### Sensor Charts
-![Sensor Charts](Screenshots/Sensor-Charts.png)
-*Real-time sensor data visualization with Chart.js - Temperature and Humidity trends, plus Alerts by Severity distribution*
+### Alert Database Storage
+![Alert Database](Screenshots/Alert_saved-in%20Database.png)
+*Backend view showing alerts stored in database with Gemini AI-generated analysis and severity classification*
 
 ### Sensor Data Records
-![Sensor Data](Screenshots/sensor-data.png)
-*Complete sensor data records showing 3000+ readings from both ESP32 and Raspberry Pi devices with timestamps and values*
-
-### Sensor Data Details
-![Sensor Data Details](Screenshots/sensor-data2.png)
-*Detailed sensor data view displaying device information, sensor types, measurements, and anomaly detection results*
+![Sensor Data](Screenshots/Sensor%20Datas.png)
+*Complete sensor data records showing 6769+ readings from both ESP32 and Raspberry Pi devices with timestamps and values*
 
 ---
 
@@ -855,9 +860,9 @@ We would like to express our deepest gratitude to:
 
 ---
 
-**Last Updated:** December 2, 2025  
-**Version:** 1.0.1  
-**Status:** Fully Operational with Multi-Device Support & AI-Powered Detection
+**Last Updated:** January 4, 2026  
+**Version:** 1.1.0  
+**Status:** Fully Operational with Gemini 2.5 Flash & Enhanced Detection
 
 </div>
   
