@@ -324,21 +324,21 @@ python manage.py runserver
 ```
 Dashboard will be available at: http://127.0.0.1:8000/
 
-**Terminal 2: MQTT Listener**
-```bash
-python manage.py mqtt_listener
-```
-
-**Terminal 3: ESP32 Simulator**
+**Terminal 2: ESP32 Simulator**
 ```bash
 cd simulator
 python simulator.py
 ```
 
-**Terminal 4: Raspberry Pi Simulator**
+**Terminal 3: Raspberry Pi Simulator**
 ```bash
 cd simulator
 python rpi_simulator.py
+```
+
+**Terminal 4: MQTT Listener**
+```bash
+python manage.py mqtt_listener
 ```
 
 **OR run both simulators together:**
