@@ -157,10 +157,10 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', 'anowar44400@gmail.com')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', 'bftzaloifudlpvrx')
-DEFAULT_FROM_EMAIL = 'IoTShield Alerts <anowar44400@gmail.com>'
-ALERT_RECIPIENT_EMAIL = os.getenv('ALERT_RECIPIENT_EMAIL', 'anowar44400@gmail.com')
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
+DEFAULT_FROM_EMAIL = f'IoTShield Alerts <{os.getenv("EMAIL_HOST_USER", "")}>'
+ALERT_RECIPIENT_EMAIL = os.getenv('ALERT_RECIPIENT_EMAIL', '')
 
 # Email Alert Settings
 EMAIL_ALERT_ENABLED = os.getenv('EMAIL_ALERT_ENABLED', 'True') == 'True'
