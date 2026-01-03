@@ -526,39 +526,96 @@ private_value = original_value + noise
 
 ```
 IoTShield/
- dashboard/                  # Django dashboard app
-    models.py              # Device, SensorData, Alert models
-    views.py               # Dashboard views
-    templates/             # HTML templates
-    static/                # CSS, JS, images
- iotshield_backend/         # Django backend app
-    settings.py            # Django configuration
-    mqtt_client.py         # MQTT subscriber client
-    gemini_anomaly_detector.py  # Gemini AI anomaly detection
-    gemini_alerts.py       # Gemini AI integration
-    management/
-        commands/
-            mqtt_listener.py  # Django command
- simulator/                 # IoT device simulators
-    simulator.py           # ESP32 simulator
-    rpi_simulator.py       # Raspberry Pi simulator
-    run_all_simulators.py  # Multi-device launcher
-    config.json            # ESP32 configuration
-    rpi_config.json        # RPI configuration
-    README.md              # Simulator documentation
-    utils/
-        sensors.py         # Sensor simulation
-        mqtt_publisher.py  # MQTT client
-        logger.py          # Logging utility
- docs/                      # Documentation
-    GETTING_STARTED.md     # Getting started guide
-    SETUP_GUIDE.md         # Setup instructions
-    QUICK_START.md         # Quick commands
- check_data.py              # Database utility script
- manage.py                  # Django management
- requirements.txt           # Python dependencies
- README.md                  # This file
- To_Do.md                   # Project progress tracker
+├── dashboard/                       # Django dashboard app
+│   ├── __init__.py
+│   ├── admin.py                     # Django admin configuration
+│   ├── apps.py                      # App configuration
+│   ├── models.py                    # Device, SensorData, Alert models
+│   ├── urls.py                      # Dashboard URL routing
+│   ├── views.py                     # Dashboard views
+│   ├── management/                  # Django management commands
+│   │   └── commands/
+│   │       ├── mqtt_listener.py     # MQTT listener command
+│   │       └── test_gemini_detector.py  # Gemini testing utility
+│   ├── migrations/                  # Database migrations
+│   │   └── 0001_initial.py
+│   ├── static/                      # Frontend static assets
+│   │   ├── css/                     # Stylesheets
+│   │   ├── images/                  # Images and icons
+│   │   └── js/                      # JavaScript files
+│   └── templates/                   # HTML templates
+│       ├── alerts.html              # Alerts page
+│       ├── dashboard.html           # Homepage
+│       ├── devices.html             # Devices page
+│       ├── login.html               # Login page
+│       └── register.html            # Registration page
+│
+├── iotshield_backend/              # Django backend core
+│   ├── __init__.py
+│   ├── settings.py                 # Django configuration
+│   ├── urls.py                     # Main URL routing
+│   ├── asgi.py                     # ASGI configuration
+│   ├── wsgi.py                     # WSGI configuration
+│   ├── models.py                   # Shared models
+│   ├── mqtt_client.py              # MQTT subscriber client
+│   ├── anomaly_detector.py         # Rule-based detector (fallback)
+│   ├── gemini_anomaly_detector.py  # Gemini 2.5 AI anomaly detection
+│   ├── gemini_alerts.py            # Gemini 2.5 AI integration
+│   ├── privacy_engine.py           # Privacy-preserving mechanisms
+│   ├── auth_urls.py                # Authentication URL routing
+│   ├── auth_views.py               # Authentication views
+│   └── utils/                      # Backend utilities
+│       ├── db_helpers.py           # Database helper functions
+│       ├── logger.py               # Logging utility
+│       ├── mqtt_utils.py           # MQTT helper functions
+│       └── noise_utils.py          # Differential privacy utilities
+│
+├── simulator/                      # IoT device simulators
+│   ├── __init__.py
+│   ├── simulator.py                # ESP32 simulator
+│   ├── rpi_simulator.py            # Raspberry Pi simulator
+│   ├── run_all_simulators.py       # Multi-device launcher
+│   ├── config.json                 # ESP32 configuration
+│   ├── rpi_config.json             # Raspberry Pi configuration
+│   ├── README.md                   # Simulator documentation
+│   └── utils/
+│       ├── sensors.py              # Sensor simulation logic
+│       ├── mqtt_publisher.py       # MQTT publishing client
+│       └── logger.py               # Logging utility
+│
+├── docs/                           # Documentation
+│   ├── GETTING_STARTED.md          # Getting started guide
+│   ├── SETUP_GUIDE.md              # Setup instructions
+│   ├── QUICK_START.md              # Quick commands reference
+│   ├── QUICK_START_GEMINI.md       # Gemini AI setup guide
+│   ├── AUTHENTICATION_GUIDE.md     # Authentication documentation
+│   ├── IMPLEMENTATION_SUMMARY.md   # Technical implementation details
+│   └── project_structure.md        # Project structure overview
+│
+├── edge_integration/               # Edge device integration
+│   └── firmware/                   # Firmware files (future)
+│
+├── scripts/                        # Utility scripts
+│   ├── run_mqtt_broker.sh          # MQTT broker startup script
+│   └── start_dashboard.sh          # Dashboard startup script
+│
+├── Screenshots/                    # Application screenshots
+│   ├── Dashboard-Homepage.png
+│   ├── Login-Page.png
+│   ├── Register-Page.png
+│   ├── Device-Page.png
+│   ├── Alerts-Page.png
+│   ├── Alert_saved-in Database.png
+│   └── Sensor Datas.png
+│
+├── check_data.py                   # Database inspection utility
+├── test_gemini_anomaly.py          # Gemini API testing script
+├── test_mqtt.py                    # MQTT connectivity testing
+├── manage.py                       # Django management
+├── requirements.txt                # Python dependencies
+├── db.sqlite3                      # SQLite database
+├── README.md                       # This file
+└── To_Do.md                        # Project progress tracker
 ```
 
 ---
@@ -762,9 +819,9 @@ We would like to express our deepest gratitude to:
 | **Backend Development** | Oct 2025 | Complete |
 | **Gemini AI Integration** | Oct-Nov 2025 | Complete |
 | **Dashboard Implementation** | Oct 2025 | Complete |
-| **Integration & Testing** | Nov 2025 | In Progress |
-| **Documentation** | Nov 2025 | In Progress |
-| **Thesis Writing** | Dec 2025 | Planned |
+| **Integration & Testing** | Nov-Dec 2025 | In Progress |
+| **Documentation** | Jan 2026 | In Progress |
+| **Thesis Writing** | Jan 2026 | Planned |
 | **Final Presentation** | Jan 2026 | Planned |
 
 ---
