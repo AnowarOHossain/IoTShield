@@ -1,6 +1,6 @@
 """
-Compare ML-based vs Gemini-based Anomaly Detection
-This script helps verify the new Gemini detector works correctly
+Gemini-Based Anomaly Detection Test
+This script helps verify the Gemini detector works correctly
 """
 import os
 import sys
@@ -154,9 +154,9 @@ def test_with_recent_data():
         print(f"  Suggestion: {result['suggestion']}")
         
         if sensor_data.is_anomaly:
-            print(f"\n  Previous ML Detection: ANOMALY (score: {sensor_data.anomaly_score:.2f})")
+            print(f"\n  Previous Detection: ANOMALY (score: {sensor_data.anomaly_score:.2f})")
         else:
-            print(f"\n  Previous ML Detection: NORMAL")
+            print(f"\n  Previous Detection: NORMAL")
     
     print(f"\n{'='*60}\n")
 

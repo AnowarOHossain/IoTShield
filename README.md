@@ -420,7 +420,7 @@ Latest alerts:
 ### Gemini-Based Anomaly Detection
 
 **Overview:**
-IoTShield uses Google Gemini 2.5 Flash AI model for intelligent, context-aware anomaly detection. Unlike traditional ML models, Gemini analyzes sensor data with human-like reasoning and provides detailed explanations.
+IoTShield uses Google Gemini 2.5 Flash AI model for intelligent, context-aware anomaly detection. Gemini analyzes sensor data with human-like reasoning and provides detailed explanations.
 
 **How It Works:**
 1. New sensor data arrives via MQTT
@@ -570,7 +570,6 @@ IoTShield/
 │   ├── wsgi.py                     # WSGI configuration
 │   ├── models.py                   # Shared models
 │   ├── mqtt_client.py              # MQTT subscriber client
-│   ├── anomaly_detector.py         # Rule-based detector (fallback)
 │   ├── gemini_anomaly_detector.py  # Gemini 2.5 AI anomaly detection
 │   ├── gemini_alerts.py            # Gemini 2.5 AI integration
 │   ├── privacy_engine.py           # Privacy-preserving mechanisms
@@ -915,7 +914,7 @@ We would like to express our deepest gratitude to:
 
 ### Research Objectives
 1. Evaluate MQTT protocol for IoT communication
-2. Assess ML models for anomaly detection
+2. Assess Gemini AI for intelligent anomaly detection
 3. Measure privacy preservation effectiveness
 4. Analyze system performance metrics
 5. Validate real-world applicability

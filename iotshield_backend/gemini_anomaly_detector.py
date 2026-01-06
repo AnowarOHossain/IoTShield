@@ -112,18 +112,33 @@ class GeminiAnomalyDetector:
 **Normal Range Context:**
 {normal_ranges}
 
+**Severity Classification Guidelines:**
+- **LOW**: Minor deviation from normal (5-15% outside normal range). Informational only, no immediate action needed.
+- **MEDIUM**: Moderate deviation (15-30% outside normal range). Monitor closely, may need attention soon.
+- **HIGH**: Significant deviation (30-50% outside normal range) or approaching danger threshold. Requires investigation.
+- **CRITICAL**: Extreme deviation (>50% outside normal range) or exceeds safety threshold. Immediate action required, potential danger.
+
+**Examples:**
+- Temperature 32°C (normal: 20-28°C) → MEDIUM (slightly warm, monitor)
+- Temperature 38°C (normal: 20-28°C) → HIGH (uncomfortably hot, investigate)
+- Temperature 48°C (normal: 20-28°C) → CRITICAL (dangerous heat, immediate action)
+- Humidity 65% (normal: 30-60%) → LOW (slightly high, informational)
+- Gas 0.35 ppm (normal: 0-0.3) → MEDIUM (elevated, monitor for leak)
+- Gas 0.75 ppm (critical: >0.7) → CRITICAL (dangerous leak, evacuate)
+
 **Task:**
 Determine if this sensor reading is normal or anomalous. Consider:
 1. Is the value within expected range for this sensor type?
-2. Could this indicate a safety hazard or system malfunction?
-3. Does this require immediate attention?
+2. How far is it from the normal range (percentage deviation)?
+3. Does it pose an immediate safety risk?
+4. Use LOW/MEDIUM for minor deviations, reserve HIGH/CRITICAL for genuine concerns.
 
 **Required Response Format (JSON only, no markdown):**
 {{
     "anomaly": true/false,
-    "explanation": "Clear explanation of why this is or isn't an anomaly (2-3 sentences)",
+    "explanation": "Clear explanation of why this is or isn't an anomaly, including deviation percentage if relevant (2-3 sentences)",
     "severity": "LOW/MEDIUM/HIGH/CRITICAL",
-    "suggestion": "Specific action recommendation (1-2 sentences)"
+    "suggestion": "Specific action recommendation appropriate to severity level (1-2 sentences)"
 }}
 
 Respond ONLY with valid JSON. No additional text or formatting.
@@ -133,14 +148,17 @@ Respond ONLY with valid JSON. No additional text or formatting.
     def _get_normal_ranges(self, sensor_type: str) -> str:
         """Get normal ranges for different sensor types"""
         ranges = {
-            'TEMPERATURE': 'Normal: 15-30°C, Warning: 30-40°C, Critical: >40°C or <0°C',
-            'HUMIDITY': 'Normal: 30-60%, Warning: 60-80%, Critical: >80% or <20%',
-            'GAS': 'Normal: 0-0.3, Warning: 0.3-0.6, Critical: >0.6 (potential gas leak)',
-            'FLAME': 'Normal: 0-0.2, Warning: 0.2-0.5, Critical: >0.5 (fire hazard)',
-            'MOTION': 'Normal: Expected motion patterns during active hours, Critical: Unexpected motion during off-hours',
-            'LIGHT': 'Normal: Varies by time of day and location, typical indoor 100-500 lux',
+            'TEMPERATURE': 'Normal: 18-28°C, Low Alert: 28-35°C or 10-18°C, Medium Alert: 35-42°C or 5-10°C, High Alert: 42-50°C or 0-5°C, Critical: >50°C or <0°C',
+            'HUMIDITY': 'Normal: 30-60%, Low Alert: 60-70% or 20-30%, Medium Alert: 70-80% or 15-20%, High Alert: 80-90% or 10-15%, Critical: >90% or <10%',
+            'GAS': 'Normal: 0-0.35 ppm, Low Alert: 0.36-0.50 ppm, Medium Alert: 0.51-0.65 ppm, High Alert: 0.66-0.75 ppm, Critical: >0.76 ppm (dangerous leak)',
+            'FLAME': 'Normal: 0-0.15, Low Alert: 0.16-0.35, Medium Alert: 0.36-0.55, High Alert: 0.56-0.70, Critical: >0.71 (fire detected)',
+            'MOTION': 'Normal: 0-0.4 (low activity), Low Alert: 0.4-0.6 (moderate activity), Medium Alert: 0.6-0.75 (high activity), High Alert: 0.75-0.90 (unusual), Critical: >0.90 (suspicious)',
+            'LIGHT': 'Normal: 100-600 lux (indoor), Low Alert: 600-800 lux, Medium Alert: 800-900 lux or <50 lux, High Alert: >900 lux or <20 lux',
+            'CPU_TEMPERATURE': 'Normal: 30-65°C, Low Alert: 65-75°C, Medium Alert: 75-85°C, High Alert: 85-95°C, Critical: >95°C',
+            'MEMORY_USAGE': 'Normal: 0-70%, Low Alert: 70-80%, Medium Alert: 80-90%, High Alert: 90-95%, Critical: >95%',
+            'DISK_USAGE': 'Normal: 0-70%, Low Alert: 70-80%, Medium Alert: 80-90%, High Alert: 90-95%, Critical: >95%',
         }
-        return ranges.get(sensor_type, 'No predefined range available. Use expert judgment.')
+        return ranges.get(sensor_type, 'No predefined range available. Use expert judgment and classify based on reasonable deviation from expected values.')
     
     def _call_gemini_with_timeout(self, prompt: str, timeout: int = 10) -> str:
         """Call Gemini API with timeout"""
@@ -231,44 +249,54 @@ Respond ONLY with valid JSON. No additional text or formatting.
         # Get threshold rules
         thresholds = self._get_threshold_rules(sensor_type)
         
-        # Check against thresholds
-        if value > thresholds.get('critical', float('inf')):
+        # Check against thresholds (multi-level severity)
+        if value > thresholds.get('critical', float('inf')) or value < thresholds.get('min', float('-inf')):
             return {
                 'anomaly': True,
-                'explanation': f'{sensor_type} value {value} exceeds critical threshold ({thresholds["critical"]}). Immediate attention required.',
+                'explanation': f'{sensor_type} value {value} exceeds critical threshold. Extreme deviation detected, immediate attention required.',
                 'severity': 'CRITICAL',
-                'suggestion': f'Check {sensor_type.lower()} sensor and investigate cause immediately.'
+                'suggestion': f'Immediately check {sensor_type.lower()} sensor and investigate cause. Take safety precautions.'
             }
-        elif value > thresholds.get('warning', float('inf')):
+        elif value > thresholds.get('high', float('inf')):
             return {
                 'anomaly': True,
-                'explanation': f'{sensor_type} value {value} is above warning threshold ({thresholds["warning"]}). Monitor closely.',
+                'explanation': f'{sensor_type} value {value} significantly exceeds high threshold ({thresholds["high"]}). Requires investigation.',
                 'severity': 'HIGH',
-                'suggestion': f'Monitor {sensor_type.lower()} trends and prepare for intervention if needed.'
+                'suggestion': f'Investigate {sensor_type.lower()} readings and prepare for intervention if trend continues.'
             }
-        elif value < thresholds.get('min', float('-inf')):
+        elif value > thresholds.get('medium', float('inf')):
             return {
                 'anomaly': True,
-                'explanation': f'{sensor_type} value {value} is below minimum threshold ({thresholds["min"]}). Possible sensor malfunction.',
+                'explanation': f'{sensor_type} value {value} exceeds medium threshold ({thresholds["medium"]}). Notable deviation from normal.',
                 'severity': 'MEDIUM',
-                'suggestion': 'Check sensor connectivity and calibration.'
+                'suggestion': f'Monitor {sensor_type.lower()} closely. Check if pattern persists over next readings.'
+            }
+        elif value > thresholds.get('low', float('inf')):
+            return {
+                'anomaly': True,
+                'explanation': f'{sensor_type} value {value} slightly exceeds normal range. Minor deviation detected.',
+                'severity': 'LOW',
+                'suggestion': f'Keep monitoring {sensor_type.lower()}. No immediate action needed unless trend worsens.'
             }
         else:
             return {
                 'anomaly': False,
                 'explanation': f'{sensor_type} value {value} is within normal operating range.',
                 'severity': 'LOW',
-                'suggestion': 'No action required. Continue monitoring.'
+                'suggestion': 'No action required. Continue routine monitoring.'
             }
     
     def _get_threshold_rules(self, sensor_type: str) -> Dict:
         """Get threshold rules for rule-based fallback"""
         rules = {
-            'TEMPERATURE': {'min': -5, 'warning': 35, 'critical': 45},
-            'HUMIDITY': {'min': 10, 'warning': 70, 'critical': 85},
-            'GAS': {'min': 0, 'warning': 0.4, 'critical': 0.6},
-            'FLAME': {'min': 0, 'warning': 0.3, 'critical': 0.6},
-            'MOTION': {'min': 0, 'warning': 0.8, 'critical': 1.0},
-            'LIGHT': {'min': 0, 'warning': 800, 'critical': 1000},
+            'TEMPERATURE': {'min': 0, 'low': 32, 'medium': 38, 'high': 45, 'critical': 50},
+            'HUMIDITY': {'min': 15, 'low': 65, 'medium': 75, 'high': 85, 'critical': 90},
+            'GAS': {'min': 0, 'low': 0.36, 'medium': 0.51, 'high': 0.66, 'critical': 0.76},
+            'FLAME': {'min': 0, 'low': 0.16, 'medium': 0.36, 'high': 0.56, 'critical': 0.71},
+            'MOTION': {'min': 0, 'low': 0.4, 'medium': 0.6, 'high': 0.75, 'critical': 0.90},
+            'LIGHT': {'min': 20, 'low': 650, 'medium': 800, 'high': 900, 'critical': 950},
+            'CPU_TEMPERATURE': {'min': 0, 'low': 70, 'medium': 80, 'high': 90, 'critical': 95},
+            'MEMORY_USAGE': {'min': 0, 'low': 75, 'medium': 85, 'high': 92, 'critical': 95},
+            'DISK_USAGE': {'min': 0, 'low': 75, 'medium': 85, 'high': 92, 'critical': 95},
         }
-        return rules.get(sensor_type, {'min': 0, 'warning': 80, 'critical': 95})
+        return rules.get(sensor_type, {'min': 0, 'low': 70, 'medium': 80, 'high': 90, 'critical': 95})

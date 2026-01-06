@@ -15,7 +15,7 @@
     "topic_control": "iotshield/control/commands"
   },
   "privacy": {
-    "enable_noise": true,
+    "enable_noise": false,
     "noise_epsilon": 0.5,
     "noise_type": "gaussian"
   },
@@ -23,30 +23,31 @@
     "temperature": {
       "base_value": 25,
       "variance": 3,
-      "anomaly_chance": 0.05
+      "anomaly_chance": 0.04
     },
     "humidity": {
       "base_value": 60,
       "variance": 10,
-      "anomaly_chance": 0.05
+      "anomaly_chance": 0.03
     },
     "gas": {
-      "base_value": 0.1,
-      "variance": 0.05,
-      "anomaly_chance": 0.02
+      "base_value": 0.08,
+      "variance": 0.02,
+      "anomaly_chance": 0.015
     },
     "flame": {
       "base_value": 0,
-      "anomaly_chance": 0.01
+      "anomaly_chance": 0.008
     },
     "motion": {
       "base_value": 0,
-      "activity_chance": 0.3
+      "base_intensity": 0.3,
+      "activity_chance": 0.25
     },
     "light": {
       "base_value": 300,
       "variance": 100,
-      "anomaly_chance": 0.03
+      "anomaly_chance": 0.025
     }
   }
 }

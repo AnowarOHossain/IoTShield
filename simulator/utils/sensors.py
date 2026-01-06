@@ -72,31 +72,71 @@ class SensorSimulator:
         value = random.normalvariate(base, variance)
         
         if random.random() < anomaly_chance:
-            value = random.uniform(0.7, 0.95)  # Gas leak!
+            # Generate anomalies across different severity ranges
+            severity_roll = random.random()
+            if severity_roll < 0.15:  # 15% CRITICAL
+                value = random.uniform(0.76, 0.90)  # Critical gas leak
+            elif severity_roll < 0.40:  # 25% HIGH
+                value = random.uniform(0.66, 0.75)  # High gas level
+            elif severity_roll < 0.70:  # 30% MEDIUM
+                value = random.uniform(0.51, 0.65)  # Medium gas level
+            else:  # 30% LOW
+                value = random.uniform(0.36, 0.50)  # Slightly elevated
         
+        # Clamp value BEFORE adding noise to prevent overflow
+        value = max(0, min(0.95, value))
+        
+        # Add privacy noise (smaller amount to prevent overflow)
         if self.privacy_config.get('enable_noise', False):
-            value = self._add_noise(value)
+            epsilon = self.privacy_config.get('noise_epsilon', 0.5)
+            # Reduce noise impact for bounded values
+            noise = random.gauss(0, 0.01 / epsilon)  # Much smaller noise
+            value = value + noise
         
-        return round(max(0, min(1, value)), 3)
+        return round(max(0, min(0.95, value)), 3)
     
     def read_flame(self):
-        """Simulate flame sensor (binary 0/1)"""
+        """Simulate flame sensor (0-1 continuous value)"""
         config = self.sensor_config.get('flame', {})
         anomaly_chance = config.get('anomaly_chance', 0.01)
         
-        # Usually 0, rarely 1 (fire!)
-        value = 1 if random.random() < anomaly_chance else 0
+        # Usually 0, rarely detect flame with varying intensity
+        if random.random() < anomaly_chance:
+            # Flame detected - vary by severity
+            severity_roll = random.random()
+            if severity_roll < 0.2:  # 20% CRITICAL - actual fire
+                value = random.uniform(0.71, 0.95)
+            elif severity_roll < 0.5:  # 30% HIGH - strong heat signature
+                value = random.uniform(0.56, 0.70)
+            elif severity_roll < 0.75:  # 25% MEDIUM - notable heat
+                value = random.uniform(0.36, 0.55)
+            else:  # 25% LOW - minor heat signature
+                value = random.uniform(0.16, 0.35)
+        else:
+            # Normal - very low or no flame
+            value = random.uniform(0, 0.10)
         
-        return value
+        return round(value, 2)
     
     def read_motion(self):
-        """Simulate motion sensor (binary 0/1)"""
+        """Simulate motion sensor (0-1 continuous value)"""
         config = self.sensor_config.get('motion', {})
         activity_chance = config.get('activity_chance', 0.3)
         
-        value = 1 if random.random() < activity_chance else 0
+        # Generate motion intensity instead of binary
+        if random.random() < activity_chance:
+            # Motion detected - vary intensity
+            base_intensity = config.get('base_intensity', 0.3)
+            value = random.uniform(base_intensity * 0.5, base_intensity * 2)
+            
+            # Rare high-intensity motion
+            if random.random() < 0.05:
+                value = random.uniform(0.7, 0.95)
+        else:
+            # No motion or very low
+            value = random.uniform(0, 0.15)
         
-        return value
+        return round(max(0, min(1, value)), 2)
     
     def read_light(self):
         """Simulate light sensor (lux)"""

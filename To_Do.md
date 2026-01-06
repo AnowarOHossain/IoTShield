@@ -75,7 +75,7 @@
 
 ### New Features to Implement
 1. **ESP32 real hardware implementation** - Deploy system on actual ESP32 devices with real sensors
-2. **SMS alerts integration** - Add SMS notifications via Twilio for critical alerts (optional enhancement)
+2. **Ollama local LLM integration** - Add Ollama support with local models (Phi-2/TinyLlama) as alternative to Gemini API for unlimited, offline anomaly detection
 
 ### Thesis Related
 4. **Complete thesis paper writing** - Final documentation for thesis defense
@@ -95,5 +95,5 @@
 
 ---
 
-*Last Updated: January 4, 2026 | Repo: https://github.com/AnowarOHossain/IoTShield*
+*Last Updated: January 6, 2026 | Repo: https://github.com/AnowarOHossain/IoTShield*
 
