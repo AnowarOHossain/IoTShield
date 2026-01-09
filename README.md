@@ -38,6 +38,7 @@ IoTShield is developed as part of the **CSE Final Year Thesis Project** at **Sha
 
 ### Implemented & Tested
 
+- **ESP32 Hardware Firmware** ready for physical device deployment
 - **Email Alert Notifications** with Gmail SMTP for critical anomalies
 - **User Authentication System** with login/register functionality and JWT token support
 - **Privacy-Preserving Data Collection** with differential privacy noise
@@ -53,6 +54,7 @@ IoTShield is developed as part of the **CSE Final Year Thesis Project** at **Sha
 - **Large-Scale Data Collection** with 3799+ sensor readings collected
 - **Anomaly Detection Accuracy** validated with 723+ real-time alerts
 - **Multi-Device Architecture** supporting ESP32 and Raspberry Pi simultaneously
+- **Production-Ready Hardware Code** with 500+ lines of Arduino firmware
 
 ---
 
