@@ -293,7 +293,7 @@ Respond ONLY with valid JSON. No additional text or formatting.
             'HUMIDITY': {'min': 15, 'low': 65, 'medium': 75, 'high': 85, 'critical': 90},
             'GAS': {'min': 0, 'low': 0.36, 'medium': 0.51, 'high': 0.66, 'critical': 0.76},
             'FLAME': {'min': 0, 'low': 0.16, 'medium': 0.36, 'high': 0.56, 'critical': 0.71},
-            'MOTION': {'min': 0, 'low': 0.4, 'medium': 0.6, 'high': 0.75, 'critical': 0.90},
+            'MOTION': {'min': 0, 'low': 0.4, 'medium': 0.6, 'high': 0.75, 'critical': 0.97},  # Increased from 0.90 to 0.97
             'LIGHT': {'min': 20, 'low': 650, 'medium': 800, 'high': 900, 'critical': 950},
             'CPU_TEMPERATURE': {'min': 0, 'low': 70, 'medium': 80, 'high': 90, 'critical': 95},
             'MEMORY_USAGE': {'min': 0, 'low': 75, 'medium': 85, 'high': 92, 'critical': 95},
