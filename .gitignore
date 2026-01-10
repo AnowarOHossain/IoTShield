@@ -1,3 +1,5 @@
+# ESP32 WiFi credentials
+edge_integration/firmware/iotshield_esp32/.wifi_secrets
 # Python
 __pycache__/
 *.py[cod]
