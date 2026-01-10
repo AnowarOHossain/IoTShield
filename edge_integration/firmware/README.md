@@ -87,6 +87,21 @@ const int MQTT_PORT = 1883;
 3. Click "Upload" button
 4. Wait for "Done uploading" message
 
+### Step 3.5: Activate Mosquitto MQTT Broker
+
+To enable MQTT communication, you need to start the Mosquitto broker on your PC:
+
+1. Press **Win + R**, type `cmd`, and press Enter.
+2. Navigate to the Mosquitto installation folder:
+   ```
+   cd "C:\Program Files\mosquitto"
+   ```
+3. Start the broker with the following command:
+   ```
+   mosquitto -c mosquitto.conf -v
+   ```
+4. Leave this window open while using the ESP32 and dashboard.
+
 ### Step 4: Monitor Serial Output
 
 1. Tools → Serial Monitor
