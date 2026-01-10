@@ -20,8 +20,10 @@
 // ==================== CONFIGURATION ====================
 
 // WiFi Configuration  
-const char* WIFI_SSID = "Rx Mamun";        // Change this to your WiFi name
-const char* WIFI_PASSWORD = "@@Mamun@"; // Change this to your WiFi password
+const char* WIFI_SSID = "YOUR_WIFI_SSID";        // Set your WiFi name here or use .wifi_secrets (not committed)
+const char* WIFI_PASSWORD = "YOUR_WIFI_PASSWORD"; // Set your WiFi password here or use .wifi_secrets (not committed)
+
+// NOTE: For security, do not commit real WiFi credentials. Use the .wifi_secrets file (excluded by .gitignore) for your actual values.
 
 // MQTT Broker Configuration
 const char* MQTT_BROKER = "192.168.0.100";   // Change to your PC's local IP (e.g., "192.168.1.100")
