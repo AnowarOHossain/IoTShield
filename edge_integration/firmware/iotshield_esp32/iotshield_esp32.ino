@@ -24,7 +24,7 @@ const char* WIFI_SSID = "Rx Mamun";        // Change this to your WiFi name
 const char* WIFI_PASSWORD = "@@Mamun@"; // Change this to your WiFi password
 
 // MQTT Broker Configuration
-const char* MQTT_BROKER = "192.168.0.102";   // Change to your PC's local IP (e.g., "192.168.1.100")
+const char* MQTT_BROKER = "192.168.0.100";   // Change to your PC's local IP (e.g., "192.168.1.100")
 const int MQTT_PORT = 1883;
 const char* MQTT_TOPIC = "iotshield/sensors/data";
 const char* MQTT_CLIENT_ID = "ESP32_HARDWARE_001";
