@@ -19,7 +19,7 @@
 
 // ==================== CONFIGURATION ====================
 
-// WiFi Configuration (UPDATE THESE WITH YOUR NETWORK)
+// WiFi Configuration  
 const char* WIFI_SSID = "Rx Mamun";        // Change this to your WiFi name
 const char* WIFI_PASSWORD = "@@Mamun@"; // Change this to your WiFi password
 
