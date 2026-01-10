@@ -89,18 +89,32 @@ const int MQTT_PORT = 1883;
 
 ### Step 3.5: Activate Mosquitto MQTT Broker
 
-To enable MQTT communication, you need to start the Mosquitto broker on your PC:
 
-1. Press **Win + R**, type `cmd`, and press Enter.
-2. Navigate to the Mosquitto installation folder:
+To enable MQTT communication, you must start the Mosquitto broker manually.
+
+**Important:** Mosquitto often runs automatically in the background. You must stop the background service first, or you will get an "Address already in use" error.
+
+1. Open the Start Menu, type `cmd`, right-click Command Prompt, and select **Run as administrator**. (This is required to stop the background service).
+
+2. Stop the auto-running service by typing this command:
+   ```
+   net stop mosquitto
+   ```
+   (If it says "The service is not started," that is fine—just proceed).
+
+3. Navigate to the Mosquitto installation folder:
    ```
    cd "C:\Program Files\mosquitto"
    ```
-3. Start the broker with the following command:
+
+4. Start the broker with your custom configuration:
    ```
    mosquitto -c mosquitto.conf -v
    ```
-4. Leave this window open while using the ESP32 and dashboard.
+
+5. Keep this window open. You should see log messages indicating the broker is running (e.g., mosquitto version 2.0.18 starting).
+
+**Why this change is important:** Without step 1 and 2, the command in step 4 will fail because port 1883 is already occupied by the invisible background service. Running `net stop mosquitto` frees up the port for your manual connection.
 
 ### Step 4: Monitor Serial Output
 
