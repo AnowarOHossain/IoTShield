@@ -46,7 +46,7 @@ def send_alert_email(alert_data):
     
     try:
         # Prepare email content
-        subject = f"🚨 {severity} Alert: {alert_data.get('sensor_type', 'Anomaly')} Detected - {alert_data.get('device_name', 'Unknown Device')}"
+        subject = f"{severity} Alert: {alert_data.get('sensor_type', 'Anomaly')} Detected - {alert_data.get('device_name', 'Unknown Device')}"
         
         # Build email body
         email_body = _build_email_body(alert_data)
@@ -101,20 +101,10 @@ def _build_email_body(alert_data):
     
     severity_color = severity_colors.get(severity, '#6B7280')
     
-    # Severity emoji mapping
-    severity_emojis = {
-        'CRITICAL': '🚨',
-        'HIGH': '⚠️',
-        'MEDIUM': '⚡',
-        'LOW': 'ℹ️'
-    }
-    
-    severity_emoji = severity_emojis.get(severity, '📊')
-    
     # Build sensor readings section
     sensor_readings_html = ""
     if additional_data:
-        sensor_readings_html = "<h3 style='color: #374151; margin-top: 20px;'>📊 All Sensor Readings</h3><ul style='list-style: none; padding: 0;'>"
+        sensor_readings_html = "<h3 style='color: #374151; margin-top: 20px;'>All Sensor Readings</h3><ul style='list-style: none; padding: 0;'>"
         for key, value in additional_data.items():
             sensor_readings_html += f"<li style='padding: 5px 0;'><strong>{key}:</strong> {value}</li>"
         sensor_readings_html += "</ul>"
@@ -193,7 +183,7 @@ def _build_email_body(alert_data):
     </head>
     <body>
         <div class="header">
-            <h1 style="margin: 0; font-size: 28px;">{severity_emoji} IoTShield Alert</h1>
+            <h1 style="margin: 0; font-size: 28px;">IoTShield Alert</h1>
             <p style="margin: 10px 0 0 0; font-size: 18px; opacity: 0.95;">{severity} Priority</p>
         </div>
         
@@ -202,32 +192,32 @@ def _build_email_body(alert_data):
                 <h2 style="margin-top: 0; color: {severity_color};">{sensor_type} Anomaly Detected</h2>
                 
                 <div class="info-row">
-                    <span class="label">🏠 Device:</span>
+                    <span class="label">Device:</span>
                     <span class="value">{device_name}</span>
                 </div>
                 
                 <div class="info-row">
-                    <span class="label">📍 Sensor Type:</span>
+                    <span class="label">Sensor Type:</span>
                     <span class="value">{sensor_type}</span>
                 </div>
                 
                 <div class="info-row">
-                    <span class="label">📈 Current Reading:</span>
+                    <span class="label">Current Reading:</span>
                     <span class="value" style="color: {severity_color}; font-weight: 600;">{sensor_value}</span>
                 </div>
                 
                 <div class="info-row">
-                    <span class="label">⏰ Time:</span>
+                    <span class="label">Time:</span>
                     <span class="value">{timestamp}</span>
                 </div>
                 
                 <div class="info-row">
-                    <span class="label">🔍 Severity:</span>
+                    <span class="label">Severity:</span>
                     <span class="value" style="color: {severity_color}; font-weight: 600;">{severity}</span>
                 </div>
             </div>
             
-            <h3 style="color: #374151; margin-top: 30px;">🤖 AI Analysis</h3>
+            <h3 style="color: #374151; margin-top: 30px;">AI Analysis</h3>
             <div style="background: white; padding: 15px; border-radius: 5px; border: 1px solid #e5e7eb;">
                 <p style="margin: 0; color: #4B5563;">{description}</p>
             </div>
@@ -240,7 +230,7 @@ def _build_email_body(alert_data):
         </div>
         
         <div class="footer">
-            <p style="margin: 5px 0;">🛡️ <strong>IoTShield</strong> - AI-Powered IoT Security System</p>
+            <p style="margin: 5px 0;"><strong>IoTShield</strong> - AI-Powered IoT Security System</p>
             <p style="margin: 5px 0; font-size: 12px;">This is an automated alert from your IoTShield system.</p>
             <p style="margin: 5px 0; font-size: 12px;">Powered by Google Gemini 2.5 Flash AI</p>
         </div>
@@ -278,8 +268,8 @@ def test_email_configuration():
     success = send_alert_email(test_alert)
     
     if success:
-        logger.info("✅ Test email sent successfully!")
+        logger.info("Test email sent successfully!")
     else:
-        logger.error("❌ Failed to send test email")
+        logger.error("Failed to send test email")
     
     return success
