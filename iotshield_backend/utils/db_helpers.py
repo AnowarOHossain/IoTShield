@@ -1,6 +1,6 @@
 """Database helper utilities for IoTShield"""
 
-from django.db.models import Avg, Max, Min, Count
+from django.db.models import Avg, Max, Min, Count, Q
 from django.utils import timezone
 from datetime import timedelta
 
@@ -11,7 +11,7 @@ def get_device_statistics(device):
     
     stats = SensorData.objects.filter(device=device).aggregate(
         total_readings=Count('id'),
-        anomalies=Count('id', filter=models.Q(is_anomaly=True))
+        anomalies=Count('id', filter=Q(is_anomaly=True))
     )
     
     return stats
