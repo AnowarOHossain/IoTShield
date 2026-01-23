@@ -1,0 +1,17 @@
+Data Type,Source/Destination,Example Fields / Description,Sensitive?,Privacy Needed?,Notes / Recommendations
+User Credentials,User → Backend (Auth API),username; password; email,Yes,Yes,Store hashed; never log or expose; use HTTPS/JWT.
+User Profile,User → Backend (DB),name; email; registration info,Yes,Yes,Protect with access control.
+Device Info,Device/Simulator → Backend,device_id; device_name; location,Yes*,Sometimes,Device ID/location can be sensitive if linked to user; restrict access.
+Sensor Data,Device/Simulator → Backend/DB,sensor_type; value; unit; timestamp; device_id,Maybe,Sometimes,Add privacy noise (done); anonymize if needed; review retention policy.
+System Metrics,RPi Simulator → Backend/DB,cpu_temp; mem_usage; disk_usage,No,No,Not user-specific; no special privacy needed.
+Alerts,Backend → Dashboard/Email,alert_type; description; device_id; timestamp; severity,Maybe,Sometimes,If includes user/device info, treat as sensitive; redact if needed.
+Anomaly Scores,Backend (AI) → DB/Dashboard,is_anomaly; anomaly_score,No,No,Not sensitive; no privacy action required.
+Control Commands,Dashboard → Device (MQTT),command_type; parameters; device_id,Maybe,Sometimes,If command reveals user intent, consider privacy; log minimally.
+Logs,Backend → DB/Files,event; user_id; device_id; timestamp,Yes*,Sometimes,Mask user/device IDs in logs if possible; restrict log access.
+Email Addresses,User → Backend (Alerts),email (for notifications),Yes,Yes,Never expose; encrypt in DB if possible; use only for alerts.
+API Tokens/JWT,Backend → User/Client,JWT token,Yes,Yes,Never log or expose; use secure storage.
+
+Legend:
+* Sensitive? = Could this data identify a user or device, or be misused if leaked?
+* Privacy Needed? = Should this data be protected (anonymized, encrypted, access-controlled)?
+* "Yes*" = Sensitive if linked to a user or device.
