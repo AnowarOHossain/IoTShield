@@ -73,17 +73,17 @@ def api_sensor_data(request):
     hours = int(request.GET.get('hours', 24))
     sensor_type = request.GET.get('sensor_type', None)
     device_id = request.GET.get('device_id', None)
-    
     cutoff_time = timezone.now() - timedelta(hours=hours)
-    
     queryset = SensorData.objects.filter(timestamp__gte=cutoff_time)
-    
+    # Support multiple sensor types (comma separated)
     if sensor_type:
-        queryset = queryset.filter(sensor_type=sensor_type)
-    
+        if ',' in sensor_type:
+            types = [t.strip() for t in sensor_type.split(',')]
+            queryset = queryset.filter(sensor_type__in=types)
+        elif sensor_type != 'ALL':
+            queryset = queryset.filter(sensor_type=sensor_type)
     if device_id:
         queryset = queryset.filter(device__device_id=device_id)
-    
     data = []
     for reading in queryset.order_by('timestamp'):
         data.append({
@@ -95,7 +95,6 @@ def api_sensor_data(request):
             'is_anomaly': reading.is_anomaly,
             'anomaly_score': reading.anomaly_score,
         })
-    
     return JsonResponse({'data': data})
 
 
