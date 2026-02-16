@@ -96,7 +96,7 @@ class IoTShieldMQTTClient:
     
     def handle_sensor_data(self, data):
         """Process incoming sensor data"""
-        from .gemini_anomaly_detector import GeminiAnomalyDetector
+        from .tinylama_anomaly_detector import TinyLlamaAnomalyDetector
         from dashboard.models import Device, SensorData, Alert
         import threading
         
@@ -124,7 +124,7 @@ class IoTShieldMQTTClient:
             def analyze_and_alert():
                 try:
                     # Initialize Gemini detector
-                    detector = GeminiAnomalyDetector()
+                    detector = TinyLlamaAnomalyDetector()
                     
                     # Prepare sensor data dict for Gemini
                     sensor_dict = {
@@ -137,7 +137,7 @@ class IoTShieldMQTTClient:
                     }
                     
                     # Call Gemini API for anomaly analysis
-                    analysis_result = detector.analyze_with_gemini(sensor_dict)
+                    analysis_result = detector.analyze(sensor_dict)
                     
                     # Update sensor data with analysis results
                     sensor_data.is_anomaly = analysis_result.get('anomaly', False)
