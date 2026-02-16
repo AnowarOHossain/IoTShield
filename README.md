@@ -4,7 +4,7 @@
 [![Python](https://img.shields.io/badge/Python-3.13-blue.svg)](https://www.python.org/)
 [![Django](https://img.shields.io/badge/Django-5.2.7-green.svg)](https://www.djangoproject.com/)
 [![MQTT](https://img.shields.io/badge/MQTT-Mosquitto-orange.svg)](https://mosquitto.org/)
-[![AI](https://img.shields.io/badge/AI-Gemini%202.5-purple.svg)](https://ai.google.dev/)
+[![AI](https://img.shields.io/badge/AI-Ollama%20%2B%20llama3.2-purple.svg)](https://ollama.ai/)
 [![License](https://img.shields.io/badge/License-Academic-red.svg)](LICENSE)
 
 ---
