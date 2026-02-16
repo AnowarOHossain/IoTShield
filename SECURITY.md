@@ -31,9 +31,9 @@ Please do NOT create public GitHub issues for security vulnerabilities.
 3. Add to `.env` file (NEVER commit to Git)
 4. Revoke and regenerate if compromised
 
-### API Keys
+### API Keys & Credentials
 
-- **Gemini API Key:** Keep in `.env` file only
+- **Ollama Configuration:** Configure `OLLAMA_HOST` and `OLLAMA_MODEL` in `.env` (local service, no API key needed)
 - **Secret Keys:** Generate strong random keys for production
 - **MQTT Credentials:** Use authentication in production
 
@@ -101,14 +101,16 @@ pip list --outdated
 pip install --upgrade package-name
 ```
 
-## Data Privacy
+## Data Privacy & Local Processing
 
 IoTShield implements privacy-preserving mechanisms:
 
 - Differential privacy noise added to sensor data
-- Local edge processing
+- **Local edge processing** with Ollama (no cloud API calls)
+- Ollama runs locally on `http://localhost:11434` (optional: configure in `.env`)
 - Minimal data collection
 - No third-party data sharing
+- All AI/ML inference happens on your machine (llama3.2:1b model)
 
 ## Incident Response
 
@@ -167,4 +169,15 @@ For security concerns or questions:
 
 ---
 
-**Last Updated:** January 4, 2026
+---
+
+## Ollama Security Notes (v2.1+)
+
+- Ollama service runs locally - no internet required for inference
+- Model (`llama3.2:1b`) downloaded and runs on your hardware
+- API accessible on `http://localhost:11434` (local network only)
+- No external API calls for anomaly detection
+- All sensor data stays local
+- Faster and more private than cloud APIs
+
+**Last Updated:** February 16, 2026
