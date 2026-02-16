@@ -125,7 +125,7 @@ Respond ONLY with valid JSON. No additional text or formatting.
             response = requests.post(
                 self.api_endpoint,
                 json=payload,
-                timeout=30
+                timeout=60
             )
             
             if response.status_code == 200:
