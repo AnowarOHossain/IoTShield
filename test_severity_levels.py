@@ -11,7 +11,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'iotshield_backend.settings')
 django.setup()
 
-from iotshield_backend.gemini_anomaly_detector import GeminiAnomalyDetector
+from iotshield_backend.tinylama_anomaly_detector import TinyLlamaAnomalyDetector
 from datetime import datetime, timezone
 
 
@@ -21,7 +21,7 @@ def test_fallback_severity_levels():
     print("SEVERITY LEVEL DISTRIBUTION TEST (Fallback Analysis)")
     print("="*70 + "\n")
     
-    detector = GeminiAnomalyDetector()
+    detector = TinyLlamaAnomalyDetector()
     
     # Test cases covering all severity levels
     test_cases = [
