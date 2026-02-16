@@ -92,7 +92,18 @@
         <!-- Charts Section -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <div class="card">
-                <h3 class="text-lg font-semibold mb-4">Sensor Readings (24h)</h3>
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-semibold">Sensor Readings (24h)</h3>
+                    <select id="sensorFilter" class="border rounded px-2 py-1 text-sm">
+                        <option value="ALL">All Sensors</option>
+                        <option value="TEMPERATURE">Temperature</option>
+                        <option value="HUMIDITY">Humidity</option>
+                        <option value="GAS">Gas</option>
+                        <option value="FLAME">Flame</option>
+                        <option value="MOTION">Motion</option>
+                        <option value="LIGHT">Light</option>
+                    </select>
+                </div>
                 <canvas id="sensorChart"></canvas>
             </div>
             <div class="card">
@@ -203,24 +214,67 @@
 
         // Update sensor chart with real data
         function updateSensorChart() {
-            fetch('/api/sensors/data/?limit=20')
+            const filter = document.getElementById('sensorFilter').value;
+            let url = '/api/sensors/data/?limit=20';
+            if (filter && filter !== 'ALL') {
+                url += `&sensor_type=${filter}`;
+            }
+            fetch(url)
                 .then(response => response.json())
                 .then(response => {
                     if (response.data && response.data.length > 0) {
-                        // Group data by sensor type
-                        const tempData = response.data.filter(d => d.sensor_type === 'TEMPERATURE');
-                        const humidityData = response.data.filter(d => d.sensor_type === 'HUMIDITY');
-                        
-                        // Get labels from timestamps (use temperature data for labels)
-                        const labels = tempData.slice(0, 20).map(d => {
-                            const date = new Date(d.timestamp);
-                            return date.toLocaleTimeString();
-                        }).reverse();
-                        
-                        // Update chart data
-                        sensorChart.data.labels = labels;
-                        sensorChart.data.datasets[0].data = tempData.slice(0, 20).map(d => d.value).reverse();
-                        sensorChart.data.datasets[1].data = humidityData.slice(0, 20).map(d => d.value).reverse();
+                        let labels = [];
+                        if (filter === 'ALL') {
+                            // Find all sensor types in the data
+                            const sensorTypes = [...new Set(response.data.map(d => d.sensor_type))];
+                            // Build datasets for each sensor type
+                            const datasets = sensorTypes.map((type, idx) => {
+                                const sensorData = response.data.filter(d => d.sensor_type === type);
+                                // Use the latest 20 readings for each sensor
+                                const dataPoints = sensorData.slice(-20);
+                                // Use timestamps from the first sensor type for labels
+                                if (idx === 0) {
+                                    labels = dataPoints.map(d => {
+                                        const date = new Date(d.timestamp);
+                                        return date.toLocaleTimeString();
+                                    });
+                                }
+                                // Assign a color for each sensor type
+                                const colors = {
+                                    'TEMPERATURE': 'rgb(255, 99, 132)',
+                                    'HUMIDITY': 'rgb(54, 162, 235)',
+                                    'GAS': 'rgb(255, 159, 64)',
+                                    'FLAME': 'rgb(255, 205, 86)',
+                                    'MOTION': 'rgb(75, 192, 192)',
+                                    'LIGHT': 'rgb(255, 99, 232)'
+                                };
+                                return {
+                                    label: type.charAt(0) + type.slice(1).toLowerCase(),
+                                    data: dataPoints.map(d => d.value),
+                                    borderColor: colors[type] || 'rgb(100,100,100)',
+                                    tension: 0.1,
+                                    fill: false
+                                };
+                            });
+                            sensorChart.data.labels = labels;
+                            sensorChart.data.datasets = datasets;
+                        } else {
+                            // Show only selected sensor type
+                            const sensorData = response.data.filter(d => d.sensor_type === filter);
+                            const dataPoints = sensorData.slice(-20);
+                            labels = dataPoints.map(d => {
+                                const date = new Date(d.timestamp);
+                                return date.toLocaleTimeString();
+                            });
+                            sensorChart.data.labels = labels;
+                            sensorChart.data.datasets = [{
+                                label: filter.charAt(0) + filter.slice(1).toLowerCase(),
+                                data: dataPoints.map(d => d.value),
+                                borderColor: 'rgb(255, 99, 132)',
+                                tension: 0.1,
+                                fill: false
+                            }];
+                        }
                         sensorChart.update();
                     }
                 })
@@ -262,6 +316,7 @@
             updateSensorChart();
             updateAlertsChart();
         }
+        document.getElementById('sensorFilter').addEventListener('change', updateSensorChart);
 
         // Update dashboard every 5 seconds
         setInterval(updateAll, 5000);

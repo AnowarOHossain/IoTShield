@@ -1,7 +1,7 @@
 # ==============================
 # IoTShield - Requirements File
 # Privacy-Preserving Real-Time Home Automation
-# Utilizing MQTT Protocol and Sensor Anomaly Detection with GenAI Integration
+# Utilizing MQTT Protocol and Sensor Anomaly Detection with Local LLM (Ollama)
 # ==============================
 
 # --- Core Frameworks ---
@@ -22,9 +22,8 @@ pandas==2.2.2
 # --- Privacy / Noise Generation ---
 scipy==1.14.1
 
-# --- Gemini API Integration ---
+# --- Local LLM Integration (Ollama) ---
 requests==2.32.3
-google-generativeai==0.7.2   # Gemini API Python SDK
 
 # --- Environment / Utilities ---
 python-dotenv==1.0.1

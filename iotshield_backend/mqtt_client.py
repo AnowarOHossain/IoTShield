@@ -96,7 +96,7 @@ class IoTShieldMQTTClient:
     
     def handle_sensor_data(self, data):
         """Process incoming sensor data"""
-        from .gemini_anomaly_detector import GeminiAnomalyDetector
+        from .ollama_anomaly_detector import OllamaAnomalyDetector
         from dashboard.models import Device, SensorData, Alert
         import threading
         
@@ -120,13 +120,13 @@ class IoTShieldMQTTClient:
                 timestamp=datetime.fromisoformat(data.get('timestamp', datetime.now().isoformat()))
             )
             
-            # Analyze with Gemini API in background thread to avoid blocking
+            # Analyze with Ollama API in background thread to avoid blocking
             def analyze_and_alert():
                 try:
-                    # Initialize Gemini detector
-                    detector = GeminiAnomalyDetector()
+                    # Initialize Ollama detector
+                    detector = OllamaAnomalyDetector()
                     
-                    # Prepare sensor data dict for Gemini
+                    # Prepare sensor data dict for Ollama
                     sensor_dict = {
                         'sensor_type': sensor_data.sensor_type,
                         'value': sensor_data.value,
@@ -136,8 +136,8 @@ class IoTShieldMQTTClient:
                         'timestamp': sensor_data.timestamp.isoformat(),
                     }
                     
-                    # Call Gemini API for anomaly analysis
-                    analysis_result = detector.analyze_with_gemini(sensor_dict)
+                    # Call Ollama API for anomaly analysis
+                    analysis_result = detector.analyze(sensor_dict)
                     
                     # Update sensor data with analysis results
                     sensor_data.is_anomaly = analysis_result.get('anomaly', False)
@@ -157,7 +157,7 @@ class IoTShieldMQTTClient:
                         # Publish alert to MQTT
                         self.publish_alert(alert)
                         
-                        logger.info(f"Anomaly detected by Gemini: {alert.title}")
+                        logger.info(f"Anomaly detected by Ollama: {alert.title}")
                         
                         # Send email notification for CRITICAL/HIGH alerts
                         from iotshield_backend.utils.email_alerts import send_alert_email
