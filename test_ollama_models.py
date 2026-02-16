@@ -1,14 +1,16 @@
 """
-TinyLlama Model Test Script
-This script helps verify TinyLlama model loading and basic inference.
+Ollama Model Test Script
+This script helps verify Ollama llama3.2:1b model is running and accessible.
 """
-from iotshield_backend.tinylama_anomaly_detector import TinyLlamaAnomalyDetector
+from iotshield_backend.ollama_anomaly_detector import OllamaAnomalyDetector
 
 def main():
     print("\n" + "="*60)
-    print("TINYLAMA MODEL TEST")
+    print("OLLAMA MODEL TEST (llama3.2:1b)")
     print("="*60 + "\n")
-    detector = TinyLlamaAnomalyDetector()
+    
+    detector = OllamaAnomalyDetector()
+    
     prompt_data = {
         'sensor_type': 'TEMPERATURE',
         'value': 30.0,
@@ -17,8 +19,12 @@ def main():
         'location': 'Lab',
         'timestamp': '2026-01-27T12:00:00Z'
     }
-    print("Testing TinyLlama model with sample data...")
+    
+    print("Testing Ollama with llama3.2:1b model...")
+    print(f"Model: {detector.model_name}")
+    print(f"Endpoint: {detector.ollama_host}")
     result = detector.analyze(prompt_data)
+    
     print("\nResult:")
     print(result)
     print("\nTest complete!\n")

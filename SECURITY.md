@@ -41,13 +41,13 @@ Please do NOT create public GitHub issues for security vulnerabilities.
 
 ### For Development
 
-- ✅ Use `.env` for all sensitive data
-- ✅ Keep `.gitignore` updated
-- ✅ Regularly rotate credentials
-- ✅ Use different credentials for dev/prod
-- ❌ Never hardcode credentials in source code
-- ❌ Never commit `.env` to Git
-- ❌ Never share credentials publicly
+-  Use `.env` for all sensitive data
+-  Keep `.gitignore` updated
+-  Regularly rotate credentials
+- Use different credentials for dev/prod
+-  Never hardcode credentials in source code
+-  Never commit `.env` to Git
+-  Never share credentials publicly
 
 ### For Production
 

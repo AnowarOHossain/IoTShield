@@ -1,6 +1,6 @@
 """
-TinyLlama-Based Anomaly Detection Test
-This script helps verify the TinyLlama detector works correctly
+Ollama-Based Anomaly Detection Test
+This script helps verify the Ollama llama3.2:1b detector works correctly
 """
 import os
 import sys
@@ -11,17 +11,17 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'iotshield_backend.settings')
 django.setup()
 
-from iotshield_backend.tinylama_anomaly_detector import TinyLlamaAnomalyDetector
+from iotshield_backend.ollama_anomaly_detector import OllamaAnomalyDetector
 from dashboard.models import SensorData
 from datetime import datetime, timezone
 
-def test_tinylama_detector():
-	"""Test the new TinyLlama-based anomaly detector"""
+def test_ollama_detector():
+	"""Test the Ollama-based anomaly detector with llama3.2:1b"""
 	print("\n" + "="*60)
-	print("TINYLAMA ANOMALY DETECTOR TEST")
+	print("OLLAMA ANOMALY DETECTOR TEST (llama3.2:1b)")
 	print("="*60 + "\n")
     
-	detector = TinyLlamaAnomalyDetector()
+	detector = OllamaAnomalyDetector()
     
 	# Test cases
 	test_cases = [
@@ -81,11 +81,11 @@ def test_tinylama_detector():
 		print(f"  Value: {test_case['data']['value']} {test_case['data']['unit']}")
 		print(f"  Location: {test_case['data']['location']}")
         
-		print(f"\nCalling TinyLlama...")
+		print(f"\nCalling Ollama (llama3.2:1b)...")
 		result = detector.analyze(test_case['data'])
         
 		print(f"\nResults:")
-		print(f"  Anomaly: {' YES' if result['anomaly'] else ' NO'}")
+		print(f"  Anomaly: {'YES' if result['anomaly'] else 'NO'}")
 		print(f"  Severity: {result['severity']}")
 		print(f"  Explanation: {result['explanation']}")
 		print(f"  Suggestion: {result['suggestion']}")
@@ -107,7 +107,7 @@ def test_with_recent_data():
 		print("No sensor data found in database.\n")
 		return
     
-	detector = TinyLlamaAnomalyDetector()
+	detector = OllamaAnomalyDetector()
     
 	print(f"Found {len(recent_data)} recent sensor readings\n")
     
@@ -133,11 +133,11 @@ def test_with_recent_data():
 			'timestamp': sensor_data.timestamp.isoformat()
 		}
         
-		print(f"\nAnalyzing...")
+		print(f"\nAnalyzing with Ollama...")
 		result = detector.analyze(data_dict)
         
-		print(f"\nTinyLlama Analysis:")
-		print(f"  Anomaly: {' YES' if result['anomaly'] else ' NO'}")
+		print(f"\nOllama Analysis (llama3.2:1b):")
+		print(f"  Anomaly: {'YES' if result['anomaly'] else 'NO'}")
 		print(f"  Severity: {result['severity']}")
 		print(f"  Explanation: {result['explanation']}")
 		print(f"  Suggestion: {result['suggestion']}")
@@ -152,7 +152,7 @@ def test_with_recent_data():
 if __name__ == '__main__':
 	import argparse
     
-	parser = argparse.ArgumentParser(description='Test TinyLlama Anomaly Detector')
+	parser = argparse.ArgumentParser(description='Test Ollama Anomaly Detector (llama3.2:1b)')
 	parser.add_argument(
 		'--mode',
 		choices=['test', 'recent', 'both'],
@@ -163,7 +163,7 @@ if __name__ == '__main__':
 	args = parser.parse_args()
     
 	if args.mode in ['test', 'both']:
-		test_tinylama_detector()
+		test_ollama_detector()
     
 	if args.mode in ['recent', 'both']:
 		test_with_recent_data()

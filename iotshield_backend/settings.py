@@ -145,8 +145,9 @@ MQTT_TOPIC_ALERTS = os.getenv('MQTT_TOPIC_ALERTS', 'iotshield/alerts')
 MQTT_TOPIC_CONTROL = os.getenv('MQTT_TOPIC_CONTROL', 'iotshield/control/commands')
 MQTT_TOPIC_LOGS = os.getenv('MQTT_TOPIC_LOGS', 'iotshield/logs')
 
-# Gemini API Configuration
-GEMINI_API_KEY = os.getenv('GEMINI_API_KEY', '')
+# Ollama Configuration (Local LLM)
+OLLAMA_HOST = os.getenv('OLLAMA_HOST', 'http://localhost:11434')
+OLLAMA_MODEL = os.getenv('OLLAMA_MODEL', 'llama3.2:1b')
 
 # Privacy Settings
 PRIVACY_NOISE_EPSILON = float(os.getenv('PRIVACY_NOISE_EPSILON', 0.5))
