@@ -41,6 +41,7 @@ IoTShield is developed as part of the **CSE Final Year Thesis Project** at **Sha
 - **ESP32 Hardware Firmware** ready for physical device deployment
 - **Email Alert Notifications** with Gmail SMTP for critical anomalies
 - **User Authentication System** with login/register functionality and JWT token support
+- **RSA Encryption** for end-to-end MQTT payload security with 2048-bit keys
 - **Privacy-Preserving Data Collection** with differential privacy noise
 - **MQTT Protocol Communication** using Mosquitto broker
 - **AI-Powered Anomaly Detection** with Google Gemini 2.5 Flash
@@ -184,7 +185,16 @@ ESP32 Sensors → MQTT Broker → Django Backend → Gemini AI → Dashboard →
    - 500 emails/day capacity (Gmail free tier)
    - Configurable severity filtering
 
-9. **Control Module** *Architecture Ready*
+9. **RSA Encryption System** *Fully Operational*
+   - End-to-end encryption for MQTT payloads
+   - 2048-bit RSA keys with PKCS1_OAEP padding
+   - Automatic key generation and management
+   - Protects data even if MQTT broker is compromised
+   - Application-layer security (independent of TLS)
+   - Key management CLI tool included
+   - Backward compatible with unencrypted messages
+
+10. **Control Module** *Architecture Ready*
    - MQTT command publishing capability
    - Control message format defined
    - Backend support for actuator commands
@@ -202,6 +212,7 @@ ESP32 Sensors → MQTT Broker → Django Backend → Gemini AI → Dashboard →
 | **Anomaly Detection** | Complete | AI-powered anomaly detection | Google Gemini 2.5 Flash |
 | **Alert Generation** | Complete | Intelligent alert system with AI | Google Gemini 2.5 Flash |
 | **Email Notifications** | Complete | Automated email alerts for anomalies | Gmail SMTP, HTML Templates |
+| **RSA Encryption** | Complete | End-to-end MQTT payload encryption | PyCryptodome, RSA-2048, PKCS1_OAEP |
 | **User Authentication** | Complete | User registration and login system | Django Auth, JWT, Tailwind CSS |
 | **Dashboard** | Complete | Real-time visualization | Django, Tailwind CSS, Chart.js |
 | **REST API** | Complete | Data access endpoints | Django REST Framework |
@@ -211,7 +222,7 @@ ESP32 Sensors → MQTT Broker → Django Backend → Gemini AI → Dashboard →
 
 ##  Current System Statistics
 
-As of January 4, 2026:
+As of February 17, 2026:
 
 ```
 Active Devices: 2
@@ -249,6 +260,7 @@ Multi-Device Support: Fully operational
 Dashboard Charts: Real-time visualization working
 All Severity Levels: LOW, MEDIUM, HIGH, CRITICAL detected
 AI Anomaly Detection: Google Gemini 2.5 Flash integrated
+Security: RSA-2048 encryption for MQTT payloads (application-layer)
 Database: 6769+ records with complete sensor history
 ```
 
@@ -330,7 +342,25 @@ MQTT_BROKER_HOST=localhost
 MQTT_BROKER_PORT=1883
 ```
 
-#### 7. Run the Complete System
+#### 7. Setup RSA Encryption (First Time Only)
+
+IoTShield includes RSA encryption for securing MQTT payloads. On first run, RSA keys will be generated automatically. You can also manually generate and test them:
+
+**Generate RSA Keys:**
+```bash
+python manage_rsa_keys.py
+# Choose option 1 to generate keys
+# Choose option 4 to test encryption
+```
+
+**Quick Test:**
+```bash
+python test_rsa_encryption.py
+```
+
+The system will automatically create encryption keys in the `keys/` directory when you start the MQTT listener.
+
+#### 8. Run the Complete System
 
 **Terminal 1: Django Web Server**
 ```bash
@@ -508,6 +538,8 @@ private_value = original_value + noise
 - Only aggregated statistics transmitted
 
 ### 3. **Secure Communication**
+- RSA encryption for MQTT payload protection (2048-bit keys)
+- Application-layer encryption protects data even if broker is compromised
 - MQTT with TLS/SSL support (configurable)
 - Encrypted database storage
 - Token-based API authentication
@@ -571,10 +603,10 @@ IoTShield/
 │   ├── asgi.py                     # ASGI configuration
 │   ├── wsgi.py                     # WSGI configuration
 │   ├── models.py                   # Shared models
-│   ├── mqtt_client.py              # MQTT subscriber client
+│   ├── mqtt_client.py              # MQTT subscriber client with RSA decryption
 │   ├── gemini_anomaly_detector.py  # Gemini 2.5 AI anomaly detection
 │   ├── gemini_alerts.py            # Gemini 2.5 AI integration
-│   ├── privacy_engine.py           # Privacy-preserving mechanisms
+│   ├── privacy_engine.py           # Privacy mechanisms & RSA encryption
 │   ├── auth_urls.py                # Authentication URL routing
 │   ├── auth_views.py               # Authentication views
 │   └── utils/                      # Backend utilities
@@ -603,6 +635,8 @@ IoTShield/
 │   ├── QUICK_START_GEMINI.md       # Gemini AI setup guide
 │   ├── AUTHENTICATION_GUIDE.md     # Authentication documentation
 │   ├── EMAIL_ALERTS_GUIDE.md       # Email notifications documentation
+│   ├── RSA_ENCRYPTION_GUIDE.md     # RSA encryption implementation guide
+│   ├── RSA_QUICK_START.md          # RSA encryption quick start
 │   ├── IMPLEMENTATION_SUMMARY.md   # Technical implementation details
 │   └── project_structure.md        # Project structure overview
 │
@@ -622,7 +656,13 @@ IoTShield/
 │   ├── Alert_saved-in Database.png
 │   └── Sensor Datas.png
 │
+├── keys/                           # RSA encryption keys (auto-generated)
+│   ├── rsa_private.pem             # Private key (keep secret!)
+│   └── rsa_public.pem              # Public key (share with devices)
+│
 ├── check_data.py                   # Database inspection utility
+├── manage_rsa_keys.py              # RSA key management tool
+├── test_rsa_encryption.py          # RSA encryption testing script
 ├── test_gemini_anomaly.py          # Gemini API testing script
 ├── test_mqtt.py                    # MQTT connectivity testing
 ├── manage.py                       # Django management
@@ -765,6 +805,8 @@ IoTShield/
 - [Gemini AI Setup Guide](docs/QUICK_START_GEMINI.md)
 - [Authentication Guide](docs/AUTHENTICATION_GUIDE.md)
 - [Email Alerts Guide](docs/EMAIL_ALERTS_GUIDE.md)
+- [RSA Encryption Guide](docs/RSA_ENCRYPTION_GUIDE.md)
+- [RSA Quick Start](docs/RSA_QUICK_START.md)
 - [Implementation Summary](docs/IMPLEMENTATION_SUMMARY.md)
 
 ### For Developers
@@ -860,6 +902,7 @@ We would like to express our deepest gratitude to:
 - Built production-ready web dashboard
 - Implemented user authentication system with JWT support
 - Implemented automated email alert notifications (Gmail SMTP)
+- Implemented RSA encryption for secure MQTT communication (2048-bit)
 - Implemented privacy-preserving mechanisms
 - Created comprehensive documentation
 - Multi-device simultaneous operation support
@@ -941,9 +984,9 @@ We would like to express our deepest gratitude to:
 
 ---
 
-**Last Updated:** January 4, 2026  
-**Version:** 1.1.0  
-**Status:** Fully Operational with Gemini 2.5 Flash & Enhanced Detection
+**Last Updated:** February 17, 2026  
+**Version:** 1.2.0  
+**Status:** Fully Operational with Gemini 2.5 Flash & RSA Encryption
 
 </div>
   
