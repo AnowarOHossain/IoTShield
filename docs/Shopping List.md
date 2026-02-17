@@ -8,16 +8,17 @@
 
 ## Product Details & Links
 
-### 1. **DHT22 Temperature & Humidity Sensor**
-- **Price:** Estimated ~150-200 BDT
+### 1. **DHT11 Temperature & Humidity Sensor** PURCHASED
+- **Part Number:** RBD-0667
+- **Price:** BDT 120
 - **Specifications:**
   - Digital output
-  - 3.3V compatible
+  - 3.3-5V compatible (more flexible than DHT22)
   - Temperature & Humidity measurement
-- **Search on store:** https://store.roboticsbd.com/sensors/81-temperature-humidity
-- **Status:** Need to check in-store
+  - Cheaper than DHT22 while maintaining good accuracy
+- **Status:** Purchased on 17/02/2026
 
-### 2. **Flame Sensor Fire Detection Module** ✓ CONFIRMED
+### 2. **Flame Sensor Fire Detection Module** CONFIRMED
 - **Part Number:** RBD-0149
 - **Price:** BDT 48
 - **Specifications:**
@@ -29,54 +30,50 @@
 - **Link:** https://store.roboticsbd.com/sensors/149-flame-sensor-fire-detection-module-robotics-bangladesh.html
 - **Status:** In Stock (70 items available)
 
-### 3. **PIR Motion Sensor**
-- **Price:** Estimated ~100-150 BDT
+### 3. **PIR Motion Sensor** PURCHASED
+- **Part Number:** RBD-0023
+- **Price:** BDT 93
 - **Specifications:**
   - Digital output (HIGH when motion detected)
   - 5V operating voltage
   - Detection range: ~7 meters
-- **Search on store:** https://store.roboticsbd.com/sensors/79-motion-sensor-robotics-bangladesh
-- **Status:** Need to check in-store
+  - Model: HC-SR501
+- **Status:** Purchased on 17/02/2026
 
-### 4. **LDR Light Sensor Module** ✓ CONFIRMED
-- **Part Number:** RBD-0823
-- **Price:** BDT 75
+### 4. **LDR Light Sensor Module** PURCHASED
+- **Part Number:** RBD-2093
+- **Price:** BDT 50
 - **Specifications:**
   - Output: Analog (ADC input)
   - Voltage: 5V
   - Light detection module with onboard resistor
-- **Link:** https://store.roboticsbd.com/sensors/823-optical-sensitive-resistance-light-detection-photosensitive-ldr-sensor-module-robotics-bangladesh.html
-- **Status:** In Stock
+- **Status:** Purchased on 17/02/2026
 
-### 5. **10kΩ Resistor**
+### 5. **10kΩ Resistor** (OPTIONAL - Not Purchased)
 - **Price:** Estimated ~10 BDT per piece
-- **Quantity Needed:** 3 pieces (~30 BDT total)
-- **Purpose:** Pullup resistors for DHT22 & LDR
-- **Search on store:** Electronics components section
+- **Quantity Suggested:** 3 pieces (~30 BDT total)
+- **Purpose:** Pull-up resistor for DHT11 (optional, for improved signal reliability)
+- **Note:** DHT11 works without pull-up resistor on most boards, but recommended for long wire runs
+- **Status:** Optional - Can be purchased later if needed
 
-### 6. **Breadboard (830 points)**
-- **Price:** Estimated ~80-100 BDT
+### 6. **Breadboard (830 points)** PURCHASED
+- **Part Number:** RBD-0133
+- **Price:** BDT 145
 - **Specifications:**
   - 830 connection points
   - For circuit prototyping
   - Standard dimensions
-- **Minimum required for our wiring:** 600-point breadboard (recommended). 830-point is comfortable.
-- **Search on store:** [https://store.roboticsbd.com/ (Search: breadboard)](https://store.roboticsbd.com/components/133-breadboard-full-size-bare-830-tie-points-robotics-bangladesh.html)
-- **Status:** Need to check in-store
+- **Status:** Purchased on 17/02/2026
 
-### 7. **Jumper Wires (Male-to-Male + Male-to-Female)**
-- **Part Number:** RBD-0031 (M-M), RBD-? (M-F)
-- **Price:** BDT 100 (M-M), ~BDT 100 (M-F)
+### 7. **Jumper Wires (Male-to-Male + Male-to-Female)** PURCHASED
+- **Part Number:** RBD-1354 (both types)
+- **Price:** BDT 45 (15x M-M) + BDT 75 (25x M-F) = BDT 120 total
 - **Specifications:**
   - 20cm length
-  - 40 pieces per pack (or 20-piece packs)
-- **Exact jumper wire counts (based on 5 sensors):**
-  - **Male-to-Male:** 15 pcs (3 wires × 5 sensors to breadboard)
-  - **Male-to-Female:** 8 pcs (ESP32 → breadboard: 5 signal + 3 power lines)
-- **Links:**
-  - M-M: https://store.roboticsbd.com/robotics-parts/31-1-jumper-wire-40-pcs-set-20cm-robotics-bangladesh.html
-  - M-F: https://store.roboticsbd.com/robotics-parts/31-1-jumper-wire-40-pcs-set-20cm-robotics-bangladesh.html
-- **Note:** We need 40–50 pieces total. If only 20-piece packs are available, buy 2 packs.
+  - 15 pieces Male-to-Male
+  - 25 pieces Male-to-Female
+- **Status:** Purchased on 17/02/2026
+- **Total provided:** 40 pieces (plenty for all sensors and future use)
 
 ---
 
@@ -101,11 +98,11 @@
 - **GND** → GND rail
 - **A0** → ESP32 GPIO **35** (ADC)
 
-#### DHT22 Temperature & Humidity (Digital)
-- **VCC** → 3.3V rail
+#### DHT11 Temperature & Humidity (Digital)
+- **VCC** → 3.3V/5V rail (DHT11 is 3.3-5V compatible)
 - **GND** → GND rail
 - **DATA** → ESP32 GPIO **32**
-- Add **10kΩ resistor** between DATA and 3.3V (pull-up)
+- Optional: Add **10kΩ resistor** between DATA and VCC (pull-up) for reliability
 
 #### Flame Sensor (Analog)
 - **VCC** → 5V rail
@@ -137,18 +134,33 @@
 ## Shopping Instructions
 
 1. **Visit RoboticsBD Store:** Uttara, Dhaka (or order online)
-2. **Confirmed Items:**
-   - [ ] Flame Sensor (RBD-0149) - BDT 48
-  - [ ] Jumper Wires (Male-to-Male, RBD-0031) - BDT 100
-  - [ ] Jumper Wires (Male-to-Female) - ~BDT 100
-   - [ ] LDR Sensor Module (RBD-0823) - BDT 75
 
-3. **Items to Search for:**
-   - [ ] DHT22 Temperature & Humidity Sensor
-   - [ ] PIR Motion Sensor
-   - [ ] Breadboard (830 points)
-   - [ ] 10kΩ Resistor (3 pieces)
-  - [ ] Jumper Wires (Male-to-Female)
+### PURCHASED TODAY (17/02/2026)
+Order Ref: WYNFXCOAM | Order ID: 81374
+
+**Items Purchased:**
+- [x] Breadboard Full Size Bare 830 Tie Points - BDT 145
+- [x] DHT11 Temperature & Humidity Sensor Module - BDT 120
+- [x] Flame Sensor Fire Detection Module (RBD-0149) - BDT 48
+- [x] HC-SR501 PIR Motion Sensor - BDT 93
+- [x] Jumper Wires Male-to-Female (25 pcs) - BDT 75
+- [x] Jumper Wires Male-to-Male (15 pcs) - BDT 45
+- [x] LDR Photosensitive Resistor Sensor Module - BDT 50
+
+**Total Cost:** BDT 576 (Paid via bKash)  
+**Shipping:** Pickup from Store
+
+### Original Shopping List (for Reference)
+2. **Confirmed Items:**
+   - [x] Flame Sensor (RBD-0149) - BDT 48
+  - [x] Jumper Wires (Male-to-Male) - BDT 45
+  - [x] Jumper Wires (Male-to-Female) - BDT 75
+   - [x] LDR Sensor Module (RBD-0823) - BDT 50
+
+3. **Items Obtained:**
+   - [x] DHT11 Temperature & Humidity Sensor (instead of DHT22)
+   - [x] PIR Motion Sensor (HC-SR501)
+   - [x] Breadboard (830 points)
 
 4. **Call/Visit for availability:** 01792 007 004
 
@@ -165,14 +177,26 @@ If specific items not available:
 ---
 
 ## Total Budget Estimate
-- **Minimum:** ~600 BDT (with confirmed prices)
-- **Maximum:** ~800 BDT (with estimates)
+- **Actual Cost Paid:** **BDT 576** (17/02/2026)
+- **Previous Budget Estimate:** ~600-800 BDT
+- **Difference:** Saved BDT 24-224 due to better pricing on sensors
 - **Currency:** Bangladeshi Taka (BDT)
+
+### Cost Breakdown
+- Breadboard: BDT 145
+- Temperature Sensor (DHT11): BDT 120
+- Humidity Sensor (DHT11): Included
+- Flame Sensor: BDT 48
+- PIR Motion Sensor: BDT 93
+- LDR Light Sensor: BDT 50
+- Jumper Wires (Combined): BDT 120 (25 M-F + 15 M-M)
 
 ---
 
 
 
-*Last Updated: February 16, 2026*
+*Last Updated: February 17, 2026 PURCHASED*
 *Store:** https://store.roboticsbd.com/
 *Phone:** 01792 007 004
+*Payment Method:* bKash
+*Pickup Status:* Completed from Uttara Store

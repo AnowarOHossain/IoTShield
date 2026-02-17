@@ -65,3 +65,4 @@ The primary objectives are:
 * Implement real hardware integration (ESP32) for practical demonstration.
 * Add user authentication and secure access.
 * Enable automated email alerts for critical events using Gmail SMTP.
+
