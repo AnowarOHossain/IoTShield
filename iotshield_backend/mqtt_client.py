@@ -74,20 +74,26 @@ class IoTShieldMQTTClient:
             logger.info("Cleanly disconnected from MQTT broker")
     
     def on_message(self, client, userdata, msg):
-        """Callback when message received"""
+        """This function runs whenever we receive an MQTT message"""
         try:
             topic = msg.topic
             payload = msg.payload.decode('utf-8')
-            logger.debug(f"Received message on topic {topic}: {payload}")
+            logger.debug(f"Received message on topic {topic}: {payload[:100]}...") 
             
-            # Parse JSON payload
+            # Convert JSON string to Python dict
             data = json.loads(payload)
             
-            # Route message based on topic
+            # Here's the security layer - decrypt if message is encrypted
+            # This protects us even if the MQTT broker is compromised
+            from .privacy_engine import rsa_encryption
+            if rsa_encryption:
+                data = rsa_encryption.decrypt_mqtt_payload(data)
+            
+            # Now route the decrypted message to the right handler
             if topic == settings.MQTT_TOPIC_SENSORS:
-                self.handle_sensor_data(data)
+                self.handle_sensor_data(data)       # Handle sensor readings
             elif topic == settings.MQTT_TOPIC_CONTROL:
-                self.handle_control_command(data)
+                self.handle_control_command(data)   # Handle control commands
             
         except json.JSONDecodeError as e:
             logger.error(f"Failed to decode JSON message: {e}")

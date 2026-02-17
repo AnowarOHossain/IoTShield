@@ -52,6 +52,11 @@ yarn-error.log*
 *.key
 *.crt
 
+# RSA Encryption Keys (SECURITY: Never commit private keys!)
+/keys/
+keys/rsa_private.pem
+keys/rsa_public.pem
+
 # Backup files
 *.bak
 *.backup

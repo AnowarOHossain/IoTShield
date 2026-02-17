@@ -48,6 +48,7 @@ Adafruit-DHT==1.4.0
 # --- Security / Encryption ---
 cryptography==43.0.3
 pyOpenSSL==24.2.1
+pycryptodome==3.21.0  # For RSA encryption/decryption
 
 # --- Deployment / Production ---
 gunicorn==23.0.0

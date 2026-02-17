@@ -149,9 +149,14 @@ MQTT_TOPIC_LOGS = os.getenv('MQTT_TOPIC_LOGS', 'iotshield/logs')
 OLLAMA_HOST = os.getenv('OLLAMA_HOST', 'http://localhost:11434')
 OLLAMA_MODEL = os.getenv('OLLAMA_MODEL', 'llama3.2:1b')
 
-# Privacy Settings
+# Privacy Settings - for adding noise to sensor data
 PRIVACY_NOISE_EPSILON = float(os.getenv('PRIVACY_NOISE_EPSILON', 0.5))
 PRIVACY_NOISE_DELTA = float(os.getenv('PRIVACY_NOISE_DELTA', 1e-5))
+
+# RSA Encryption Settings - for securing MQTT messages
+# This protects data even if MQTT broker is compromised
+RSA_ENCRYPTION_ENABLED = os.getenv('RSA_ENCRYPTION_ENABLED', 'True') == 'True'
+RSA_KEY_SIZE = int(os.getenv('RSA_KEY_SIZE', 2048))  # 2048 bits is standard, 4096 is extra secure
 
 # Email Configuration (Gmail SMTP)
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
