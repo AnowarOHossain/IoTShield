@@ -121,13 +121,18 @@ class IoTShieldMQTTClient:
             )
             
             # Store sensor data
+            sensor_timestamp = datetime.fromisoformat(data.get('timestamp', datetime.now().isoformat()))
             sensor_data = SensorData.objects.create(
                 device=device,
                 sensor_type=data.get('sensor_type').upper(),
                 value=float(data.get('value')),
                 unit=data.get('unit', ''),
-                timestamp=datetime.fromisoformat(data.get('timestamp', datetime.now().isoformat()))
+                timestamp=sensor_timestamp
             )
+            
+            # Update device's last_seen timestamp to the sensor reading time
+            device.last_seen = sensor_timestamp
+            device.save(update_fields=['last_seen'])
             
             # Analyze with Ollama API in background thread to avoid blocking
             def analyze_and_alert():
