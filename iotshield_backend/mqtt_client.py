@@ -25,6 +25,10 @@ class IoTShieldMQTTClient:
             self.client.username_pw_set(settings.MQTT_USERNAME, settings.MQTT_PASSWORD)
         
         self.is_connected = False
+        
+        # Initialize anomaly detector once (singleton pattern)
+        from .ollama_anomaly_detector import OllamaAnomalyDetector
+        self.anomaly_detector = OllamaAnomalyDetector()
     
     def connect(self):
         """Connect to MQTT broker"""
@@ -102,7 +106,6 @@ class IoTShieldMQTTClient:
     
     def handle_sensor_data(self, data):
         """Process incoming sensor data"""
-        from .ollama_anomaly_detector import OllamaAnomalyDetector
         from dashboard.models import Device, SensorData, Alert
         import threading
         
@@ -129,10 +132,7 @@ class IoTShieldMQTTClient:
             # Analyze with Ollama API in background thread to avoid blocking
             def analyze_and_alert():
                 try:
-                    # Initialize Ollama detector
-                    detector = OllamaAnomalyDetector()
-                    
-                    # Prepare sensor data dict for Ollama
+                    # Use the singleton detector instance
                     sensor_dict = {
                         'sensor_type': sensor_data.sensor_type,
                         'value': sensor_data.value,
@@ -142,8 +142,8 @@ class IoTShieldMQTTClient:
                         'timestamp': sensor_data.timestamp.isoformat(),
                     }
                     
-                    # Call Ollama API for anomaly analysis
-                    analysis_result = detector.analyze(sensor_dict)
+                    # Call Ollama API for anomaly analysis using singleton detector
+                    analysis_result = self.anomaly_detector.analyze(sensor_dict)
                     
                     # Update sensor data with analysis results
                     sensor_data.is_anomaly = analysis_result.get('anomaly', False)
