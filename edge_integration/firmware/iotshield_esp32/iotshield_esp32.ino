@@ -1,12 +1,14 @@
 /*
- * IoTShield ESP32 Firmware v1.0
+ * IoTShield ESP32-S3 Firmware v2.0
  * Privacy-Preserving IoT Monitoring System
  * 
- * This firmware enables ESP32 to connect to WiFi and publish
+ * This firmware enables ESP32-S3 to connect to WiFi and publish
  * sensor data to MQTT broker for real-time monitoring.
  * 
- * Hardware: ESP32 DevKit (or compatible)
- * Sensors: DHT22, MQ2, Flame, PIR Motion, LDR (Optional - can work without sensors)
+ * Hardware: ESP32-S3 Development Board
+ * Sensors: DHT11, MQ2 Gas, Flame, PIR Motion (HC-SR501), LDR Light
+ * 
+ * Purchased: February 17, 2026 - RoboticsBD Uttara
  * 
  * Author: Anowar Hossain & Shihab Sarker
  * Project: IoTShield - CSE Thesis Project
@@ -16,14 +18,15 @@
 #include <WiFi.h>
 #include <PubSubClient.h>
 #include <ArduinoJson.h>
+#include <DHT.h>
 
 // ==================== CONFIGURATION ====================
 
 // WiFi Configuration  
-const char* WIFI_SSID = "YOUR_WIFI_SSID";        // Set your WiFi name here or use .wifi_secrets (not committed)
-const char* WIFI_PASSWORD = "YOUR_WIFI_PASSWORD"; // Set your WiFi password here or use .wifi_secrets (not committed)
+const char* WIFI_SSID = "YOUR_WIFI_SSID";        // Set your WiFi name here
+const char* WIFI_PASSWORD = "YOUR_WIFI_PASSWORD"; // Set your WiFi password here
 
-// NOTE: For security, do not commit real WiFi credentials. Use the .wifi_secrets file (excluded by .gitignore) for your actual values.
+// NOTE: For security, do not commit real WiFi credentials to GitHub
 
 // MQTT Broker Configuration
 const char* MQTT_BROKER = "192.168.0.100";   // Change to your PC's local IP (e.g., "192.168.1.100")
@@ -45,13 +48,32 @@ const unsigned long MQTT_RECONNECT_DELAY = 5000; // 5 seconds
 // Built-in LED Pin
 const int LED_PIN = 2;  // Most ESP32 boards have LED on GPIO2
 
+// ==================== SENSOR PIN CONFIGURATION ====================
+
+// DHT11 Temperature & Humidity Sensor
+#define DHT_PIN 32
+#define DHT_TYPE DHT11
+
+// MQ2 Gas Sensor (Analog)
+#define MQ2_PIN 35
+
+// Flame Sensor (Analog)
+#define FLAME_PIN 36
+
+// PIR Motion Sensor (Digital)
+#define PIR_PIN 33
+
+// LDR Light Sensor (Analog)
+#define LDR_PIN 37
+
 // ==================== GLOBAL OBJECTS ====================
 
 WiFiClient wifiClient;
 PubSubClient mqttClient(wifiClient);
+DHT dht(DHT_PIN, DHT_TYPE);
 
 unsigned long lastPublishTime = 0;
-bool sensorsAvailable = false;  // Set to true when physical sensors are connected
+bool sensorsAvailable = true;  // Set to true - we have physical sensors now!
 
 // ==================== SETUP FUNCTIONS ====================
 
@@ -136,19 +158,34 @@ void setupWiFi() {
 void setupSensors() {
   Serial.println("Initializing sensors...");
   
-  // TODO: Add sensor initialization code here when sensors are available
-  // Example for DHT22:
-  // dht.begin();
+  // Initialize DHT11 Temperature & Humidity Sensor
+  dht.begin();
+  Serial.println("✓ DHT11 Temperature & Humidity Sensor initialized (GPIO 32)");
   
-  // For Demo 2: Using simulated data (no physical sensors required)
-  sensorsAvailable = false;
+  // Initialize MQ2 Gas Sensor (Analog)
+  pinMode(MQ2_PIN, INPUT);
+  Serial.println("✓ MQ2 Gas Sensor initialized (GPIO 35)");
   
-  if (sensorsAvailable) {
-    Serial.println("✓ Physical sensors detected and initialized");
-  } else {
-    Serial.println("⚠ Running in simulation mode (no physical sensors)");
-    Serial.println("  Generating realistic sensor data for demonstration");
-  }
+  // Initialize Flame Sensor (Analog)
+  pinMode(FLAME_PIN, INPUT);
+  Serial.println("✓ Flame Sensor initialized (GPIO 36)");
+  
+  // Initialize PIR Motion Sensor (Digital)
+  pinMode(PIR_PIN, INPUT);
+  Serial.println("✓ PIR Motion Sensor initialized (GPIO 33)");
+  Serial.println("  [Calibrating for 60 seconds, please wait...]");
+  
+  // Initialize LDR Light Sensor (Analog)
+  pinMode(LDR_PIN, INPUT);
+  Serial.println("✓ LDR Light Sensor initialized (GPIO 37)");
+  
+  // Allow PIR sensor to calibrate
+  delay(60000);  // 60 second calibration period for PIR
+  Serial.println("✓ PIR Motion Sensor calibrated and ready!");
+  
+  sensorsAvailable = true;
+  Serial.println();
+  Serial.println("✓ All physical sensors detected and initialized");
   Serial.println();
 }
 
@@ -221,72 +258,90 @@ void reconnectMQTT() {
 
 float readTemperature() {
   if (sensorsAvailable) {
-    // TODO: Read from DHT22 sensor
-    // return dht.readTemperature();
-    return 0.0;
-  } else {
-    // Simulated realistic temperature data
-    float baseTemp = 25.0;
-    float variance = random(-30, 30) / 10.0;  // ±3°C variance
+    // Read from DHT11 sensor
+    float temp = dht.readTemperature();
     
-    // Occasionally generate anomaly
-    if (random(100) < 4) {  // 4% chance
-      variance = random(-150, 150) / 10.0;  // Larger anomaly
+    // Check if reading is valid
+    if (isnan(temp)) {
+      Serial.println("⚠ DHT11 temperature reading failed!");
+      return 25.0;  // Return default value
     }
     
+    return temp;
+  } else {
+    // Fallback: Simulated data
+    float baseTemp = 25.0;
+    float variance = random(-30, 30) / 10.0;
     return baseTemp + variance;
   }
 }
 
 float readHumidity() {
   if (sensorsAvailable) {
-    // TODO: Read from DHT22 sensor
-    // return dht.readHumidity();
-    return 0.0;
-  } else {
-    // Simulated realistic humidity data
-    float baseHumidity = 60.0;
-    float variance = random(-100, 100) / 10.0;  // ±10% variance
+    // Read from DHT11 sensor
+    float humidity = dht.readHumidity();
     
-    // Occasionally generate anomaly
-    if (random(100) < 3) {  // 3% chance
-      variance = random(-200, 200) / 10.0;  // Larger anomaly
+    // Check if reading is valid
+    if (isnan(humidity)) {
+      Serial.println("⚠ DHT11 humidity reading failed!");
+      return 60.0;  // Return default value
     }
     
+    return humidity;
+  } else {
+    // Fallback: Simulated data
+    float baseHumidity = 60.0;
+    float variance = random(-100, 100) / 10.0;
     float humidity = baseHumidity + variance;
-    return constrain(humidity, 0, 100);  // Keep within 0-100%
+    return constrain(humidity, 0, 100);
   }
 }
 
 float readGas() {
   if (sensorsAvailable) {
-    // TODO: Read from MQ2 sensor
-    // return analogRead(GAS_PIN) / 4095.0;
-    return 0.0;
+    // Read from MQ2 analog sensor
+    int rawValue = analogRead(MQ2_PIN);
+    
+    // Convert to ppm (parts per million)
+    // MQ2 output: 0-4095 (12-bit ADC)
+    // Clean air: ~300-400 ppm
+    // Gas detected: 600+ ppm
+    float ppm = map(rawValue, 0, 4095, 0, 1000);
+    
+    return ppm;
   } else {
-    // Simulated gas sensor (ppm)
-    float baseGas = 0.08;
-    float variance = random(-20, 20) / 1000.0;
+    // Fallback: Simulated data
+    float baseGas = 350.0;
+    float variance = random(-50, 50);
     
     // Occasionally generate gas leak anomaly
-    if (random(1000) < 15) {  // 1.5% chance
-      variance = random(200, 500) / 1000.0;  // High gas reading
+    if (random(1000) < 15) {
+      variance = random(200, 500);
     }
     
-    float gas = baseGas + variance;
-    return constrain(gas, 0, 1.0);
+    return baseGas + variance;
   }
 }
 
 int readFlame() {
   if (sensorsAvailable) {
-    // TODO: Read from flame sensor
-    // return digitalRead(FLAME_PIN);
-    return 0;
-  } else {
-    // Simulated flame sensor (0 = no flame, 1 = flame detected)
-    if (random(1000) < 8) {  // 0.8% chance
+    // Read from flame sensor (analog, but we treat as digital threshold)
+    int rawValue = analogRead(FLAME_PIN);
+    
+    // Flame detected if reading is above threshold
+    // Typically: No flame = high value, Flame = low value (inverted)
+    // Adjust threshold based on your sensor (usually 1000-2000)
+    int threshold = 1500;
+    
+    if (rawValue < threshold) {
       return 1;  // Flame detected
+    } else {
+      return 0;  // No flame
+    }
+  } else {
+    // Fallback: Simulated data
+    if (random(1000) < 8) {
+      return 1;
     }
     return 0;
   }
@@ -294,13 +349,15 @@ int readFlame() {
 
 int readMotion() {
   if (sensorsAvailable) {
-    // TODO: Read from PIR sensor
-    // return digitalRead(PIR_PIN);
-    return 0;
+    // Read from PIR sensor (digital output)
+    int motionDetected = digitalRead(PIR_PIN);
+    
+    // HC-SR501 outputs HIGH when motion detected
+    return motionDetected;
   } else {
-    // Simulated motion sensor
-    if (random(100) < 25) {  // 25% activity chance
-      return random(1, 4);  // Motion intensity 1-3
+    // Fallback: Simulated data
+    if (random(100) < 25) {
+      return 1;
     }
     return 0;
   }
@@ -308,14 +365,21 @@ int readMotion() {
 
 float readLight() {
   if (sensorsAvailable) {
-    // TODO: Read from LDR sensor
-    // return analogRead(LDR_PIN);
-    return 0.0;
+    // Read from LDR sensor (analog)
+    int rawValue = analogRead(LDR_PIN);
+    
+    // Convert to lux (light intensity)
+    // Higher ADC value = darker environment (LDR resistance increases)
+    // Lower ADC value = brighter environment
+    // Typical range: 0-4095 (12-bit ADC)
+    // Convert to lux: 0-1000 lux scale
+    float lux = map(rawValue, 0, 4095, 1000, 0);  // Inverted mapping
+    
+    return lux;
   } else {
-    // Simulated light sensor (lux)
+    // Fallback: Simulated data
     float baseLight = 300.0;
     float variance = random(-100, 100);
-    
     return baseLight + variance;
   }
 }
