@@ -392,7 +392,7 @@ python manage_rsa_keys.py  # Option 2
 
 ### ESP32 Files (To Be Modified)
 
-- ⏳ `edge_integration/firmware/iotshield_esp32/iotshield_esp32.ino`
+-  `edge_integration/firmware/iotshield_esp32/iotshield_esp32.ino`
   - Add RSA encryption before MQTT publish
   - Embed public key
 
