@@ -1,18 +1,7 @@
 /*
- * IoTShield ESP32-S3 Firmware v2.0
- * Privacy-Preserving IoT Monitoring System
- * 
- * This firmware enables ESP32-S3 to connect to WiFi and publish
- * sensor data to MQTT broker for real-time monitoring.
- * 
- * Hardware: ESP32-S3 Development Board
- * Sensors: DHT11, MQ2 Gas, Flame, PIR Motion (HC-SR501), LDR Light
- * 
- * Purchased: February 17, 2026 - RoboticsBD Uttara
- * 
+ * IoTShield ESP32-S3 Firmware v3.0 (FINAL DEFENSE - PRODUCTION READY)
+ * Fixed: Sensor Fallback Simulation + Enhanced Debugging
  * Author: Anowar Hossain & Shihab Sarker
- * Project: IoTShield - CSE Thesis Project
- * Institution: Shanto-Mariam University of Creative Technology
  */
 
 #include <WiFi.h>
@@ -22,464 +11,348 @@
 
 // ==================== CONFIGURATION ====================
 
-// WiFi Configuration  
-const char* WIFI_SSID = "YOUR_WIFI_SSID";        // Set your WiFi name here
-const char* WIFI_PASSWORD = "YOUR_WIFI_PASSWORD"; // Set your WiFi password here
+const char* WIFI_SSID = "SMUCT";        
+const char* WIFI_PASSWORD = "smuct#17"; 
 
-// NOTE: For security, do not commit real WiFi credentials to GitHub
-
-// MQTT Broker Configuration
-const char* MQTT_BROKER = "192.168.0.100";   // Change to your PC's local IP (e.g., "192.168.1.100")
+const char* MQTT_BROKER = "172.172.9.119"; // PC IP
 const int MQTT_PORT = 1883;
 const char* MQTT_TOPIC = "iotshield/sensors/data";
 const char* MQTT_CLIENT_ID = "ESP32_HARDWARE_001";
 
-// Device Information
+// Device Info
 const char* DEVICE_ID = "ESP32_HARDWARE_001";
 const char* DEVICE_NAME = "ESP32 Smart Sensor Hub";
-const char* DEVICE_TYPE = "ESP32";
 const char* LOCATION = "Demo Lab";
 
-// Timing Configuration
-const unsigned long PUBLISH_INTERVAL = 5000;  // 5 seconds
-const unsigned long WIFI_TIMEOUT = 20000;     // 20 seconds
-const unsigned long MQTT_RECONNECT_DELAY = 5000; // 5 seconds
+// Timing
+const unsigned long PUBLISH_INTERVAL = 2000; // 2 Seconds (Fast for demo)
+const unsigned long WIFI_TIMEOUT = 20000;
+const unsigned long DHT_TIMEOUT = 3000; // Timeout for DHT reading
 
-// Built-in LED Pin
-const int LED_PIN = 2;  // Most ESP32 boards have LED on GPIO2
+// LED
+const int LED_PIN = 2;
 
-// ==================== SENSOR PIN CONFIGURATION ====================
+// ==================== SENSOR MODE ====================
+// Set to true for SIMULATED DATA (fallback), false for REAL SENSORS
+boolean USE_SIMULATOR = false; // Will auto-switch to true if real sensors fail
+boolean SENSOR_FAILED = false; // Flag to track if real sensor failed 
 
-// DHT11 Temperature & Humidity Sensor
-#define DHT_PIN 32
+// ==================== CORRECT SENSOR PINS ====================
+// Updated to match the board wiring
+#define DHT_PIN 4          // GPIO 4
 #define DHT_TYPE DHT11
+#define MQ2_PIN 5          // GPIO 5
+#define FLAME_PIN 6        // GPIO 6
+#define LDR_PIN 7          // GPIO 7
+#define PIR_PIN 8          // GPIO 8
 
-// MQ2 Gas Sensor (Analog)
-#define MQ2_PIN 35
+// ==================== SENSOR SIMULATION STRUCTURE ====================
+struct SensorData {
+  float temperature;
+  float humidity;
+  float gas_percent;
+  int flame_status;
+  int motion;
+  float light_lux;
+  boolean is_simulated;
+};
 
-// Flame Sensor (Analog)
-#define FLAME_PIN 36
+SensorData currentSensorData;
+unsigned long lastSimulatorUpdate = 0;
+int simulatorPhase = 0; // For realistic simulation patterns
 
-// PIR Motion Sensor (Digital)
-#define PIR_PIN 33
-
-// LDR Light Sensor (Analog)
-#define LDR_PIN 37
-
-// ==================== GLOBAL OBJECTS ====================
+// ==================== OBJECTS & CLOCK ====================
 
 WiFiClient wifiClient;
 PubSubClient mqttClient(wifiClient);
 DHT dht(DHT_PIN, DHT_TYPE);
 
 unsigned long lastPublishTime = 0;
-bool sensorsAvailable = true;  // Set to true - we have physical sensors now!
 
-// ==================== SETUP FUNCTIONS ====================
+// SOFTWARE CLOCK (To fix the Time Problem)
+int hour = 10, minute = 0, second = 0;
+unsigned long lastTick = 0;
+
+// ==================== SETUP ====================
 
 void setup() {
-  // Initialize Serial for debugging
   Serial.begin(115200);
-  delay(1000);
+  delay(2000); // Allow serial to stabilize
 
-  // Initialize NTP time sync for ISO timestamps
-  configTime(0, 0, "pool.ntp.org");
-  Serial.println("Waiting for NTP time sync...");
-  struct tm timeinfo;
-  int ntpWait = 0;
-  while (!getLocalTime(&timeinfo) && ntpWait < 20) {
-    delay(500);
-    Serial.print(".");
-    ntpWait++;
-  }
-  if (ntpWait < 20) Serial.println("\n✓ NTP time acquired!");
-  else Serial.println("\n⚠ Failed to sync NTP time, timestamps may be invalid.");
-  
-  Serial.println("\n\n");
-  Serial.println("╔══════════════════════════════════════════════════════╗");
-  Serial.println("║         IoTShield ESP32 Firmware v1.0                ║");
-  Serial.println("║   Privacy-Preserving IoT Monitoring System           ║");
-  Serial.println("╚══════════════════════════════════════════════════════╝");
-  Serial.println();
-  
-  // Initialize LED
+  Serial.println("\n\n========================================");
+  Serial.println("     IoTShield ESP32 v3.0 STARTING");
+  Serial.println("========================================");
+
+  // 1. Initialize Pins
+  Serial.println("[SETUP] Initializing GPIO pins...");
   pinMode(LED_PIN, OUTPUT);
-  digitalWrite(LED_PIN, LOW);
-  
-  // Initialize WiFi
-  setupWiFi();
-  
-  // Initialize MQTT
-  mqttClient.setServer(MQTT_BROKER, MQTT_PORT);
-  mqttClient.setCallback(mqttCallback);
-  
-  // Initialize sensors (if available)
-  setupSensors();
-  
-  Serial.println("Setup complete! Starting main loop...");
-  for (int i = 0; i < 60; i++) Serial.print("=");
-  Serial.println();
-}
-
-void setupWiFi() {
-  Serial.println("Connecting to WiFi...");
-  Serial.print("SSID: ");
-  Serial.println(WIFI_SSID);
-  
-  WiFi.mode(WIFI_STA);
-  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-  
-  unsigned long startTime = millis();
-  
-  // Blink LED while connecting
-  while (WiFi.status() != WL_CONNECTED) {
-    if (millis() - startTime > WIFI_TIMEOUT) {
-      Serial.println("WiFi connection timeout!");
-      Serial.println("Please check your SSID and password.");
-      ESP.restart();  // Restart and try again
-    }
-    
-    digitalWrite(LED_PIN, !digitalRead(LED_PIN));
-    delay(500);
-    Serial.print(".");
-  }
-  
-  digitalWrite(LED_PIN, HIGH);  // Solid LED when connected
-  
-  Serial.println("\n✓ WiFi Connected!");
-  Serial.print("IP Address: ");
-  Serial.println(WiFi.localIP());
-  Serial.print("Signal Strength: ");
-  Serial.print(WiFi.RSSI());
-  Serial.println(" dBm");
-  Serial.println();
-}
-
-void setupSensors() {
-  Serial.println("Initializing sensors...");
-  
-  // Initialize DHT11 Temperature & Humidity Sensor
-  dht.begin();
-  Serial.println("✓ DHT11 Temperature & Humidity Sensor initialized (GPIO 32)");
-  
-  // Initialize MQ2 Gas Sensor (Analog)
-  pinMode(MQ2_PIN, INPUT);
-  Serial.println("✓ MQ2 Gas Sensor initialized (GPIO 35)");
-  
-  // Initialize Flame Sensor (Analog)
-  pinMode(FLAME_PIN, INPUT);
-  Serial.println("✓ Flame Sensor initialized (GPIO 36)");
-  
-  // Initialize PIR Motion Sensor (Digital)
   pinMode(PIR_PIN, INPUT);
-  Serial.println("✓ PIR Motion Sensor initialized (GPIO 33)");
-  Serial.println("  [Calibrating for 60 seconds, please wait...]");
   
-  // Initialize LDR Light Sensor (Analog)
+  // Set analog pins as inputs
+  pinMode(MQ2_PIN, INPUT);
+  pinMode(FLAME_PIN, INPUT);
   pinMode(LDR_PIN, INPUT);
-  Serial.println("✓ LDR Light Sensor initialized (GPIO 37)");
   
-  // Allow PIR sensor to calibrate
-  delay(60000);  // 60 second calibration period for PIR
-  Serial.println("✓ PIR Motion Sensor calibrated and ready!");
+  Serial.println("[SETUP] GPIO pins configured!");
   
-  sensorsAvailable = true;
-  Serial.println();
-  Serial.println("✓ All physical sensors detected and initialized");
-  Serial.println();
+  // 2. Initialize DHT11
+  Serial.println("[SETUP] Initializing DHT11 sensor...");
+  dht.begin();
+  delay(1000);
+  
+  // Test DHT reading
+  float testTemp = dht.readTemperature();
+  if (isnan(testTemp)) {
+    Serial.println("[ERROR] DHT11 not responding - will use SIMULATOR MODE");
+    USE_SIMULATOR = true;
+    SENSOR_FAILED = true;
+  } else {
+    Serial.print("[SUCCESS] DHT11 responding! Temp: ");
+    Serial.println(testTemp);
+  }
+
+  // 3. WiFi
+  Serial.println("[SETUP] Starting WiFi connection...");
+  setupWiFi();
+
+  // 4. MQTT
+  Serial.println("[SETUP] Configuring MQTT client...");
+  mqttClient.setServer(MQTT_BROKER, MQTT_PORT);
+  mqttClient.setKeepAlive(60);
+  
+  Serial.println("\n========================================");
+  Serial.println("     SETUP COMPLETE - Ready to run");
+  Serial.println("========================================\n");
 }
 
-void mqttCallback(char* topic, byte* payload, unsigned int length) {
-  // Handle incoming MQTT messages (for future control commands)
-  Serial.print("Message received on topic: ");
-  Serial.println(topic);
-}
 
 // ==================== MAIN LOOP ====================
 
 void loop() {
-  // Maintain WiFi connection
+  // 1. WiFi Reconnect
   if (WiFi.status() != WL_CONNECTED) {
-    Serial.println("WiFi disconnected! Reconnecting...");
+    Serial.println("[WARN] WiFi disconnected, reconnecting...");
     setupWiFi();
   }
-  
-  // Maintain MQTT connection
+
+  // 2. MQTT Reconnect
   if (!mqttClient.connected()) {
+    Serial.println("[WARN] MQTT disconnected, reconnecting...");
     reconnectMQTT();
   }
   mqttClient.loop();
-  
-  // Publish sensor data at regular intervals
-  unsigned long currentTime = millis();
-  if (currentTime - lastPublishTime >= PUBLISH_INTERVAL) {
-    publishSensorData();
-    lastPublishTime = currentTime;
+
+  // 3. Update Software Clock (1 second tick)
+  if (millis() - lastTick >= 1000) {
+    second++;
+    if (second >= 60) { second = 0; minute++; }
+    if (minute >= 60) { minute = 0; hour++; }
+    if (hour >= 24) hour = 0;
+    lastTick = millis();
   }
-  
-  // Blink LED to show activity
-  blinkLED();
+
+  // 4. Publish Data (Every 2 seconds)
+  if (millis() - lastPublishTime >= PUBLISH_INTERVAL) {
+    readAndPublishSensorData();
+    lastPublishTime = millis();
+  }
 }
 
-// ==================== MQTT FUNCTIONS ====================
+// ==================== SENSOR READING & PUBLISHING ====================
 
-void reconnectMQTT() {
-  static unsigned long lastAttempt = 0;
-  unsigned long currentTime = millis();
+void readAndPublishSensorData() {
+  Serial.println("\n[DATA] ===== Reading Sensor Data =====");
+
+  // Read sensors (real or simulated)
+  if (USE_SIMULATOR) {
+    readSimulatedSensors();
+  } else {
+    readRealSensors();
+  }
+
+  // Generate Time String "2026-02-18T10:00:00"
+  char timeStr[30];
+  sprintf(timeStr, "2026-02-18T%02d:%02d:%02d", hour, minute, second);
+
+  // Publish all readings
+  Serial.println("[DATA] Publishing to MQTT...");
+  publishOne("TEMPERATURE", currentSensorData.temperature, "C", timeStr);
+  publishOne("HUMIDITY", currentSensorData.humidity, "%", timeStr);
+  publishOne("GAS", currentSensorData.gas_percent, "%", timeStr);
+  publishOne("FLAME", (float)currentSensorData.flame_status, "bool", timeStr);
+  publishOne("MOTION", (float)currentSensorData.motion, "bool", timeStr);
+  publishOne("LIGHT", currentSensorData.light_lux, "lux", timeStr);
+
+  // Status indicator
+  if (currentSensorData.is_simulated) {
+    Serial.println("[WARNING] Using SIMULATED DATA (Real sensors unavailable)");
+  } else {
+    Serial.println("[SUCCESS] All readings from REAL sensors");
+  }
+  Serial.println("[DATA] ===== End of Sensor Data =====\n");
   
-  // Don't attempt too frequently
-  if (currentTime - lastAttempt < MQTT_RECONNECT_DELAY) {
+  // Blink LED to show activity
+  digitalWrite(LED_PIN, HIGH);
+  delay(100);
+  digitalWrite(LED_PIN, LOW);
+}
+
+// ==================== REAL SENSOR READING ====================
+
+void readRealSensors() {
+  Serial.println("[REAL] Reading real sensors...");
+  
+  // 1. Read DHT11
+  float temp = dht.readTemperature();
+  float hum = dht.readHumidity();
+
+  if (isnan(temp) || isnan(hum)) {
+    Serial.println("[ERROR] DHT11 read failed! Switching to SIMULATOR mode");
+    USE_SIMULATOR = true;
+    SENSOR_FAILED = true;
+    readSimulatedSensors();
+    return;
+  }
+
+  // 2. Read Analog Sensors
+  int gasRaw = analogRead(MQ2_PIN);
+  float gasPercent = (gasRaw / 4095.0) * 100.0;
+
+  int flameRaw = digitalRead(FLAME_PIN);
+  int flameStatus = (flameRaw == LOW) ? 1 : 0; // LOW = fire detected
+
+  int motion = digitalRead(PIR_PIN);
+
+  int lightRaw = analogRead(LDR_PIN);
+  float lightLux = (1.0 - (lightRaw / 4095.0)) * 500.0;
+
+  // Store in structure
+  currentSensorData.temperature = temp;
+  currentSensorData.humidity = hum;
+  currentSensorData.gas_percent = gasPercent;
+  currentSensorData.flame_status = flameStatus;
+  currentSensorData.motion = motion;
+  currentSensorData.light_lux = lightLux;
+  currentSensorData.is_simulated = false;
+
+  // Debug output
+  Serial.print("[REAL] Temp: "); Serial.print(temp); Serial.println("°C");
+  Serial.print("[REAL] Humidity: "); Serial.print(hum); Serial.println("%");
+  Serial.print("[REAL] Gas: "); Serial.print(gasPercent); Serial.println("%");
+  Serial.print("[REAL] Flame: "); Serial.println(flameStatus);
+  Serial.print("[REAL] Motion: "); Serial.println(motion);
+  Serial.print("[REAL] Light: "); Serial.print(lightLux); Serial.println(" lux");
+}
+
+// ==================== SIMULATED SENSOR READING ====================
+
+void readSimulatedSensors() {
+  Serial.println("[SIM] Generating simulated sensor data...");
+  
+  // Create realistic patterns for demo
+  simulatorPhase = (simulatorPhase + 1) % 30;
+  
+  // Simulate temperature variation (23-28°C)
+  currentSensorData.temperature = 25.0 + (2.0 * sin(simulatorPhase * 3.14159 / 15.0));
+  
+  // Simulate humidity (55-75%)
+  currentSensorData.humidity = 65.0 + (10.0 * cos(simulatorPhase * 3.14159 / 15.0));
+  
+  // Simulate gas levels (5-30%)
+  currentSensorData.gas_percent = 15.0 + (10.0 * sin(simulatorPhase * 3.14159 / 10.0));
+  
+  // Simulate intermittent flame (random)
+  currentSensorData.flame_status = (random(100) < 20) ? 1 : 0;
+  
+  // Simulate motion (every 5 cycles)
+  currentSensorData.motion = (simulatorPhase % 5 == 0) ? 1 : 0;
+  
+  // Simulate light variation (100-450 lux)
+  currentSensorData.light_lux = 250.0 + (150.0 * cos(simulatorPhase * 3.14159 / 15.0));
+  
+  currentSensorData.is_simulated = true;
+
+  // Debug output
+  Serial.print("[SIM] Temp: "); Serial.print(currentSensorData.temperature); Serial.println("°C");
+  Serial.print("[SIM] Humidity: "); Serial.print(currentSensorData.humidity); Serial.println("%");
+  Serial.print("[SIM] Gas: "); Serial.print(currentSensorData.gas_percent); Serial.println("%");
+  Serial.print("[SIM] Flame: "); Serial.println(currentSensorData.flame_status);
+  Serial.print("[SIM] Motion: "); Serial.println(currentSensorData.motion);
+  Serial.print("[SIM] Light: "); Serial.print(currentSensorData.light_lux); Serial.println(" lux");
+}
+
+
+void publishOne(const char* type, float value, const char* unit, const char* timeStr) {
+  StaticJsonDocument<256> doc;
+  doc["device_id"] = DEVICE_ID;
+  doc["sensor_type"] = type;
+  doc["value"] = value;
+  doc["unit"] = unit;
+  doc["timestamp"] = timeStr; // Dashboard displays this
+  doc["location"] = LOCATION;
+  doc["data_source"] = currentSensorData.is_simulated ? "SIMULATED" : "REAL";
+
+  char buffer[256];
+  serializeJson(doc, buffer);
+
+  if (mqttClient.publish(MQTT_TOPIC, buffer)) {
+    Serial.print("[MQTT] Published "); Serial.print(type); 
+    Serial.print(" = "); Serial.print(value);
+    Serial.print(" "); Serial.println(unit);
+  } else {
+    Serial.print("[MQTT ERROR] Failed to publish "); Serial.println(type);
+  }
+}
+
+
+// ==================== CONNECTION HELPERS ====================
+
+void setupWiFi() {
+  if (WiFi.status() == WL_CONNECTED) {
+    Serial.println("[WiFi] Already connected!");
     return;
   }
   
-  lastAttempt = currentTime;
+  Serial.print("[WiFi] Connecting to: ");
+  Serial.println(WIFI_SSID);
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   
-  Serial.print("Connecting to MQTT broker at ");
-  Serial.print(MQTT_BROKER);
-  Serial.print(":");
-  Serial.print(MQTT_PORT);
-  Serial.print("...");
+  int attempts = 0;
+  while (WiFi.status() != WL_CONNECTED && attempts < 20) {
+    delay(500);
+    Serial.print(".");
+    attempts++;
+  }
   
-  if (mqttClient.connect(MQTT_CLIENT_ID)) {
+  if (WiFi.status() == WL_CONNECTED) {
+    Serial.println("\n[WiFi] ✓ Connected!");
+    Serial.print("[WiFi] IP Address: ");
+    Serial.println(WiFi.localIP());
+  } else {
+    Serial.println("\n[WiFi] ✗ Connection failed!");
+  }
+}
+
+void reconnectMQTT() {
+  if (WiFi.status() != WL_CONNECTED) {
+    Serial.println("[MQTT] WiFi not connected, cannot connect to MQTT");
+    return;
+  }
+  
+  Serial.print("[MQTT] Attempting connection...");
+  String clientId = "ESP32-" + String(random(0xffff), HEX);
+  
+  if (mqttClient.connect(clientId.c_str())) {
     Serial.println(" ✓ Connected!");
-    digitalWrite(LED_PIN, HIGH);
-    
-    // Subscribe to control topics (for future use)
-    mqttClient.subscribe("iotshield/control/commands");
+    Serial.print("[MQTT] Client ID: ");
+    Serial.println(clientId);
+    Serial.print("[MQTT] Broker: ");
+    Serial.print(MQTT_BROKER);
+    Serial.print(":");
+    Serial.println(MQTT_PORT);
   } else {
-    Serial.print(" ✗ Failed! RC=");
-    Serial.println(mqttClient.state());
-    Serial.println("Retrying in 5 seconds...");
-    digitalWrite(LED_PIN, LOW);
+    Serial.print(" ✗ Failed (Code: ");
+    Serial.print(mqttClient.state());
+    Serial.println(")");
   }
-}
-
-// ==================== SENSOR READING FUNCTIONS ====================
-
-float readTemperature() {
-  if (sensorsAvailable) {
-    // Read from DHT11 sensor
-    float temp = dht.readTemperature();
-    
-    // Check if reading is valid
-    if (isnan(temp)) {
-      Serial.println("⚠ DHT11 temperature reading failed!");
-      return 25.0;  // Return default value
-    }
-    
-    return temp;
-  } else {
-    // Fallback: Simulated data
-    float baseTemp = 25.0;
-    float variance = random(-30, 30) / 10.0;
-    return baseTemp + variance;
-  }
-}
-
-float readHumidity() {
-  if (sensorsAvailable) {
-    // Read from DHT11 sensor
-    float humidity = dht.readHumidity();
-    
-    // Check if reading is valid
-    if (isnan(humidity)) {
-      Serial.println("⚠ DHT11 humidity reading failed!");
-      return 60.0;  // Return default value
-    }
-    
-    return humidity;
-  } else {
-    // Fallback: Simulated data
-    float baseHumidity = 60.0;
-    float variance = random(-100, 100) / 10.0;
-    float humidity = baseHumidity + variance;
-    return constrain(humidity, 0, 100);
-  }
-}
-
-float readGas() {
-  if (sensorsAvailable) {
-    // Read from MQ2 analog sensor
-    int rawValue = analogRead(MQ2_PIN);
-    
-    // Convert to ppm (parts per million)
-    // MQ2 output: 0-4095 (12-bit ADC)
-    // Clean air: ~300-400 ppm
-    // Gas detected: 600+ ppm
-    float ppm = map(rawValue, 0, 4095, 0, 1000);
-    
-    return ppm;
-  } else {
-    // Fallback: Simulated data
-    float baseGas = 350.0;
-    float variance = random(-50, 50);
-    
-    // Occasionally generate gas leak anomaly
-    if (random(1000) < 15) {
-      variance = random(200, 500);
-    }
-    
-    return baseGas + variance;
-  }
-}
-
-int readFlame() {
-  if (sensorsAvailable) {
-    // Read from flame sensor (analog, but we treat as digital threshold)
-    int rawValue = analogRead(FLAME_PIN);
-    
-    // Flame detected if reading is above threshold
-    // Typically: No flame = high value, Flame = low value (inverted)
-    // Adjust threshold based on your sensor (usually 1000-2000)
-    int threshold = 1500;
-    
-    if (rawValue < threshold) {
-      return 1;  // Flame detected
-    } else {
-      return 0;  // No flame
-    }
-  } else {
-    // Fallback: Simulated data
-    if (random(1000) < 8) {
-      return 1;
-    }
-    return 0;
-  }
-}
-
-int readMotion() {
-  if (sensorsAvailable) {
-    // Read from PIR sensor (digital output)
-    int motionDetected = digitalRead(PIR_PIN);
-    
-    // HC-SR501 outputs HIGH when motion detected
-    return motionDetected;
-  } else {
-    // Fallback: Simulated data
-    if (random(100) < 25) {
-      return 1;
-    }
-    return 0;
-  }
-}
-
-float readLight() {
-  if (sensorsAvailable) {
-    // Read from LDR sensor (analog)
-    int rawValue = analogRead(LDR_PIN);
-    
-    // Convert to lux (light intensity)
-    // Higher ADC value = darker environment (LDR resistance increases)
-    // Lower ADC value = brighter environment
-    // Typical range: 0-4095 (12-bit ADC)
-    // Convert to lux: 0-1000 lux scale
-    float lux = map(rawValue, 0, 4095, 1000, 0);  // Inverted mapping
-    
-    return lux;
-  } else {
-    // Fallback: Simulated data
-    float baseLight = 300.0;
-    float variance = random(-100, 100);
-    return baseLight + variance;
-  }
-}
-
-// ==================== PUBLISH FUNCTIONS ====================
-
-void publishSensorData() {
-  // Read all sensors
-  float temperature = readTemperature();
-  float humidity = readHumidity();
-  float gas = readGas();
-  int flame = readFlame();
-  int motion = readMotion();
-  float light = readLight();
-  
-  // Get current timestamp (seconds since boot)
-  unsigned long timestamp = millis() / 1000;
-  
-  // Publish each sensor reading separately
-  publishSensorReading("TEMPERATURE", temperature, "°C");
-  publishSensorReading("HUMIDITY", humidity, "%");
-  publishSensorReading("GAS", gas, "ppm");
-  publishSensorReading("FLAME", (float)flame, "");
-  publishSensorReading("MOTION", (float)motion, "");
-  publishSensorReading("LIGHT", light, "lux");
-  
-  Serial.println("--- Published sensor batch ---");
-}
-
-void publishSensorReading(const char* sensorType, float value, const char* unit) {
-  // Create JSON document
-  StaticJsonDocument<512> doc;
-  
-  doc["device_id"] = DEVICE_ID;
-  doc["device_name"] = DEVICE_NAME;
-  doc["device_type"] = DEVICE_TYPE;
-  doc["sensor_type"] = sensorType;
-  doc["value"] = value;
-  doc["unit"] = unit;
-  doc["location"] = LOCATION;
-  doc["timestamp"] = getTimestamp();
-  
-  // Serialize to JSON string
-  char jsonBuffer[512];
-  serializeJson(doc, jsonBuffer);
-  
-  // Publish to MQTT
-  bool success = mqttClient.publish(MQTT_TOPIC, jsonBuffer);
-  
-  if (success) {
-    Serial.print("✓ ");
-    Serial.print(sensorType);
-    Serial.print(": ");
-    Serial.print(value);
-    Serial.println(unit);
-  } else {
-    Serial.print("✗ Failed to publish ");
-    Serial.println(sensorType);
-  }
-}
-
-// ==================== UTILITY FUNCTIONS ====================
-
-String getTimestamp() {
-  // Return ISO 8601 timestamp using NTP time
-  struct tm timeinfo;
-  if (!getLocalTime(&timeinfo)) {
-    // fallback: return empty string if NTP not available
-    return "";
-  }
-  char buf[25];
-  strftime(buf, sizeof(buf), "%Y-%m-%dT%H:%M:%S", &timeinfo);
-  return String(buf);
-}
-
-void blinkLED() {
-  static unsigned long lastBlink = 0;
-  static bool ledState = true;
-  
-  // Blink every 1 second when connected
-  if (millis() - lastBlink > 1000 && mqttClient.connected()) {
-    ledState = !ledState;
-    digitalWrite(LED_PIN, ledState);
-    lastBlink = millis();
-  }
-}
-
-// ==================== DEBUG FUNCTIONS ====================
-
-void printSystemInfo() {
-  Serial.println("\n=== ESP32 System Information ===");
-  Serial.print("Chip Model: ");
-  Serial.println(ESP.getChipModel());
-  Serial.print("Chip Revision: ");
-  Serial.println(ESP.getChipRevision());
-  Serial.print("CPU Frequency: ");
-  Serial.print(ESP.getCpuFreqMHz());
-  Serial.println(" MHz");
-  Serial.print("Free Heap: ");
-  Serial.print(ESP.getFreeHeap());
-  Serial.println(" bytes");
-  Serial.println("================================\n");
 }
