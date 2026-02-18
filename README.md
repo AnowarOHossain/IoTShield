@@ -13,7 +13,7 @@
 
 **IoTShield** is a fully-functional smart home automation and monitoring system that provides **real-time, privacy-preserving data communication** and **AI-driven anomaly detection** using the **MQTT protocol**.
 
-The system integrates **Generative AI (Google Gemini 2.5 Flash)** to interpret and generate meaningful alerts from sensor anomalies, ensuring an intelligent and secure home environment. With **6769+ sensor readings** collected, **1132+ alerts generated** across all severity levels, and **real-time chart visualization**, IoTShield demonstrates a complete end-to-end IoT solution.
+The system integrates **Generative AI (Llama 3.2:1B via Ollama)** to interpret and generate meaningful alerts from sensor anomalies, ensuring an intelligent and secure home environment. With **6769+ sensor readings** collected, **1132+ alerts generated** across all severity levels, and **real-time chart visualization**, IoTShield demonstrates a complete end-to-end IoT solution.
 
 **Current Status:**  **Fully Operational** - All core features implemented, tested, and working perfectly!
 
@@ -38,17 +38,17 @@ IoTShield is developed as part of the **CSE Final Year Thesis Project** at **Sha
 
 ### Implemented & Tested
 
-- **ESP32 Hardware Firmware** ready for physical device deployment
+- **ESP32 Hardware Firmware** running on real sensors (physical device deployed)
 - **Email Alert Notifications** with Gmail SMTP for critical anomalies
 - **User Authentication System** with login/register functionality and JWT token support
 - **RSA Encryption** for end-to-end MQTT payload security with 2048-bit keys
-- **Privacy-Preserving Data Collection** with differential privacy noise
+- **Privacy-Preserving Data Collection** with dual-layer Gaussian noise
 - **MQTT Protocol Communication** using Mosquitto broker
-- **AI-Powered Anomaly Detection** with Google Gemini 2.5 Flash
+- **AI-Powered Anomaly Detection** with Llama 3.2:1B (Ollama)
 - **Intelligent Alert Generation** with context-aware AI analysis
 - **Interactive Dashboard** with Tailwind CSS & Chart.js
 - **Data Persistence** with Django ORM and SQLite
-- **IoT Device Simulator** for ESP32 and Raspberry Pi
+- **IoT Device Simulator** for Raspberry Pi and ESP32 testing
 - **Real-Time Data Visualization** with auto-refresh
 - **Alert Management System** with severity levels
 - **RESTful API Endpoints** for data access
@@ -64,14 +64,14 @@ IoTShield is developed as part of the **CSE Final Year Thesis Project** at **Sha
 IoTShield follows a **hybrid edge-cloud architecture** integrating IoT devices, an MQTT-based communication layer, a Django web server, and GenAI services for intelligent insights.
 
 ```
-ESP32 Sensors → MQTT Broker → Django Backend → Gemini AI → Dashboard → MQTT Control
+ESP32 Sensors → MQTT Broker → Django Backend → Llama AI → Dashboard → MQTT Control
 ```
 
 ### Architecture Diagram
 
 ```
 
-   ESP32 Simulator        Raspberry Pi Simulator
+   ESP32 Real Sensors     Raspberry Pi Simulator
   Temperature              Temperature      
   Humidity                 Humidity         
   Gas (MQ2)                Gas (MQ2)        
@@ -99,7 +99,7 @@ ESP32 Sensors → MQTT Broker → Django Backend → Gemini AI → Dashboard →
            
            ↓
 
-   Gemini AI 2.5     
+   Llama 3.2:1B      
   Anomaly Detection
   Context Analysis 
   Alert Generation 
@@ -120,11 +120,11 @@ ESP32 Sensors → MQTT Broker → Django Backend → Gemini AI → Dashboard →
 
 ### System Components
 
-1. **IoT Device Simulators** *Fully Implemented*
-   - **ESP32 Simulator (Living Room)**: ESP32_SIM_001
+1. **IoT Devices & Simulators** *Fully Implemented*
+    - **ESP32 Real Sensors (Living Room)**: ESP32_SIM_001
      - Collects 6 sensor types: Temperature, Humidity, Gas, Flame, Motion, Light
      - Publishes data every 5 seconds
-     - Privacy-preserving Gaussian noise
+       - Dual-layer Gaussian noise for privacy
    - **Raspberry Pi Simulator (Kitchen)**: RPI_SIM_001
      - All ESP32 sensors PLUS system metrics
      - CPU Temperature monitoring (40-55°C normal)
@@ -145,8 +145,8 @@ ESP32 Sensors → MQTT Broker → Django Backend → Gemini AI → Dashboard →
    - Manages devices, sensor readings, and alerts
    - Real-time data processing with timezone-aware timestamps
 
-4. **Gemini AI Anomaly Detection** *Working & Validated*
-   - Uses **Google Gemini 2.5 Flash** for intelligent anomaly detection
+4. **Llama AI Anomaly Detection** *Working & Validated*
+   - Uses **Llama 3.2:1B (Ollama)** for intelligent anomaly detection
    - Context-aware analysis with human-like reasoning
    - Real-time anomaly detection with detailed explanations
    - Severity classification (LOW, MEDIUM, HIGH, CRITICAL)
@@ -205,12 +205,12 @@ ESP32 Sensors → MQTT Broker → Django Backend → Gemini AI → Dashboard →
 
 | **Module** | **Status** | **Description** | **Technologies** |
 |-------------|------------|------------------|------------------|
-| **Data Acquisition** | Complete | Sensor data simulation with privacy noise | Python, datetime, random |
+| **Data Acquisition** | Complete | Sensor data collection/simulation with privacy noise | Python, datetime, random |
 | **MQTT Communication** | Complete | Secure publish/subscribe messaging | Mosquitto, paho-mqtt 2.1.0 |
 | **Edge Processing** | Complete | Local MQTT broker and caching | Raspberry Pi compatible |
 | **Backend & Storage** | Complete | Data ingestion, storage, management | Django 5.2.7, SQLite |
-| **Anomaly Detection** | Complete | AI-powered anomaly detection | Google Gemini 2.5 Flash |
-| **Alert Generation** | Complete | Intelligent alert system with AI | Google Gemini 2.5 Flash |
+| **Anomaly Detection** | Complete | AI-powered anomaly detection | Llama 3.2:1B (Ollama) |
+| **Alert Generation** | Complete | Intelligent alert system with AI | Llama 3.2:1B (Ollama) |
 | **Email Notifications** | Complete | Automated email alerts for anomalies | Gmail SMTP, HTML Templates |
 | **RSA Encryption** | Complete | End-to-end MQTT payload encryption | PyCryptodome, RSA-2048, PKCS1_OAEP |
 | **User Authentication** | Complete | User registration and login system | Django Auth, JWT, Tailwind CSS |
@@ -259,7 +259,7 @@ Average Response Time: < 2 seconds
 Multi-Device Support: Fully operational
 Dashboard Charts: Real-time visualization working
 All Severity Levels: LOW, MEDIUM, HIGH, CRITICAL detected
-AI Anomaly Detection: Google Gemini 2.5 Flash integrated
+AI Anomaly Detection: Llama 3.2:1B (Ollama) integrated
 Security: RSA-2048 encryption for MQTT payloads (application-layer)
 Database: 6769+ records with complete sensor history
 ```
@@ -274,6 +274,7 @@ Ensure the following are installed:
 - **Python 3.10+** (Tested with Python 3.13.7)
 - **Git** for version control
 - **Mosquitto MQTT Broker**
+- **Ollama** (for Llama 3.2:1B)
 - **pip** package manager
 
 ---
@@ -305,7 +306,7 @@ pip install -r requirements.txt
 **Key Dependencies:**
 - Django 5.2.7
 - paho-mqtt 2.1.0
-- google-generativeai 0.8.3
+- ollama (local runtime for Llama 3.2:1B)
 - numpy, pandas
 
 #### 4. Setup Django Database
@@ -331,18 +332,23 @@ sudo systemctl start mosquitto
 sudo systemctl enable mosquitto
 ```
 
-#### 6. Configure Environment Variables
+#### 6. Install Llama 3.2:1B Model (Ollama)
+```bash
+ollama pull llama3.2:1b
+```
+
+#### 7. Configure Environment Variables
 
 Create a `.env` file in the root directory:
 ```env
 SECRET_KEY=your-secret-key-here
 DEBUG=True
-GEMINI_API_KEY=your-gemini-api-key
+OLLAMA_MODEL=llama3.2:1b
 MQTT_BROKER_HOST=localhost
 MQTT_BROKER_PORT=1883
 ```
 
-#### 7. Setup RSA Encryption (First Time Only)
+#### 8. Setup RSA Encryption (First Time Only)
 
 IoTShield includes RSA encryption for securing MQTT payloads. On first run, RSA keys will be generated automatically. You can also manually generate and test them:
 
@@ -360,7 +366,7 @@ python test_rsa_encryption.py
 
 The system will automatically create encryption keys in the `keys/` directory when you start the MQTT listener.
 
-#### 8. Run the Complete System
+#### 9. Run the Complete System
 
 **Terminal 1: Django Web Server**
 ```bash
@@ -368,11 +374,12 @@ python manage.py runserver
 ```
 Dashboard will be available at: http://127.0.0.1:8000/
 
-**Terminal 2: ESP32 Simulator**
+**Terminal 2: ESP32 Simulator (optional for testing)**
 ```bash
 cd simulator
 python simulator.py
 ```
+If using real ESP32 sensors, flash the firmware and connect the device to the MQTT broker instead.
 
 **Terminal 3: Raspberry Pi Simulator**
 ```bash
@@ -449,20 +456,20 @@ Latest alerts:
 
 ## AI Integration Details
 
-### Gemini-Based Anomaly Detection
+### Llama-Based Anomaly Detection
 
 **Overview:**
-IoTShield uses Google Gemini 2.5 Flash AI model for intelligent, context-aware anomaly detection. Gemini analyzes sensor data with human-like reasoning and provides detailed explanations.
+IoTShield uses the Llama 3.2:1B model (via Ollama) for intelligent, context-aware anomaly detection. The model analyzes sensor data with human-like reasoning and provides detailed explanations.
 
 **How It Works:**
 1. New sensor data arrives via MQTT
 2. Data saved to database immediately
-3. Gemini API called asynchronously (non-blocking)
+3. Llama inference called asynchronously (non-blocking)
 4. AI analyzes sensor reading with contextual understanding
 5. Returns anomaly detection + explanation + severity + suggestions
 6. Alert created if anomalous
 
-**API Request Format:**
+**Inference Request Format:**
 ```python
 {
     "sensor_type": "TEMPERATURE",
@@ -474,7 +481,7 @@ IoTShield uses Google Gemini 2.5 Flash AI model for intelligent, context-aware a
 }
 ```
 
-**Gemini Analysis Response:**
+**Llama Analysis Response:**
 ```json
 {
     "anomaly": true,
@@ -487,27 +494,27 @@ IoTShield uses Google Gemini 2.5 Flash AI model for intelligent, context-aware a
 **Key Features:**
 - **Context-Aware**: Understands sensor types and their normal ranges
 - **Async Processing**: Non-blocking background analysis (< 10s timeout)
-- **Fallback System**: Rule-based detection if API fails
+- **Fallback System**: Rule-based detection if inference fails
 - **Error Handling**: Graceful degradation with threshold-based detection
 - **Real-time**: Analysis triggered on every sensor reading
 
 **Performance:**
-- API Response Time: 2-5 seconds
+- Inference Response Time: 2-5 seconds
 - Timeout Protection: 10 seconds max
 - Fallback Latency: < 50ms
 - Accuracy: Enhanced with AI reasoning
 
-### Alert Generation (Google Gemini 2.5 Flash)
+### Alert Generation (Llama 3.2:1B)
 
 **Configuration:**
 ```python
-model = genai.GenerativeModel('gemini-2.5-flash')
+model = "llama3.2:1b"
 temperature = 0.7
 max_output_tokens = 150
 ```
 
 **Alert Generation Process:**
-- Gemini detector provides anomaly + explanation + severity
+- Llama detector provides anomaly + explanation + severity
 - Alert created automatically if anomaly detected
 - Stored in database with AI-generated details
 - Published to MQTT for real-time notifications
@@ -525,11 +532,12 @@ max_output_tokens = 150
 
 IoTShield implements multiple privacy layers:
 
-### 1. **Differential Privacy Noise**
+### 1. **Dual-Layer Differential Privacy Noise**
 ```python
-# Gaussian noise added to sensor readings
-noise = np.random.normal(0, epsilon * sensitivity)
-private_value = original_value + noise
+# Dual-layer Gaussian noise added to sensor readings
+noise_layer_1 = np.random.normal(0, epsilon_1 * sensitivity)
+noise_layer_2 = np.random.normal(0, epsilon_2 * sensitivity)
+private_value = original_value + noise_layer_1 + noise_layer_2
 ```
 
 ### 2. **Edge Processing**
@@ -561,7 +569,7 @@ private_value = original_value + noise
 | **Database Growth** | ~200 KB/day | With 2 devices |
 | **Dashboard Load Time** | < 500ms | Initial page load |
 | **API Response Time** | < 100ms | Average response time |
-| **Gemini API Latency** | 1-3 seconds | Alert generation time |
+| **Llama Inference Latency** | 1-3 seconds | Alert generation time |
 | **Model Inference** | < 100ms | Anomaly detection |
 | **System Uptime** | 99.9% | Tested reliability |
 | **Multi-Device Support** | 2+ devices | Concurrent operation |
@@ -581,8 +589,7 @@ IoTShield/
 │   ├── views.py                     # Dashboard views
 │   ├── management/                  # Django management commands
 │   │   └── commands/
-│   │       ├── mqtt_listener.py     # MQTT listener command
-│   │       └── test_gemini_detector.py  # Gemini testing utility
+│   │       └── mqtt_listener.py     # MQTT listener command
 │   ├── migrations/                  # Database migrations
 │   │   └── 0001_initial.py
 │   ├── static/                      # Frontend static assets
@@ -604,8 +611,7 @@ IoTShield/
 │   ├── wsgi.py                     # WSGI configuration
 │   ├── models.py                   # Shared models
 │   ├── mqtt_client.py              # MQTT subscriber client with RSA decryption
-│   ├── gemini_anomaly_detector.py  # Gemini 2.5 AI anomaly detection
-│   ├── gemini_alerts.py            # Gemini 2.5 AI integration
+│   ├── ollama_anomaly_detector.py  # Llama 3.2:1B anomaly detection
 │   ├── privacy_engine.py           # Privacy mechanisms & RSA encryption
 │   ├── auth_urls.py                # Authentication URL routing
 │   ├── auth_views.py               # Authentication views
@@ -632,7 +638,7 @@ IoTShield/
 │   ├── GETTING_STARTED.md          # Getting started guide
 │   ├── SETUP_GUIDE.md              # Setup instructions
 │   ├── QUICK_START.md              # Quick commands reference
-│   ├── QUICK_START_GEMINI.md       # Gemini AI setup guide
+│   ├── QUICK_START_OLLAMA.md       # Llama (Ollama) setup guide
 │   ├── AUTHENTICATION_GUIDE.md     # Authentication documentation
 │   ├── EMAIL_ALERTS_GUIDE.md       # Email notifications documentation
 │   ├── RSA_ENCRYPTION_GUIDE.md     # RSA encryption implementation guide
@@ -663,7 +669,7 @@ IoTShield/
 ├── check_data.py                   # Database inspection utility
 ├── manage_rsa_keys.py              # RSA key management tool
 ├── test_rsa_encryption.py          # RSA encryption testing script
-├── test_gemini_anomaly.py          # Gemini API testing script
+├── test_ollama_anomaly.py          # Llama testing script
 ├── test_mqtt.py                    # MQTT connectivity testing
 ├── manage.py                       # Django management
 ├── requirements.txt                # Python dependencies
@@ -726,13 +732,13 @@ IoTShield/
    - Data validation
 
 3. **Anomaly Detection**
-   - Gemini API integration
+   - Llama (Ollama) integration
    - Context-aware analysis
    - Real-time detection
    - Severity classification
 
 4. **AI Integration**
-   - Gemini API connectivity
+   - Llama (Ollama) connectivity
    - Context generation
    - Alert formatting
    - Error handling
@@ -759,9 +765,9 @@ IoTShield/
    - Does not affect data flow
    - Under investigation
 
-2. **Gemini API**
-   - Requires stable internet connection
-   - Rate limiting may apply
+2. **Llama Inference**
+   - Runs locally with Ollama
+   - Model availability required on host
    - Fallback to rule-based alerts implemented
 
 3. **Database**
@@ -781,7 +787,7 @@ IoTShield/
 - [ ] Implement data export functionality
 
 ### Phase 2 (Mid-term)
-- [ ] Enhance Gemini AI prompts for better accuracy
+- [ ] Enhance Llama prompts for better accuracy
 - [ ] Add voice control via Google Assistant
 - [ ] Implement blockchain for decentralized IoT trust
 - [ ] Create mobile app (Flutter/React Native)
@@ -802,7 +808,7 @@ IoTShield/
 - [Getting Started Guide](docs/GETTING_STARTED.md)
 - [Setup Guide](docs/SETUP_GUIDE.md)
 - [Quick Start Guide](docs/QUICK_START.md)
-- [Gemini AI Setup Guide](docs/QUICK_START_GEMINI.md)
+- [Llama (Ollama) Setup Guide](docs/QUICK_START_OLLAMA.md)
 - [Authentication Guide](docs/AUTHENTICATION_GUIDE.md)
 - [Email Alerts Guide](docs/EMAIL_ALERTS_GUIDE.md)
 - [RSA Encryption Guide](docs/RSA_ENCRYPTION_GUIDE.md)
@@ -882,7 +888,7 @@ We would like to express our deepest gratitude to:
 | **Planning & Research** | Sep 2025 | Complete |
 | **System Design** | Oct 2025 | Complete |
 | **Backend Development** | Oct 2025 | Complete |
-| **Gemini AI Integration** | Oct-Nov 2025 | Complete |
+| **Llama AI Integration** | Oct-Nov 2025 | Complete |
 | **Dashboard Implementation** | Oct-Nov 2025 | Complete |
 | **Integration & Testing** | Nov-Dec 2025 | In Progress |
 | **Documentation** | Jan 2026 | In Progress |
@@ -894,7 +900,7 @@ We would like to express our deepest gratitude to:
 ## Achievements
 
 - Successfully implemented complete IoT pipeline
-- Integrated cutting-edge Gemini 2.5 Flash AI technology
+- Integrated Llama 3.2:1B (Ollama) AI model
 - Achieved real-time anomaly detection with < 2s latency
 - Built multi-device architecture (ESP32 + Raspberry Pi)
 - Collected 6769+ sensor readings with 1132+ AI-generated alerts
@@ -912,7 +918,7 @@ We would like to express our deepest gratitude to:
 - Complete screenshot documentation added
 - Large-scale data collection validated (6769+ readings)
 - AI anomaly detection proven effective (1132+ alerts)
-- Upgraded to latest Gemini 2.5 Flash model
+- Upgraded to Llama 3.2:1B model
 
 ---
 
@@ -932,7 +938,7 @@ We would like to express our deepest gratitude to:
 
 ### Devices Page
 ![Devices Page](Screenshots/Device-Page.png)
-*Connected IoT device management interface showing ESP32 and Raspberry Pi simulators with real-time status*
+*Connected IoT device management interface showing ESP32 real sensors and Raspberry Pi simulator with real-time status*
 
 ### Alerts Page
 ![Alerts Page](Screenshots/Alerts-Page.png)
@@ -940,7 +946,7 @@ We would like to express our deepest gratitude to:
 
 ### Alert Database Storage
 ![Alert Database](Screenshots/Alert_saved-in%20Database.png)
-*Backend view showing alerts stored in database with Gemini AI-generated analysis and severity classification*
+*Backend view showing alerts stored in database with Llama AI-generated analysis and severity classification*
 
 ### Sensor Data Records
 ![Sensor Data](Screenshots/Sensor%20Datas.png)
@@ -959,7 +965,7 @@ We would like to express our deepest gratitude to:
 
 ### Research Objectives
 1. Evaluate MQTT protocol for IoT communication
-2. Assess Gemini AI for intelligent anomaly detection
+2. Assess Llama AI for intelligent anomaly detection
 3. Measure privacy preservation effectiveness
 4. Analyze system performance metrics
 5. Validate real-world applicability
@@ -986,7 +992,7 @@ We would like to express our deepest gratitude to:
 
 **Last Updated:** February 17, 2026  
 **Version:** 1.2.0  
-**Status:** Fully Operational with Gemini 2.5 Flash & RSA Encryption
+**Status:** Fully Operational with Llama 3.2:1B & RSA Encryption
 
 </div>
   
