@@ -13,7 +13,7 @@
 
 **IoTShield** is a fully-functional smart home automation and monitoring system that provides **real-time, privacy-preserving data communication** and **AI-driven anomaly detection** using the **MQTT protocol**.
 
-The system integrates **Generative AI (Llama 3.2:1B via Ollama)** to interpret and generate meaningful alerts from sensor anomalies, ensuring an intelligent and secure home environment. With **6769+ sensor readings** collected, **1132+ alerts generated** across all severity levels, and **real-time chart visualization**, IoTShield demonstrates a complete end-to-end IoT solution.
+The system integrates **Generative AI (Llama 3.2:1B via Ollama)** to interpret and generate meaningful alerts from sensor anomalies, ensuring an intelligent and secure home environment. With **13244 sensor readings** collected, **1612 alerts generated** across all severity levels, and **real-time chart visualization**, IoTShield demonstrates a complete end-to-end IoT solution.
 
 **Current Status:**  **Fully Operational** - All core features implemented, tested, and working perfectly!
 
@@ -52,8 +52,8 @@ IoTShield is developed as part of the **CSE Final Year Thesis Project** at **Sha
 - **Real-Time Data Visualization** with auto-refresh
 - **Alert Management System** with severity levels
 - **RESTful API Endpoints** for data access
-- **Large-Scale Data Collection** with 3799+ sensor readings collected
-- **Anomaly Detection Accuracy** validated with 723+ real-time alerts
+- **Large-Scale Data Collection** with 13244 sensor readings collected
+- **Anomaly Detection Accuracy** validated with 1612 real-time alerts
 - **Multi-Device Architecture** supporting ESP32 and Raspberry Pi simultaneously
 - **Production-Ready Hardware Code** with 500+ lines of Arduino firmware
 
@@ -222,24 +222,25 @@ ESP32 Sensors → MQTT Broker → Django Backend → Llama AI → Dashboard → 
 
 ##  Current System Statistics
 
-As of February 17, 2026:
+As of February 19, 2026:
 
 ```
-Active Devices: 2
-   Living Room Sensor Hub (ESP32_SIM_001) - Online
+Active Devices: 3
+   ESP32 Smart Sensor Hub (ESP32_HARDWARE_001) - Online
    Kitchen Edge Gateway (RPI_SIM_001) - Online
+   Living Room Sensor Hub (ESP32_SIM_001) - Online
 
 Total Sensor Types: 9
    ESP32: Temperature, Humidity, Gas, Flame, Motion, Light
    RPI: All above + CPU Temperature, Memory Usage, Disk Usage
 
-Total Sensor Readings: 6769+
+Total Sensor Readings: 13244
    Environmental sensor readings (both devices)
    System metrics from Raspberry Pi
    Real-time data every 5 seconds
    Continuous data collection over multiple sessions
 
-Total Alerts Generated: 1132+
+Total Alerts Generated: 1612
    CRITICAL alerts - Immediate threats (Gas leaks, Fire hazards)
    HIGH priority alerts - Significant issues (Motion anomalies)
    MEDIUM priority alerts - Notable anomalies (Temperature spikes)
@@ -253,15 +254,15 @@ Anomalies Detected: Multiple severities
    Humidity anomalies (MEDIUM severity)
    System performance anomalies (RPI monitoring)
 
-Detection Accuracy: Validated with 1132+ real-time alerts
+Detection Accuracy: Validated with 1612 real-time alerts
 Data Flow: End-to-end operational
 Average Response Time: < 2 seconds
-Multi-Device Support: Fully operational
+Multi-Device Support: 3 devices online
 Dashboard Charts: Real-time visualization working
 All Severity Levels: LOW, MEDIUM, HIGH, CRITICAL detected
 AI Anomaly Detection: Llama 3.2:1B (Ollama) integrated
 Security: RSA-2048 encryption for MQTT payloads (application-layer)
-Database: 6769+ records with complete sensor history
+Database: 13244 records with complete sensor history
 ```
 
 ---
@@ -426,25 +427,26 @@ python check_data.py
 
 Output example:
 ```
- Devices: 2
-  - Kitchen Edge Gateway (RPI_SIM_001) -  Active
-  - Living Room Sensor Hub (ESP32_SIM_001) -  Active
+ Devices: 3
+   - ESP32 Smart Sensor Hub (ESP32_HARDWARE_001) -  Active
+   - Kitchen Edge Gateway (RPI_SIM_001) -  Active
+   - Living Room Sensor Hub (ESP32_SIM_001) -  Active
 
- Sensor Readings: 3799+
+ Sensor Readings: 13244
 
-Latest readings:
-  DISK_USAGE: 44.0% from Kitchen Edge Gateway
-  MEMORY_USAGE: 40.09% from Kitchen Edge Gateway
-  CPU_TEMPERATURE: 53.97°C from Kitchen Edge Gateway
-  LIGHT: 458.35lux from Kitchen Edge Gateway
-  MOTION: 1.0 from Kitchen Edge Gateway  ANOMALY
-  FLAME: 0.0 from Kitchen Edge Gateway
-  GAS: 0.0ppm from Kitchen Edge Gateway
-  HUMIDITY: 51.94% from Kitchen Edge Gateway
-  TEMPERATURE: 22.94°C from Kitchen Edge Gateway
-  ...
+Latest 10 readings:
+   TEMPERATURE: 33.2C from ESP32 Smart Sensor Hub
+   HUMIDITY: 31.0% from ESP32 Smart Sensor Hub
+   GAS: 0.0% from ESP32 Smart Sensor Hub
+   FLAME: 0.0bool from ESP32 Smart Sensor Hub
+   MOTION: 0.0bool from ESP32 Smart Sensor Hub
+   LIGHT: 485.9585lux from ESP32 Smart Sensor Hub
+   TEMPERATURE: 33.2C from ESP32 Smart Sensor Hub
+   HUMIDITY: 31.0% from ESP32 Smart Sensor Hub
+   GAS: 0.0% from ESP32 Smart Sensor Hub
+   FLAME: 0.0bool from ESP32 Smart Sensor Hub
 
- Alerts: 723+
+ Alerts: 1612
 
 Latest alerts:
   [HIGH] MOTION Anomaly Detected
@@ -704,11 +706,11 @@ IoTShield/
 ### Example API Response:
 ```json
 {
-  "total_devices": 2,
-  "active_devices": 2,
-  "total_readings": 3799,
-  "total_alerts": 723,
-  "recent_anomalies": 723,
+   "total_devices": 3,
+   "active_devices": 3,
+   "total_readings": 13244,
+   "total_alerts": 1612,
+   "recent_anomalies": 1612,
   "system_status": "operational"
 }
 ```
@@ -903,7 +905,7 @@ We would like to express our deepest gratitude to:
 - Integrated Llama 3.2:1B (Ollama) AI model
 - Achieved real-time anomaly detection with < 2s latency
 - Built multi-device architecture (ESP32 + Raspberry Pi)
-- Collected 6769+ sensor readings with 1132+ AI-generated alerts
+- Collected 13244 sensor readings with 1612 AI-generated alerts
 - Implemented edge gateway with system monitoring
 - Built production-ready web dashboard
 - Implemented user authentication system with JWT support
@@ -916,8 +918,8 @@ We would like to express our deepest gratitude to:
 - All 4 severity levels (LOW, MEDIUM, HIGH, CRITICAL) working
 - Fixed and optimized dashboard data visualization
 - Complete screenshot documentation added
-- Large-scale data collection validated (6769+ readings)
-- AI anomaly detection proven effective (1132+ alerts)
+- Large-scale data collection validated (13244 readings)
+- AI anomaly detection proven effective (1612 alerts)
 - Upgraded to Llama 3.2:1B model
 
 ---
@@ -950,7 +952,7 @@ We would like to express our deepest gratitude to:
 
 ### Sensor Data Records
 ![Sensor Data](Screenshots/Sensor%20Datas.png)
-*Complete sensor data records showing 6769+ readings from both ESP32 and Raspberry Pi devices with timestamps and values*
+*Complete sensor data records showing 13244 readings from both ESP32 and Raspberry Pi devices with timestamps and values*
 
 ---
 
