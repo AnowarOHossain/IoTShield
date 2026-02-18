@@ -14,7 +14,7 @@
 const char* WIFI_SSID = "SMUCT";        
 const char* WIFI_PASSWORD = "smuct#17"; 
 
-const char* MQTT_BROKER = "172.172.9.119"; // PC IP
+const char* MQTT_BROKER = "172.172.13.77"; // PC IP
 const int MQTT_PORT = 1883;
 const char* MQTT_TOPIC = "iotshield/sensors/data";
 const char* MQTT_CLIENT_ID = "ESP32_HARDWARE_001";
