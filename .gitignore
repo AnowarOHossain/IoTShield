@@ -61,7 +61,17 @@ keys/rsa_public.pem
 *.bak
 *.backup
 *.tmp
+main.aux
+main.fdb_latexmk
 
 # OS
 Thumbs.db
 .DS_Store
+
+# Thesis paper: only keep main.tex, main.pdf, and Images tracked
+Thesis_Paper/**
+!Thesis_Paper/
+!Thesis_Paper/main.tex
+!Thesis_Paper/main.pdf
+!Thesis_Paper/Images/
+!Thesis_Paper/Images/**
