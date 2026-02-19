@@ -1,0 +1,605 @@
+\documentclass[12pt,a4paper]{report}
+
+% ==================== PACKAGES ====================
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}       % For handling images
+\usepackage{geometry}       % For page margins
+\usepackage{setspace}       % For line spacing
+\usepackage{titlesec}       % For custom chapter titles
+\usepackage{fancyhdr}       % For headers and footers
+\usepackage{tocloft}        % For Table of Contents formatting
+\usepackage{hyperref}       % For clickable links
+\usepackage{times}          % Times New Roman font (standard for formal theses)
+\usepackage{caption}        % For figure/table captions
+\usepackage{float}          % To force images to stay in place
+\usepackage{listings}       % For code snippets
+\usepackage{xcolor}         % For code coloring
+
+% ==================== PAGE SETTINGS ====================
+% Standard thesis margins: Left 1.25" (for binding), others 1"
+\geometry{
+    top=1.0in,
+    bottom=1.0in,
+    left=1.25in,
+    right=1.0in
+}
+
+% 1.5 Line Spacing (Standard for thesis)
+\onehalfspacing
+
+% Link Colors (Black for printing, Blue for URLs)
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    filecolor=black,
+    urlcolor=blue,
+    citecolor=black
+}
+
+% ==================== HEADER & FOOTER ====================
+\pagestyle{fancy}
+\fancyhf{} % Clear all headers/footers
+\fancyfoot[C]{\thepage} % Page number at bottom center
+\renewcommand{\headrulewidth}{0pt} % Remove header line
+
+% ==================== CHAPTER TITLE FORMATTING ====================
+% Makes chapter titles look professional (e.g., "Chapter 1" centered)
+\titleformat{\chapter}[display]
+  {\normalfont\bfseries\centering}{\chaptertitlename\ \thechapter}{10pt}{\LARGE}
+\titlespacing*{\chapter}{0pt}{-20pt}{20pt}
+
+% ==================== DOCUMENT START ====================
+\begin{document}
+
+% ==================== TITLE PAGE ====================
+\begin{titlepage}
+\begin{center}
+
+% 1. Pull everything up slightly
+\vspace*{-1cm} 
+
+\includegraphics[width=0.25\textwidth]{Images/logo.jpg}
+
+% 2. Reduced space from 1cm to 0.5cm
+\vspace{0.5cm} 
+
+{\fontsize{16}{18}\selectfont 
+\textbf{PRIVACY-PRESERVING REAL-TIME HOME AUTOMATION UTILIZING MQTT PROTOCOL AND SENSOR ANOMALY DETECTION WITH GENAI INTEGRATION}
+}
+
+% 3. Reduced space from 1cm to 0.8cm
+\vspace{0.8cm}
+
+A Thesis Submitted in Partial\\
+Fulfillment for the Requirement of the Degree of
+
+\vspace{0.3cm}
+
+\textbf{Bachelor of Science}\\
+in\\
+Computer Science and Engineering
+
+% 4. Reduced space from 1cm to 0.8cm
+\vspace{0.8cm}
+
+\textbf{by}
+
+\vspace{0.3cm}
+
+\textbf{Anowar Hossain}\\
+ID: 221071051
+
+\vspace{0.3cm}
+
+\textbf{Shihab Sarker}\\
+ID: 202071004
+
+% 5. Reduced space from 1cm to 0.8cm
+\vspace{0.8cm}
+
+\textbf{Under the Supervision of}
+
+\vspace{0.3cm}
+
+\textbf{Tahsin Alam}\\
+Lecturer\\
+Department of Computer Science and Engineering
+
+\vfill 
+
+to the
+
+\vspace{0.3cm}
+
+{\fontsize{14}{18}\selectfont Department of Computer Science and Engineering}
+
+\vspace{0.2cm}
+
+{\fontsize{16}{20}\selectfont Shanto-Mariam University of Creative Technology}
+
+\vspace{0.5cm}
+
+February, 2026
+
+\end{center}
+\end{titlepage}
+% ==================== FRONT MATTER (ROMAN NUMBERING) ====================
+\pagenumbering{roman} % Starts i, ii, iii...
+
+% =========================
+% ACKNOWLEDGEMENT
+% =========================
+\chapter*{ACKNOWLEDGEMENT}
+\addcontentsline{toc}{chapter}{ACKNOWLEDGEMENT}
+
+% Pull text up to save space at the bottom
+\vspace*{0.5cm}
+
+\noindent This thesis has been submitted to the Department of Computer Science and Engineering of Shanto-Mariam University of Creative Technology (SMUCT), Dhaka, Bangladesh, in partial fulfillment of the requirements for the degree of B.Sc. in Computer Science and Engineering. The thesis title is ``PRIVACY-PRESERVING REAL-TIME HOME AUTOMATION UTILIZING MQTT PROTOCOL AND SENSOR ANOMALY DETECTION WITH GENAI INTEGRATION''.
+
+\vspace{0.25cm}
+
+\noindent First and foremost, we offer our sincere gratitude to our thesis supervisor, \textbf{Tahsin Alam}, Lecturer, Department of Computer Science and Engineering, for his continuous support, motivation, and immense knowledge. His valuable guidance and dedicated supervision greatly contributed to the successful completion of this research.
+
+\vspace{0.25cm}
+
+\noindent We also express our sincere appreciation to the Head of the Department, \textbf{Faisal Imran}, Head \& Associate Professor, for his academic leadership and for providing the necessary facilities and institutional support to conduct this research work.
+
+\vspace{0.25cm}
+
+\noindent We are extremely grateful to our Thesis Moderator, \textbf{Md. Tousif Hasan Lavlu}, Lecturer, Department of Computer Science \& Engineering, for his thorough review, insightful feedback, and continuous encouragement. His constructive evaluation was instrumental in refining this thesis.
+
+\vspace{0.25cm}
+
+\noindent Our heartfelt thanks are extended to the External Examiner, \textbf{Sakhor Das Opi}, Lecturer, Department of Computer Science \& Engineering, for his valuable time and constructive suggestions, which have significantly improved the quality and presentation of this work.
+
+\vspace{0.25cm}
+
+\noindent Finally, we express our deepest gratitude to our parents and family members for their unconditional love, constant encouragement, and moral support throughout our academic journey. Without them, this achievement would not have been possible.
+
+% --- SIGNATURES (Compact Spacing) ---
+\vspace{0.5cm} 
+
+\noindent
+Anowar Hossain\\
+ID: 221071051
+
+\vspace{0.3cm}
+
+\noindent
+Shihab Sarker\\
+ID: 202071004
+
+\vspace{0.3cm}
+
+\noindent
+February, 2026\\
+SMUCT, Dhaka, Bangladesh
+
+\newpage
+% =========================
+% CERTIFICATE - SUPERVISOR
+% =========================
+\chapter*{CERTIFICATE}
+\addcontentsline{toc}{chapter}{CERTIFICATE}
+
+\noindent This is to certify that the thesis entitled ``PRIVACY-PRESERVING REAL-TIME HOME AUTOMATION UTILIZING MQTT PROTOCOL AND SENSOR ANOMALY DETECTION WITH GENAI INTEGRATION'' by \textbf{Anowar Hossain} (ID: 221071051) and \textbf{Shihab Sarker} (ID: 202071004) has been carried out under my direct supervision. To the best of my knowledge, this thesis is an original work and has not been submitted anywhere for any degree or diploma.
+
+\vspace{2cm}
+
+\noindent
+Thesis Supervisor: \\
+\vspace{1.5cm}
+\noindent
+...............................................\\
+\textbf{Tahsin Alam}\\
+Lecturer\\
+Department of Computer Science and Engineering\\
+Shanto-Mariam University of Creative Technology
+
+\newpage
+
+% =========================
+% CERTIFICATE - HOD
+% =========================
+\chapter*{CERTIFICATE}
+\addcontentsline{toc}{chapter}{CERTIFICATE}
+
+\noindent This is to certify that the thesis entitled ``PRIVACY-PRESERVING REAL-TIME HOME AUTOMATION UTILIZING MQTT PROTOCOL AND SENSOR ANOMALY DETECTION WITH GENAI INTEGRATION'' by \textbf{Anowar Hossain} (ID: 221071051) and \textbf{Shihab Sarker} (ID: 202071004) has been carried out under the direct supervision of \textbf{Tahsin Alam}. This thesis has been prepared according to the guidelines of the Department of Computer Science \& Engineering / Department of Computer Science \& Information Technology of Shanto-Mariam University of Creative Technology.
+
+\vspace{2cm}
+
+\noindent
+Head of the Department\\
+\vspace{1.5cm}
+\noindent
+...............................................\\
+\textbf{Faisal Imran}\\
+Head \& Associate Professor\\
+Department of Computer Science \& Engineering and\\
+Department of CSIT\\
+Shanto-Mariam University of Creative Technology
+
+\newpage
+
+% =========================
+% CERTIFICATE - THESIS MODERATOR
+% =========================
+\chapter*{CERTIFICATE}
+\addcontentsline{toc}{chapter}{CERTIFICATE}
+
+\noindent This is to certify that the thesis entitled ``PRIVACY-PRESERVING REAL-TIME HOME AUTOMATION UTILIZING MQTT PROTOCOL AND SENSOR ANOMALY DETECTION WITH GENAI INTEGRATION'' submitted by \textbf{Anowar Hossain} (ID: 221071051) and \textbf{Shihab Sarker} (ID: 202071004) in partial fulfillment of the requirements for the degree of B.Sc. in Computer Science and Engineering has been examined and moderated by me.
+
+\vspace{0.5cm}
+
+\noindent I have carefully reviewed the thesis defense and documentation. I found it to be a comprehensive and original piece of research work. The thesis successfully meets the academic standards and requirements set by the Department of Computer Science \& Engineering / Department of Computer Science \& Information Technology of Shanto-Mariam University of Creative Technology.
+
+\vspace{2cm}
+
+\noindent
+Thesis Moderator\\
+\vspace{1.5cm}
+\noindent
+...............................................\\
+\textbf{Md. Tousif Hasan Lavlu}\\
+Lecturer\\
+Department of Computer Science \& Engineering\\
+Shanto-Mariam University of Creative Technology
+
+\newpage
+
+% =========================
+% CERTIFICATE - EXTERNAL EXAMINER
+% =========================
+\chapter*{CERTIFICATE}
+\addcontentsline{toc}{chapter}{CERTIFICATE}
+
+\noindent This is to certify that the thesis entitled ``PRIVACY-PRESERVING REAL-TIME HOME AUTOMATION UTILIZING MQTT PROTOCOL AND SENSOR ANOMALY DETECTION WITH GENAI INTEGRATION'' submitted by \textbf{Anowar Hossain} (ID: 221071051) and \textbf{Shihab Sarker} (ID: 202071004) in partial fulfillment of the requirements for the degree of B.Sc. in Computer Science and Engineering has been examined by me.
+
+\vspace{0.5cm}
+
+\noindent I have carefully reviewed the thesis and found that it is an original piece of research work. The thesis meets the academic standards and requirements set by the Department of Computer Science \& Engineering / Department of Computer Science \& Information Technology of Shanto-Mariam University of Creative Technology.
+
+\vspace{2cm}
+
+\noindent
+External Examiner\\
+\vspace{1.5cm}
+\noindent
+...............................................\\
+\textbf{Sakhor Das Opi}\\
+Lecturer\\
+Department of Computer Science \& Engineering\\
+Shanto-Mariam University of Creative Technology
+
+\newpage
+
+% =========================
+% DECLARATION
+% =========================
+\chapter*{DECLARATION}
+\addcontentsline{toc}{chapter}{DECLARATION}
+
+\noindent We hereby declare that the thesis entitled ``PRIVACY-PRESERVING REAL-TIME HOME AUTOMATION UTILIZING MQTT PROTOCOL AND SENSOR ANOMALY DETECTION WITH GENAI INTEGRATION'' is the result of our own independent research work carried out under the supervision of \textbf{Tahsin Alam}, Lecturer, Department of Computer Science and Engineering, Shanto-Mariam University of Creative Technology.
+
+\vspace{0.5cm}
+
+\noindent This thesis has not been submitted, either in whole or in part, to any other university or institution for the award of any degree, diploma, or other qualification. All sources of information used in this research have been duly acknowledged through proper references and citations.
+
+\vspace{0.5cm}
+
+\noindent We take full responsibility for the authenticity and accuracy of the work presented in this thesis.
+
+\vspace{2cm}
+
+\noindent
+...............................................\\
+\textbf{Anowar Hossain}\\
+B.Sc. in Computer Science and Engineering\\
+ID: 221071051\\
+Department of Computer Science and Engineering\\
+Shanto-Mariam University of Creative Technology
+
+\vspace{1.5cm}
+
+\noindent
+...............................................\\
+\textbf{Shihab Sarker}\\
+B.Sc. in Computer Science and Engineering\\
+ID: 202071004\\
+Department of Computer Science and Engineering\\
+Shanto-Mariam University of Creative Technology
+
+\newpage
+
+% =========================
+% ABSTRACT
+% =========================
+\chapter*{\centering\fontsize{18}{22}\selectfont Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+
+\begin{spacing}{1.2} % Adjust spacing to ensure 1-page fit
+\noindent The rapid proliferation of Internet of Things (IoT) devices in smart homes has introduced critical vulnerabilities regarding data privacy and security. Conventional cloud-centric architectures often expose sensitive user data to third-party risks, necessitating a shift toward secure, edge-based solutions. This research presents ``IoTShield'', a comprehensive privacy-preserving home automation framework that integrates the lightweight MQTT protocol with Generative AI for intelligent anomaly detection. The system utilizes a hybrid edge-computing architecture featuring ESP32 microcontrollers and Raspberry Pi gateways to process data locally. To ensure robust privacy, a dual-layer Differential Privacy mechanism using Gaussian noise is applied, complemented by end-to-end RSA-2048 encryption for secure transmission. For anomaly detection, the system integrates a local Large Language Model (Llama 3.2:1B) to analyze sensor patterns and generate context-aware alerts with explainable insights. Experimental results from over 13,000 sensor readings demonstrate that the system achieves an end-to-end latency of under 2 seconds and successfully classifies anomalies across four severity levels (Low to Critical). This study confirms that combining local GenAI with cryptographic privacy mechanisms preserves data sovereignty while delivering a highly responsive and secure smart home environment.
+\end{spacing}
+
+\vspace{1em}
+\noindent \textbf{Keywords:} IoT Security, MQTT Protocol, Generative AI, Llama 3.2, Anomaly Detection, Differential Privacy, RSA Encryption, Edge Computing, Smart Home Automation
+\newpage
+
+% ==================== TABLE OF CONTENTS & LISTS ====================
+\tableofcontents
+\newpage
+\listoffigures
+\addcontentsline{toc}{chapter}{List of Figures}
+\newpage
+\listoftables
+\addcontentsline{toc}{chapter}{List of Tables}
+\newpage
+
+% =========================
+% LIST OF ABBREVIATIONS
+% =========================
+\chapter*{\centering\fontsize{18}{22}\selectfont List of Abbreviations}
+\addcontentsline{toc}{chapter}{List of Abbreviations}
+
+\begin{flushleft}
+\begin{tabular}{p{3cm} p{11cm}}
+
+AES & Advanced Encryption Standard \\
+AI & Artificial Intelligence \\
+API & Application Programming Interface \\
+CPU & Central Processing Unit \\
+CSE & Computer Science and Engineering \\
+DoS & Denial of Service \\
+ESP32 & Espressif Systems 32-bit Microcontroller \\
+GenAI & Generative Artificial Intelligence \\
+GPIO & General Purpose Input/Output \\
+HTTP & Hypertext Transfer Protocol \\
+IDE & Integrated Development Environment \\
+IoT & Internet of Things \\
+IP & Internet Protocol \\
+JSON & JavaScript Object Notation \\
+JWT & JSON Web Token \\
+LED & Light Emitting Diode \\
+LLM & Large Language Model \\
+LDR & Light Dependent Resistor \\
+MQTT & Message Queuing Telemetry Transport \\
+PIR & Passive Infrared Sensor \\
+QoS & Quality of Service \\
+RAM & Random Access Memory \\
+REST & Representational State Transfer \\
+RSA & Rivest–Shamir–Adleman (Encryption Algorithm) \\
+SMTP & Simple Mail Transfer Protocol \\
+SSL & Secure Sockets Layer \\
+TCP & Transmission Control Protocol \\
+TLS & Transport Layer Security \\
+UI & User Interface \\
+URL & Uniform Resource Locator \\
+Wi-Fi & Wireless Fidelity \\
+
+\end{tabular}
+\end{flushleft}
+
+\newpage
+
+% =========================
+% LIST OF SYMBOLS
+% =========================
+\chapter*{\centering\fontsize{18}{22}\selectfont List of Symbols}
+\addcontentsline{toc}{chapter}{List of Symbols}
+
+\begin{flushleft}
+\begin{tabular}{p{3cm} p{11cm}}
+
+$M$ & Plaintext Message \\
+$C$ & Ciphertext (Encrypted Message) \\
+$K_{pub}$ & Public Key \\
+$K_{priv}$ & Private Key \\
+$e$ & Public Exponent (RSA) \\
+$d$ & Private Exponent (RSA) \\
+$n$ & Modulus (RSA) \\
+$\mu$ & Mean Value (Gaussian Distribution) \\
+$\sigma$ & Standard Deviation \\
+$\epsilon$ & Privacy Budget / Noise Parameter \\
+$N(\mu, \sigma^2)$ & Gaussian (Normal) Distribution \\
+$T$ & Temperature Sensor Reading \\
+$H$ & Humidity Sensor Reading \\
+$G$ & Gas Sensor Value \\
+$L_{lat}$ & System Latency \\
+$P(x)$ & Probability of an Event \\
+$V_{in}$ & Input Voltage \\
+$R$ & Resistance \\
+$t$ & Time / Timestamp \\
+$\Delta$ & Difference / Change in Value \\
+$\theta$ & Threshold Value for Anomaly Detection \\
+$Hz$ & Hertz (Frequency Unit) \\
+$dB$ & Decibel (Signal Strength Unit) \\
+$bps$ & Bits Per Second \\
+
+\end{tabular}
+\end{flushleft}
+
+\newpage
+
+% ==================== MAIN CHAPTERS (ARABIC NUMBERING) ====================
+\pagenumbering{arabic} % Starts 1, 2, 3...
+
+% --- CHAPTER 1 ---
+\chapter{Introduction}
+\section{Background and Motivation}
+\section{Problem Statement}
+\section{Research Gap}
+\section{Research Objectives}
+\section{Contributions of the Thesis}
+\section{Scope of the Thesis}
+\section{Thesis Organization}
+
+% --- CHAPTER 2 ---
+\chapter{Related Work}
+\section{MQTT-Based Smart Home Architectures}
+\section{Privacy-Preserving IoT Systems}
+\section{Cryptographic Mechanisms in IoT Security}
+\section{Anomaly Detection Techniques in IoT}
+\section{Generative AI for Real-Time Monitoring}
+\section{Limitations of Existing Approaches}
+
+% --- CHAPTER 3 ---
+\chapter{Proposed System}
+\section{Overall System Overview}
+\section{System Architecture Design}
+\section{Hardware Architecture (ESP32 and Sensors)}
+\section{Software Architecture}
+\section{MQTT Communication Model}
+\section{Privacy-Preserving Data Pipeline}
+\subsection{Differential Privacy with Dual Gaussian Noise}
+\subsection{RSA-2048 Encryption Mechanism}
+\section{AI-Based Anomaly Detection Framework}
+\subsection{Threshold-Based Detection Logic}
+\subsection{Local LLM Integration (Llama 3.2 via Ollama)}
+\section{End-to-End System Workflow}
+
+% --- CHAPTER 4 ---
+\chapter{Implementation}
+\section{Hardware Implementation Details}
+\section{Software Development Environment}
+\section{MQTT Broker Configuration}
+\section{Differential Privacy Implementation}
+\section{RSA Encryption Implementation}
+\section{Local LLM Deployment Setup}
+\section{Database Design and Storage Model}
+
+% --- CHAPTER 5 ---
+\chapter{Results and Discussion}
+\section{Experimental Setup}
+\section{Performance Evaluation}
+\subsection{System Latency Analysis}
+\subsection{Encryption Overhead Analysis}
+\section{Anomaly Detection Results}
+\section{AI Response Evaluation}
+\section{Privacy--Utility Trade-off Analysis}
+\section{Security Analysis}
+\section{Comparative Discussion}
+
+% --- CHAPTER 6 ---
+\chapter{Conclusion and Future Work}
+\section{Summary of the Work}
+\section{Key Findings}
+\section{Limitations of the Study}
+\section{Future Research Directions}
+
+% ==================== REFERENCES ====================
+\addcontentsline{toc}{chapter}{References}
+\begin{thebibliography}{99}
+
+\bibitem{ref1}
+M. M. Hasan, A. Rahman, and S. Ahmed, ``Internet of Things-based Home Automation with Network Mapper and MQTT Protocol,'' \textit{Computers \& Education: Artificial Intelligence}, 2024. [Online]. Available: \url{https://www.sciencedirect.com/science/article/pii/S0045790624007341}
+
+\bibitem{ref2}
+A. Author, B. Author, and C. Author, ``Generative AI Techniques for Anomaly Detection in IoT Devices,'' 2024. [Online]. Available: \url{https://www.researchgate.net/publication/395801862_GENERATIVE_AI_TECHNIQUES_FOR_ANOMALY_DETECTION_IN_IOT_DEVICES}
+
+\bibitem{ref3}
+B. Author, D. Author, and E. Author, ``Anomaly Detection in IoT Using Generative AI Models,'' \textit{SPIE Conference Proceedings}, vol. 13473, 2024. [Online]. Available: \url{https://www.spiedigitallibrary.org/conference-proceedings-of-spie/13473/134730J/AD-GAM--anomaly-detection-in-IoT-using-generative-AI/10.1117/12.3058632.full}
+
+\bibitem{ref4}
+C. Author, F. Author, and G. Author, ``Review: Generative Adversarial Networks-Enabled Anomaly Detection in IoT,'' \textit{Expert Systems with Applications}, 2025. [Online]. Available: \url{https://www.sciencedirect.com/science/article/pii/S0957417425025953}
+
+\bibitem{ref5}
+D. Author, H. Author, and I. Author, ``AI-Driven Anomaly Detection for Securing IoT Devices in Smart Cities,'' \textit{Electronics}, vol. 14, no. 12, p. 2492, 2025. [Online]. Available: \url{https://www.mdpi.com/2079-9292/14/12/2492}
+
+\bibitem{ref6}
+E. Author, J. Author, and K. Author, ``Privacy-Preserving Security of IoT Networks: A Comparative Study,'' \textit{ScienceDirect}, 2025. [Online]. Available: \url{https://www.sciencedirect.com/science/article/pii/S2772918425000013}
+
+\bibitem{ref7}
+F. Author, L. Author, and M. Author, ``Leveraging IoT, Cloud, and Edge Computing with AI,'' \textit{Sensors}, vol. 25, no. 6, p. 1763, 2025. [Online]. Available: \url{https://www.mdpi.com/1424-8220/25/6/1763}
+
+\bibitem{ref8}
+G. Author, N. Author, and O. Author, ``Towards Smart Home Automation Using IoT-Enabled Edge-Computing Paradigm,'' 2021. [Online]. Available: \url{https://www.researchgate.net/publication/353372471_Towards_Smart_Home_Automation_Using_IoT-Enabled_Edge-Computing_Paradigm}
+
+\bibitem{ref9}
+H. Author, P. Author, and Q. Author, ``Improving Smart Home Security via MQTT: Maximizing Data Confidentiality and Energy Efficiency,'' \textit{CSSE}, vol. 48, no. 6, p. 58697, 2025. [Online]. Available: \url{https://www.techscience.com/csse/v48n6/58697}
+
+\bibitem{ref10}
+I. Author, R. Author, and S. Author, ``Enhancing MQTT Security on the Internet of Things with an Enhanced Symmetric Algorithm,'' 2025. [Online]. Available: \url{https://www.researchgate.net/publication/379866006_Enhancing_MQTT_Security_in_the_Internet_of_Things_with_an_Enhanced_Symmetric_Algorithm}
+
+\bibitem{ref11}
+J. Author, K. Author, and L. Author, ``Hybrid Approaches to Predictive Maintenance: Combining Generative AI with IoT Sensor Data for Enhanced Failure Prediction,'' 2024. [Online]. Available: \url{https://www.researchgate.net/publication/395791187_Hybrid_Approaches_to_Predictive_Maintenance_Combining_Generative_AI_with_IoT_Sensor_Data_for_Enhanced_Failure_Prediction}
+
+\bibitem{ref12}
+K. Author, M. Author, and N. Author, ``Generative AI for Internet of Things Security: Challenges and Opportunities,'' 2025. [Online]. Available: \url{https://arxiv.org/abs/2502.08886}
+
+\bibitem{ref13}
+L. Author, O. Author, and P. Author, ``The Role of Smart Homes in Providing Care for Older Adults,'' \textit{MDPI}, vol. 7, no. 4, p. 62, 2025. [Online]. Available: \url{https://www.mdpi.com/2624-6511/7/4/62}
+
+\bibitem{ref14}
+M. Author, Q. Author, and R. Author, ``Internet of Robotic Things for Independent Living Support,'' \textit{ScienceDirect}, 2024. [Online]. Available: \url{https://www.sciencedirect.com/science/article/pii/S2542660524000623}
+
+\bibitem{ref15}
+N. Author, S. Author, and T. Author, ``Design and Implementation of Smart Home System Based on IoT,'' \textit{ScienceDirect}, 2024. [Online]. Available: \url{https://www.sciencedirect.com/science/article/pii/S2590123024016621}
+
+\bibitem{ref16}
+O. Author, U. Author, and V. Author, ``Design of an Innovative Solution to Integrate and Automate Smart Homes via Multiple Chatbots,'' \textit{ScienceDirect}, 2025. [Online]. Available: \url{https://www.sciencedirect.com/science/article/pii/S2542660525002070}
+
+\bibitem{ref17}
+P. Author, W. Author, and X. Author, ``Adoption of Internet of Things in Residential Smart Homes,'' \textit{ScienceDirect}, 2025. [Online]. Available: \url{https://www.sciencedirect.com/science/article/pii/S2666188825002333}
+
+\bibitem{ref18}
+Q. Author, Y. Author, and Z. Author, ``MQTT\_UAD: MQTT Under Attack Dataset — A Public Benchmark for MQTT Security Research,'' \textit{ScienceDirect}, 2025. [Online]. Available: \url{https://www.sciencedirect.com/science/article/pii/S2352340925008881}
+
+\bibitem{ref19}
+R. Author, A1. Author, and B1. Author, ``Edge AI Enabled IoT Framework for Secure Smart Home Infrastructure,'' \textit{ScienceDirect}, 2024. [Online]. Available: \url{https://www.sciencedirect.com/science/article/pii/S1877050924009979}
+
+\bibitem{ref20}
+S. Author, C1. Author, and D1. Author, ``Machine Learning and IoT in Healthcare,'' \textit{ScienceDirect}, 2025. [Online]. Available: \url{https://www.sciencedirect.com/science/article/pii/S2543106425000201}
+
+\bibitem{ref21}
+T. Author, E1. Author, and F1. Author, ``Toward Generating a Large-Scale IoT-Z-Wave Intrusion Detection Dataset: Smart Device Profiling, Intruder Behavior, and Traffic Characterization,'' \textit{ScienceDirect}, 2025. [Online]. Available: \url{https://www.sciencedirect.com/science/article/pii/S2542660525002616}
+
+\bibitem{ref22}
+U. Author, G1. Author, and H1. Author, ``Smart Home System: A Comprehensive Review,'' \textit{Wiley Interdisciplinary Reviews}, 2023. [Online]. Available: \url{https://onlinelibrary.wiley.com/doi/epdf/10.1155/2023/7616683}
+
+\bibitem{ref23}
+V. Author, I1. Author, and J1. Author, ``Artificial Intelligence in Smart Cities — Applications, Barriers, and Future Directions: A Review,'' \textit{MDPI}, vol. 7, no. 3, p. 57, 2025. [Online]. Available: \url{https://www.mdpi.com/2624-6511/7/3/57}
+
+\bibitem{ref24}
+W. Author, K1. Author, and L1. Author, ``IoT — A Promising Solution to Energy Management in Smart Buildings: A Systematic Review, Applications, Barriers, and Future Scope,'' \textit{MDPI}, vol. 14, no. 11, p. 3446, 2025. [Online]. Available: \url{https://www.mdpi.com/2075-5309/14/11/3446}
+
+\bibitem{ref25}
+X. Author, M1. Author, and N1. Author, ``Review of Smart-Home Security Using the Internet of Things,'' \textit{MDPI Electronics}, vol. 13, no. 16, p. 3343, 2025. [Online]. Available: \url{https://www.mdpi.com/2079-9292/13/16/3343}
+
+\bibitem{ref26}
+Y. Author, O1. Author, and P1. Author, ``Smart Home Advancements for Health Care and Beyond: Systematic Review of Two Decades of User-Centric Innovation,'' \textit{JMIR}, 2025. [Online]. Available: \url{https://www.jmir.org/2025/1/e62793}
+
+\bibitem{ref27}
+Z. Author, Q1. Author, and R1. Author, ``Machine Learning in Smart Buildings: A Review of Methods, Challenges, and Future Trends,'' \textit{MDPI Applied Sciences}, vol. 15, no. 14, p. 7682, 2025. [Online]. Available: \url{https://www.mdpi.com/2076-3417/15/14/7682}
+
+\bibitem{ref28}
+A1. Author, B1. Author, and C1. Author, ``Internet of Things: a comprehensive overview, architectures, applications, simulation tools, challenges and future directions,'' \textit{Springer}, 2024. [Online]. Available: \url{https://link.springer.com/article/10.1007/s43926-024-00084-3}
+
+\bibitem{ref29}
+B1. Author, D1. Author, and E1. Author, ``IoT-Based Security and Privacy Implementation in Smart Home,'' \textit{IJFANS}, 2022. [Online]. Available: \url{https://www.ijfans.org/issue?volume=Volume%2011&issue=Issue%205&year=2022}
+
+\bibitem{ref30}
+C1. Author, F1. Author, and G1. Author, ``Smart Home Remote Control System Prototype Using Internet of Things (IoT) Based ESP8266 Microcontroller,'' 2023. [Online]. Available: \url{https://www.researchgate.net/publication/376060810_Smart_Home_Remote_Control_System_Prototype_Using_Internet_of_Things_IoT_Based_ESP8266_Microcontroller}
+
+\bibitem{ref31}
+D1. Author, H1. Author, and I1. Author, ``IoT Enabled Smart Homes in Tropical Regions as a Means of Sustainable Development,'' \textit{IOP Conference Series}, 2023. [Online]. Available: \url{https://iopscience.iop.org/article/10.1088/1755-1315/1306/1/012035/pdf}
+
+\bibitem{ref32}
+E1. Author, J1. Author, and K1. Author, ``A Comprehensive Survey on Generative AI Solutions in IoT Security,'' \textit{MDPI Electronics}, vol. 13, no. 24, p. 4965, 2025. [Online]. Available: \url{https://www.mdpi.com/2079-9292/13/24/4965}
+
+\bibitem{ref33}
+F1. Author, L1. Author, and M1. Author, ``IoT Based Smart Door Unlock and Intruder Alert System,'' 2021. [Online]. Available: \url{https://www.researchgate.net/publication/356206104_IoT_Based_Smart_Door_Unlock_and_Intruder_Alert_System}
+
+\bibitem{ref34}
+G1. Author, N1. Author, and O1. Author, ``An Internet of Things-driven Smart Key System with Real-Time Alerts: Innovations in Hotel Security,'' 2025. [Online]. Available: \url{https://www.researchgate.net/publication/389470099_An_internet_of_things-driven_smart_key_system_with_real-time_alerts_innovations_in_hotel_security}
+
+\bibitem{ref35}
+H1. Author, P1. Author, and Q1. Author, ``Design of ESP8266 Smart Home Using MQTT and Node-RED,'' 2021. [Online]. Available: \url{https://www.researchgate.net/publication/350935668_Design_of_ESP8266_Smart_Home_Using_MQTT_and_Node-RED}
+
+\end{thebibliography}
+
+% ==================== APPENDIX ====================
+\appendix
+\chapter{Appendix}
+
+\end{document}
