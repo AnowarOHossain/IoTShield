@@ -426,13 +426,122 @@ $bps$ & Bits Per Second \\
 
 % --- CHAPTER 1 ---
 \chapter{Introduction}
+
 \section{Background and Motivation}
+
+\noindent The rapid evolution of the Internet of Things (IoT) has fundamentally transformed modern living spaces into intelligent, interconnected environments. Smart home automation systems now routinely deploy diverse networks of sensors and actuators to monitor environmental conditions, manage energy consumption, and significantly enhance user convenience. To facilitate this seamless interaction, lightweight communication protocols, particularly the Message Queuing Telemetry Transport (MQTT) protocol, have become the industry standard. MQTT enables efficient, low-latency data transmission even across highly constrained networks and low-power microcontrollers, making it ideal for real-time residential applications.
+
+\vspace{0.3cm}
+
+\noindent Despite the tremendous advantages of these smart home ecosystems, their widespread adoption introduces critical vulnerabilities surrounding data privacy and security. Continuous environmental monitoring generates a massive influx of granular data, capturing intimate details about household occupancy, daily routines, and behavioral habits. In conventional architectures, this highly sensitive data is frequently transmitted in its raw form to centralized cloud servers for processing. This heavy reliance on third-party cloud infrastructure exposes users to severe risks, including data breaches, unauthorized surveillance, and corporate data profiling. While basic transport-layer security is sometimes implemented, true end-to-end data confidentiality at the application layer remains a significant challenge in residential deployments.
+
+\vspace{0.3cm}
+
+\noindent Beyond privacy concerns, traditional smart home systems are largely constrained by rudimentary, rule-based logic. Most commercial setups rely on static, predefined thresholds to trigger alerts—for example, activating a notification only if a gas or temperature sensor strictly exceeds a hardcoded limit. This rigid approach lacks contextual awareness. It frequently results in a high volume of false positives, struggles to identify complex anomalies that span multiple sensor types, and provides users with generic, numerical warnings rather than clear, actionable insights into the actual problem.
+
+\vspace{0.3cm}
+
+\noindent Motivated by these profound limitations, there is a pressing need for a paradigm shift toward secure, intelligent, and decentralized home automation. The integration of Generative Artificial Intelligence (GenAI), specifically localized Large Language Models (LLMs), presents a revolutionary opportunity to move beyond simple threshold alerts to context-aware, human-readable anomaly detection. This research is driven by the ambition to engineer a holistic framework that marries the efficiency of MQTT with rigorous privacy-preserving mechanisms—such as dual-layer Gaussian noise and RSA encryption—processed entirely at the network edge. By doing so, the proposed system aims to deliver highly responsive, intelligent monitoring while guaranteeing absolute data sovereignty for the user.
 \section{Problem Statement}
+
+\noindent The integration of Internet of Things (IoT) devices into residential environments has significantly improved building automation, safety, and energy management. However, the standard architecture of these systems fundamentally compromises user privacy and data security. Most commercial smart home setups rely heavily on centralized, cloud-based processing, where raw, granular sensor data—such as room occupancy, temperature fluctuations, and lighting usage—is continuously transmitted over the internet. This continuous data stream creates a high-risk attack surface. If intercepted or analyzed by unauthorized entities, this information can be used to deduce sensitive domestic activities, leaving users vulnerable to surveillance, corporate data profiling, and malicious physical intrusions.
+
+\vspace{0.3cm}
+
+\noindent Furthermore, the communication protocols utilized by resource-constrained IoT devices, while lightweight and efficient, often lack robust application-layer security. For instance, while the MQTT protocol is highly optimized for low-bandwidth environments, standard implementations frequently leave the data payload entirely readable by the central broker. Even when transport-layer security (TLS) is applied, the centralized broker remains a single point of failure that can expose historical and real-time data if compromised. There is a distinct lack of mechanisms that protect the structural privacy of the data—such as cryptographic encryption or differential privacy—before it even leaves the physical edge device.
+
+\vspace{0.3cm}
+
+\noindent In addition to these severe privacy vulnerabilities, current home automation systems suffer from severely limited analytical capabilities. They typically depend on rigid, rule-based logic to trigger alerts, such as activating an alarm only when a gas or temperature sensor crosses a strict, hardcoded numerical limit. This rudimentary approach fails to account for environmental context, frequently leading to a high rate of false positives and a lack of actionable information. When complex, multi-sensor anomalies occur, users are presented with generic numerical warnings rather than a clear, intelligent explanation of the event. While advanced machine learning models can offer more sophisticated detection, they are usually too computationally expensive to deploy locally on edge-based microcontrollers, forcing a reliance back onto the insecure cloud.
+
+\vspace{0.3cm}
+
+\noindent Therefore, the primary problem addressed in this research is the lack of a secure, edge-centric framework capable of performing real-time home automation and intelligent anomaly detection without compromising data sovereignty. Specifically, the challenge lies in securing lightweight MQTT communications through application-layer encryption and noise-based privacy mechanisms, while simultaneously deploying a Generative AI model locally to analyze complex sensor patterns and generate human-readable, context-aware alerts within a decentralized architecture.
 \section{Research Gap}
+
+\noindent Despite the extensive body of literature on smart home automation and Internet of Things (IoT) security, a significant gap remains at the intersection of lightweight communication, robust data privacy, and intelligent anomaly detection. A comprehensive review of existing methodologies reveals a persistent dichotomy: systems are typically either highly secure but computationally heavy, or lightweight but dangerously vulnerable. While the MQTT protocol is widely celebrated for its low latency and efficiency in constrained environments, prevailing implementations primarily rely on transport-layer security (TLS). This approach leaves the data payload unencrypted at the broker level, creating a critical vulnerability if the central server is compromised. Furthermore, the application of structural privacy mechanisms—such as injecting differential noise at the sensor node before transmission—is rarely explored in real-time, lightweight residential architectures.
+
+\vspace{0.3cm}
+
+\noindent In the domain of anomaly detection, current smart home deployments predominantly utilize either static, rule-based thresholds or traditional machine learning models (e.g., Support Vector Machines and Random Forests). While threshold-based systems are efficient, they lack the contextual awareness necessary to identify sophisticated, multi-sensor anomalies, leading to high false-positive rates. Conversely, while traditional machine learning models can detect deviations, they function as ``black boxes,'' providing numerical anomaly scores without any human-readable explanation or actionable context. When an alert is triggered, the user is left to interpret raw data rather than receiving a clear, reasoned diagnosis of the potential hazard.
+
+\vspace{0.3cm}
+
+\noindent Recently, Generative Artificial Intelligence (GenAI) and Large Language Models (LLMs) have demonstrated exceptional capabilities in contextual reasoning and data interpretation. However, their application in IoT environments is heavily biased toward cloud-centric architectures due to their immense computational requirements. The deployment of localized, edge-optimized LLMs to process raw sensor telemetry and generate intelligent, real-time alerts without relying on third-party cloud APIs remains significantly under-researched. Existing studies that do explore Al-driven IoT security mostly focus on high-level network traffic analysis rather than granular, domestic environmental sensor data.
+
+\vspace{0.3cm}
+
+\noindent Consequently, the fundamental research gap lies in the absence of a holistic, decentralized smart home framework that unifies these disparate elements. There is a distinct lack of systems that successfully combine application-layer cryptographic payload encryption, privacy-preserving data obfuscation, and edge-deployed Generative AI to provide secure, real-time, and explainable anomaly detection within a lightweight MQTT ecosystem.
 \section{Research Objectives}
+
+\noindent The primary aim of this research is to design, implement, and evaluate a decentralized, privacy-preserving smart home automation system capable of intelligent, real-time anomaly detection. To achieve this overarching goal, the research is guided by the following specific objectives:
+
+\vspace{0.3cm}
+
+\begin{itemize}
+    \item \textbf{To design a lightweight, edge-centric IoT architecture:} Develop a responsive smart home network utilizing ESP32 microcontrollers, a Raspberry Pi edge gateway, and the MQTT protocol to ensure low-latency communication without heavy reliance on external cloud infrastructure.
+    \item \textbf{To implement a dual-layer privacy and security pipeline:} Engineer a robust data protection mechanism that applies structural obfuscation via dual-layer Gaussian noise (differential privacy) and secures the MQTT payload using application-layer RSA-2048 encryption before data transmission.
+    \item \textbf{To integrate localized Generative AI for anomaly detection:} Deploy a lightweight Large Language Model (Llama 3.2:1B via Ollama) to autonomously analyze multi-sensor telemetry, replacing rigid threshold-based logic with context-aware, human-readable alert generation.
+    \item \textbf{To construct an interactive, full-stack monitoring platform:} Build a comprehensive backend and web dashboard (utilizing Django, Tailwind CSS, and Chart.js) to manage devices, decrypt sensor data, and visualize real-time AI-generated insights.
+    \item \textbf{To empirically evaluate system performance:} Validate the proposed IoTShield framework in a real-world deployment by analyzing key metrics, including end-to-end latency, encryption overhead, anomaly detection accuracy, and the overall privacy-utility trade-off.
+\end{itemize}
+
+\vspace{0.3cm}
+
 \section{Contributions of the Thesis}
+
+\noindent This thesis makes several significant contributions to the fields of Internet of Things security, edge computing, and smart home automation. By addressing the critical vulnerabilities of cloud-dependent architectures, the proposed IoTShield system introduces a novel paradigm for domestic environmental monitoring. 
+
+\vspace{0.3cm}
+
+\noindent The core contributions of this research are summarized as follows:
+
+\vspace{0.3cm}
+
+\begin{itemize}
+    \item \textbf{A Novel Edge-Based GenAI Integration:} This research demonstrates the feasibility and immense value of deploying localized Generative AI at the network edge. By utilizing a 1-billion parameter LLM to process sensor data locally, the system successfully transitions anomaly detection from binary, threshold-based triggers to intelligent, context-aware reasoning, providing users with actionable and highly accurate alerts.
+    \item \textbf{Application-Layer MQTT Security Architecture:} Unlike standard IoT deployments that rely solely on transport-layer security, this thesis contributes a fully functional RSA-2048 encryption scheme specifically optimized for MQTT payloads. This ensures that even if the central message broker is compromised, the granular sensor telemetry remains strictly confidential.
+    \item \textbf{Practical Implementation of Differential Privacy in IoT:} The research introduces a dual-layer Gaussian noise injection mechanism directly at the sensor node. This contributes a practical methodology for masking exact domestic routines and behavioral patterns while preserving enough data utility for the AI model to accurately detect critical anomalies (e.g., fires or gas leaks).
+    \item \textbf{Empirical Validation of a Production-Ready Framework:} The thesis provides comprehensive, real-world validation of the proposed architecture. Through the deployment of physical hardware and simulated nodes generating over 13,000 sensor readings and validating over 1,500 distinct alerts, the study proves that a highly secure, AI-driven IoT system can operate with an average end-to-end latency of less than two seconds.
+\end{itemize}
 \section{Scope of the Thesis}
+
+\noindent The scope of this research is specifically bounded to the design, implementation, and evaluation of a privacy-preserving, AI-driven monitoring framework tailored for residential smart home environments. The project focuses strictly on secure environmental data collection, anomalous event detection, and real-time alert generation, rather than large-scale industrial IoT (IIoT) deployments or complex physical robotic actuation.
+
+\vspace{0.3cm}
+
+\noindent In terms of hardware and physical deployment, the scope encompasses the development of a fully operational real-world sensor node. This node utilizes a physical ESP32 microcontroller integrated with six distinct environmental sensors (temperature, humidity, gas, flame, motion, and light) to validate real-world data acquisition. To rigorously evaluate the system's network handling, multi-device architecture, and edge processing capabilities without deploying extensive hardware, the scope also incorporates simulated IoT nodes. These consist of a simulated secondary ESP32 hub and a simulated Raspberry Pi edge gateway, which additionally provides system performance metrics such as CPU and memory usage.
+
+\vspace{0.3cm}
+
+\noindent From a software and security perspective, the research is limited to securing the MQTT communication protocol at the application layer. This involves the implementation of a custom RSA-2048 encryption pipeline for payload confidentiality and a dual-layer Gaussian noise mechanism to ensure differential privacy. The thesis does not attempt to invent new foundational cryptographic algorithms or replace standard transport-layer security (TLS); instead, it focuses on practical, edge-level data obfuscation to prevent broker-level data compromises.
+
+\vspace{0.3cm}
+
+\noindent Finally, the intelligence and anomaly detection scope is centered entirely on edge-optimized Generative AI. The system integrates a locally hosted, 1-billion parameter Large Language Model (Llama 3.2 via Ollama) to process decrypted sensor telemetry and generate context-aware, human-readable alerts. The research deliberately excludes the use of proprietary, cloud-based AI APIs to strictly maintain data sovereignty and adhere to decentralized edge-computing principles. Furthermore, the development of a responsive backend and web dashboard (utilizing Django, SQLite, and Tailwind CSS) is included within the scope to demonstrate end-to-end data persistence, real-time visualization, and practical alert management.
 \section{Thesis Organization}
+
+\noindent The remainder of this thesis is logically structured into five subsequent chapters, each detailing a critical phase of the research, development, and evaluation of the proposed IoTShield framework.
+
+\vspace{0.3cm}
+
+\noindent \textbf{Chapter 2: Related Work} provides a comprehensive review of the existing literature surrounding smart home automation. It examines current MQTT-based architectures, privacy-preserving IoT systems, and the application of cryptographic mechanisms in constrained environments. Furthermore, it explores traditional anomaly detection techniques alongside the emerging role of Generative AI in real-time monitoring, ultimately highlighting the crucial limitations and research gaps that this thesis addresses.
+
+\vspace{0.3cm}
+
+\noindent \textbf{Chapter 3: Proposed System} outlines the theoretical and structural design of the IoTShield architecture. It details the holistic system overview, defining the roles of the physical ESP32 sensors and the simulated edge gateway. This chapter extensively covers the MQTT communication model, the privacy-preserving data pipeline incorporating dual-layer Gaussian noise and RSA-2048 encryption, and the localized AI-based anomaly detection framework driven by Llama 3.2. 
+
+\vspace{0.3cm}
+
+\noindent \textbf{Chapter 4: Implementation} translates the proposed architecture into a functional, real-world application. It documents the exact hardware setup, the software development environment (including Django, Tailwind CSS, and Chart.js), and the configuration of the Mosquitto MQTT broker. Additionally, it details the practical coding implementations of the differential privacy mechanisms, the application-layer encryption, the local LLM deployment, and the relational database schema utilized for data persistence.
+
+\vspace{0.3cm}
+
+\noindent \textbf{Chapter 5: Results and Discussion} presents a rigorous empirical evaluation of the operational system. Based on an extensive dataset of over 13,000 sensor readings and more than 1,500 validated alerts, this chapter analyzes system latency, cryptographic processing overhead, and the accuracy of the AI-driven anomaly detection. It also provides a critical discussion on the privacy-utility trade-off and compares the proposed framework's performance against traditional baseline models.
+
+\vspace{0.3cm}
+
+\noindent \textbf{Chapter 6: Conclusion and Future Work} synthesizes the key findings of the research, summarizing the successful integration of privacy-preserving mechanisms with edge-based Generative AI. It candidly discusses the limitations encountered during the study and proposes strategic directions for future research to further enhance secure, intelligent residential automation.
 
 % --- CHAPTER 2 ---
 \chapter{Related Work}
