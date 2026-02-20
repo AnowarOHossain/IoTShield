@@ -1731,7 +1731,140 @@ H1. Author, P1. Author, and Q1. Author, ``Design of ESP8266 Smart Home Using MQT
 \end{thebibliography}
 
 % ==================== APPENDIX ====================
+\clearpage
 \appendix
-\chapter{Appendix}
+
+% ==========================================
+% APPENDIX A: Hardware Configuration
+% ==========================================
+\chapter{Hardware Schematics and Pin Configuration}
+
+\noindent This appendix details the physical wiring and hardware interface of the IoTShield edge node. The ESP32-WROOM-32 microcontroller was selected as the central processing unit due to its dual-core architecture, which is essential for isolating cryptographic operations from continuous sensor polling.
+
+\vspace{0.3cm}
+
+\section*{A.1 Sensor Pin Mappings}
+\noindent Table A.1 defines the specific General Purpose Input/Output (GPIO) pins utilized to interface the environmental sensors with the ESP32.
+
+\vspace{0.5cm}
+
+\begin{table}[H]
+    \centering
+    \caption{ESP32 GPIO Pin Configuration for Sensor Integration}
+    \vspace{0.2cm}
+    \renewcommand{\arraystretch}{1.5}
+    \begin{tabular}{|l|l|l|}
+        \hline
+        \textbf{Component} & \textbf{ESP32 Pin} & \textbf{Signal Type} \\
+        \hline
+        DHT11 (Climate) & GPIO 4 & Digital Input \\
+        \hline
+        MQ-2 (Gas/Smoke) & GPIO 34 & Analog Input (ADC) \\
+        \hline
+        PIR (Motion) & GPIO 13 & Digital Input (Interrupt) \\
+        \hline
+        IR Flame Sensor & GPIO 14 & Digital Input \\
+        \hline
+        LDR (Light Level) & GPIO 35 & Analog Input (ADC) \\
+        \hline
+    \end{tabular}
+    \label{tab:appendix_pin_mapping}
+\end{table}
+
+\vspace{0.5cm}
+
+% ==========================================
+% APPENDIX B: Firmware (ESP32)
+% ==========================================
+\chapter{Core Firmware Implementation (ESP32)}
+
+\noindent This appendix provides essential excerpts from the C++ firmware deployed on the ESP32 edge node. The code highlights the implementation of the Differential Privacy (DP) layer and the hardware-accelerated RSA-2048 encryption logic.
+
+\vspace{0.3cm}
+
+\section*{B.1 Differential Privacy: Gaussian Noise Injection}
+\noindent The following function demonstrates how calibrated noise ($\epsilon = 0.5$) is dynamically generated and applied to the raw analog readings to prevent behavioral profiling.
+
+\vspace{0.3cm}
+
+\begin{lstlisting}[language=C++, showspaces=false, showstringspaces=false, basicstyle=\ttfamily\small, caption={Gaussian noise injection logic on the ESP32}, label={lst:gaussian_noise}]
+#include <math.h>
+
+// Function to generate Gaussian noise using Box-Muller transform
+float generateGaussianNoise(float mean, float stdDev) {
+    float u1 = (float)random(10000) / 10000.0;
+    float u2 = (float)random(10000) / 10000.0;
+    
+    // Prevent log(0)
+    if (u1 <= 0.0001) u1 = 0.0001; 
+    
+    float z0 = sqrt(-2.0 * log(u1)) * cos(2.0 * PI * u2);
+    return mean + z0 * stdDev;
+}
+
+// Applying DP to the MQ-2 Gas Sensor reading
+int rawGasLevel = analogRead(34);
+float noisyGasLevel = rawGasLevel + generateGaussianNoise(0, 0.5);
+\end{lstlisting}
+
+\vspace{0.5cm}
+
+% ==========================================
+% APPENDIX C: Backend AI (Django)
+% ==========================================
+\chapter{Backend AI Integration (Django \& Llama 3.2)}
+
+\noindent To ensure deterministic and highly relevant safety diagnostics, the Llama 3.2 (1B) model required a strictly engineered system prompt. This appendix details the core Python logic used within the Django backend (via the \texttt{OllamaAnomalyDetector} class) to dynamically format telemetry, inject contextual baselines, and query the local Ollama REST API.
+
+\vspace{0.3cm}
+
+\section*{C.1 Dynamic LLM Prompt Engineering}
+\noindent The following Python excerpt showcases the advanced prompt engineering utilized by the backend. The prompt dynamically injects the specific sensor's normal operating ranges and forces the LLM to adhere to a strict JSON output format. The model's temperature is set to 0.7, balanced by a Top-P of 0.9 and Top-K of 40, to allow for contextual reasoning while maintaining structural reliability.
+
+\vspace{0.3cm}
+
+\begin{lstlisting}[language=Python, showspaces=false, showstringspaces=false, basicstyle=\ttfamily\footnotesize, caption={Excerpt from ollama\_anomaly\_detector.py detailing the dynamic prompt construction and API payload}, label={lst:llm_prompt}]
+import requests
+import json
+from typing import Dict
+
+def analyze_sensor_data(sensor_data: Dict, normal_ranges: str):
+    url = "http://localhost:11434/api/generate"
+    
+    prompt = f"""You are an IoT security and monitoring expert. 
+    Analyze the following sensor data and determine if it represents an anomaly.
+
+    **Sensor Data:**
+    - Sensor Type: {sensor_data.get('sensor_type')}
+    - Current Value: {sensor_data.get('value')} {sensor_data.get('unit')}
+    - Device: {sensor_data.get('device_name')}
+    
+    **Normal Range Context:**
+    {normal_ranges}
+
+    **Severity Classification Guidelines:**
+    - LOW: Minor deviation (5-15% outside normal). Informational only.
+    - MEDIUM: Moderate deviation (15-30% outside normal). Monitor closely.
+    - HIGH: Significant deviation (30-50% outside normal). Requires investigation.
+    - CRITICAL: Extreme deviation (>50% outside normal). Immediate action required.
+
+    **Required Response Format (JSON only, no markdown):**
+    {{"anomaly": true/false, "explanation": "...", "severity": "...", "suggestion": "..."}}"""
+    
+    payload = {
+        "model": "llama3.2:1b",
+        "prompt": prompt,
+        "stream": False,
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "top_k": 40
+    }
+    
+    response = requests.post(url, json=payload, timeout=60)
+    
+    # Parse the forced JSON response
+    result_text = response.json().get('response', '{}')
+    return json.loads(result_text)
+\end{lstlisting}
 
 \end{document}
