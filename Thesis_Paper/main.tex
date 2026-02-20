@@ -708,17 +708,245 @@ $bps$ & Bits Per Second \\
 
 \vspace{0.5cm}
 
+\clearpage
 \section{System Architecture Design}
+
+\noindent The architectural design of the IoTShield framework is structured around a localized, decentralized network topology operating entirely within a private Local Area Network (LAN). To guarantee data sovereignty and eliminate reliance on external cloud processing, all core communications, data routing, and artificial intelligence inferences are confined within the 192.168.1.0/24 subnet. The network is orchestrated by a standard WiFi Router acting as the default gateway (192.168.1.1), which manages DHCP assignments, Network Address Translation (NAT), and internal firewall policies to insulate the smart home ecosystem from the public Wide Area Network (WAN).
+
+\vspace{0.3cm}
+
+\noindent Operating at the network edge is the ESP32 Smart Sensor Hub, which connects to the local router via a 2.4GHz WiFi interface. Assigned to a dedicated local IP address (192.168.1.150), this edge node is responsible for continuously polling the connected hardware—specifically the DHT11, MQ-2, Flame, LDR, and PIR sensors. Once the telemetry is acquired, the ESP32 processes the data through the local privacy pipeline, packages it into a secure JSON payload, and transmits it via the MQTT protocol to the central server.
+
+\vspace{0.3cm}
+
+\noindent The core intelligence and data routing of the system are hosted on the Central Server, acting as the edge gateway. To ensure maximum stability and minimize latency, this server is connected to the router via a hardwired Ethernet connection and assigned a static IP address (192.168.1.100). The server concurrently hosts three critical, containerized services: the Mosquitto MQTT Broker on Port 1883, the Django Web Server on Port 8000, and the Ollama AI Inference engine on Port 11434, which hosts the localized Llama 3.2 model.
+
+\vspace{0.3cm}
+
+\noindent Finally, the User Interface tier allows end-users to access the monitoring dashboard and manage alerts using any standard web browser on a mobile device or laptop. By navigating to the internal address (\texttt{http://192.168.1.100:8000}), users can interact with the system securely over the local WiFi connection without routing traffic over the public internet.
+
+\vspace{0.5cm}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.95\textwidth]{Images/Network Topology -Diagram.png}
+    \caption{Detailed network topology of the IoTShield framework, illustrating the local IP subnet structure, port assignments, and the strict isolation of edge processing from the public internet.}
+    \label{fig:network_topology}
+\end{figure}
+
+\vspace{0.5cm}
+
+\clearpage
 \section{Hardware Architecture (ESP32 and Sensors)}
+
+\noindent The physical foundation of the IoTShield framework is built upon a highly responsive, resource-optimized hardware architecture designed specifically for edge environments. At the core of the Edge Sensing Tier is the ESP32 microcontroller, specifically the ESP32-WROOM-32 module. The ESP32 was deliberately selected over lower-tier microcontrollers due to its dual-core 240 MHz Tensilica processor, built-in 2.4 GHz Wi-Fi capabilities, and sufficient SRAM to handle demanding application-layer tasks. Unlike standard IoT edge nodes that merely forward raw electrical signals, the ESP32 in this architecture is tasked with actively polling six distinct sensors, applying dual-layer Gaussian noise matrices, executing RSA-2048 cryptographic encryption, and managing asynchronous MQTT publishing—all in real-time.
+
+\vspace{0.3cm}
+
+\noindent To capture a comprehensive profile of the domestic environment, the ESP32 is physically interfaced with a diverse array of five distinct sensor modules, collectively gathering six unique environmental metrics. Ambient climate monitoring is handled by a DHT11 digital sensor, which provides continuous temperature and relative humidity readings. Hazardous environmental anomalies are monitored by an MQ-2 analog gas sensor, calibrated to detect combustible gases and smoke concentrations, working in tandem with an infrared (IR) Flame sensor that triggers upon detecting specific light wavelengths associated with open fires. Finally, spatial and security metrics are captured using an HC-SR501 Passive Infrared (PIR) motion sensor to detect physical occupancy, alongside a Light Dependent Resistor (LDR) to measure ambient room illumination.
+
+\vspace{0.3cm}
+
+\noindent By aggregating these diverse metrics onto a single ESP32 node, the hardware architecture provides the localized AI model with a rich, multivariate dataset. This allows the system to cross-reference multiple data points (e.g., detecting a simultaneous spike in temperature, gas, and a positive flame reading) to accurately diagnose complex hazards. Table 3.1 provides a detailed technical specification of the hardware components utilized in the physical edge node deployment.
+
+\vspace{0.5cm}
+
+\begin{table}[htbp]
+    \centering
+    \caption{Hardware Components and Sensor Specifications}
+    \vspace{0.2cm}
+    \renewcommand{\arraystretch}{1.5}
+    \resizebox{\textwidth}{!}{
+    \begin{tabular}{|p{3.5cm}|p{3cm}|p{4.5cm}|p{4.5cm}|}
+        \hline
+        \textbf{Component} & \textbf{Type} & \textbf{Operating Range / Details} & \textbf{Role in System} \\
+        \hline
+        ESP32-WROOM-32 & Microcontroller & 240 MHz Dual-Core, 3.3V Logic, 802.11 b/g/n Wi-Fi & Primary edge gateway; executes RSA encryption, differential privacy, and MQTT routing. \\
+        \hline
+        DHT11 & Digital Climate Sensor & Temp: 0--50$^\circ$C, Humidity: 20--90\% RH & Monitors ambient room temperature and relative humidity levels. \\
+        \hline
+        MQ-2 & Analog Gas Sensor & 300--10,000 ppm (LPG, Methane, Smoke) & Identifies hazardous gas leaks and potential pre-combustion smoke. \\
+        \hline
+        IR Flame Sensor & Infrared Receiver & Wavelengths: 760 nm to 1100 nm & Provides immediate binary detection of open flames or fire outbreaks. \\
+        \hline
+        HC-SR501 (PIR) & Digital Motion Sensor & Range: 7m, Angle: 120$^\circ$ & Detects human occupancy or unauthorized physical intrusion. \\
+        \hline
+        LDR (Photoresistor) & Analog Light Sensor & 1 M$\Omega$ (Dark) to 10 k$\Omega$ (Light) & Monitors ambient illumination to provide contextual environmental data. \\
+        \hline
+    \end{tabular}
+    }
+    \label{tab:hardware_specs}
+\end{table}
+
+\vspace{0.5cm}
+
+\clearpage
 \section{Software Architecture}
+
+\noindent The software architecture of the IoTShield system is engineered as a modular, high-concurrency framework designed to facilitate real-time environmental monitoring while maintaining strict local data sovereignty. The architecture follows a decoupled, service-oriented paradigm where each component—ranging from edge firmware to the backend inference engine—operates independently yet communicates through standardized interfaces. This design choice ensures that the system can handle high-frequency telemetry from multiple nodes without blocking critical security operations or AI reasoning tasks.
+
+\vspace{0.3cm}
+
+\noindent At the network's periphery, the Firmware Layer is developed using the Arduino framework in C++, specifically optimized for the dual-core architecture of the ESP32. This layer manages the low-level hardware abstraction for the connected sensor array and executes the initial privacy-preserving pipeline. By utilizing the second core of the ESP32 for cryptographic operations, the firmware ensures that the RSA-2048 encryption and Gaussian noise injection do not interfere with the primary sensor polling and MQTT publishing loops, thus maintaining a consistent data acquisition rate.
+
+\vspace{0.3cm}
+
+\noindent The Message Broker Layer serves as the foundational communication backbone, utilizing the Eclipse Mosquitto implementation of the MQTT protocol. This layer is configured to handle asynchronous messaging with a Quality of Service (QoS) Level 1, ensuring that critical telemetry packets are acknowledged by the backend. The broker functions as a stateless relay, where the encrypted sensor payloads are routed through a hierarchical topic structure. This decoupling allows the backend processing services to subscribe to specific data streams without maintaining a persistent direct connection to each individual hardware node.
+
+\vspace{0.3cm}
+
+\noindent The Backend and Application Layer is constructed using the Django web framework, which orchestrates the core logic of the IoTShield system. This layer manages the secure decryption of payloads, the execution of multivariate threshold logic for immediate anomaly detection, and the persistence of telemetry within a relational SQLite database. Furthermore, the backend integrates with the Ollama inference engine via a local API to facilitate the generation of context-aware alerts. By hosting the Llama 3.2 model locally, the software architecture ensures that the transition from raw environmental data to human-readable insights occurs entirely within the edge environment, fulfilling the primary research objective of localized and privacy-preserving monitoring.
+
+\clearpage
 \section{MQTT Communication Model}
+
+\noindent The communication backbone of the IoTShield system is built upon the Message Queuing Telemetry Transport (MQTT) protocol, specifically selected for its lightweight overhead and suitability for resource-constrained edge devices like the ESP32. The system utilizes an asynchronous publish-subscribe paradigm, where the Mosquitto broker serves as a central hub for routing secure telemetry between the edge sensing nodes and the Django backend. To ensure reliability in a residential network environment, the system is configured with a Quality of Service (QoS) Level 1, guaranteeing that critical sensor updates and hazard alerts are delivered to the subscriber at least once, supported by a 60-second keep-alive interval to monitor node connectivity.
+
+\vspace{0.3cm}
+
+\noindent The communication architecture is governed by a strict hierarchical topic structure, which allows for efficient data filtering and multi-device management. The ESP32 hardware nodes publish encrypted environmental data to specific sub-topics, while the backend system subscribes to these streams to trigger the decryption and anomaly detection pipelines. Conversely, the backend can publish commands to the control topic, allowing for remote device management. This decoupled approach ensures that the sensing nodes do not need to maintain a direct awareness of the backend's state, significantly reducing the computational burden on the ESP32. Table 3.2 details the topic hierarchy and the corresponding payload characteristics utilized in the IoTShield framework.
+
+\vspace{0.5cm}
+
+\begin{table}[htbp]
+    \centering
+    \caption{MQTT Topic Structure and Payload Formats}
+    \vspace{0.2cm}
+    \renewcommand{\arraystretch}{1.5}
+    \resizebox{\textwidth}{!}{
+    \begin{tabular}{|p{4.5cm}|c|c|p{6cm}|}
+        \hline
+        \textbf{Topic Name} & \textbf{Direction} & \textbf{QoS} & \textbf{Payload Description} \\
+        \hline
+        iotshield/sensors/data & Publish & 1 & RSA-encrypted JSON containing multi-sensor telemetry (Temp, Hum, Gas, etc.). \\
+        \hline
+        iotshield/alerts & Publish & 1 & Encrypted alerts containing severity levels and AI-generated suggestions. \\
+        \hline
+        iotshield/control/commands & Subscribe & 1 & Incoming instructions for device configuration or manual sensor polling. \\
+        \hline
+        iotshield/logs & Publish & 0 & Plaintext diagnostic messages for system health and connectivity monitoring. \\
+        \hline
+    \end{tabular}
+    }
+    \label{tab:mqtt_topics}
+\end{table}
+
+\vspace{0.5cm}
+
+\noindent Figure 3.3 illustrates the end-to-end communication flow, highlighting the interaction between the Edge Device (PubSubClient), the Mosquitto Broker, and the Backend System (paho-mqtt), while detailing the JSON data format utilized for secure message exchange.
+
+\vspace{0.5cm}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.95\textwidth]{Images/MQTT Communication Architecture - Diagram.png}
+    \caption{MQTT communication architecture illustrating the hierarchical topic structure, message flow between edge nodes and the backend, and key protocol parameters.}
+    \label{fig:mqtt_architecture}
+\end{figure}
+
+\vspace{0.5cm}
+
+\clearpage
 \section{Privacy-Preserving Data Pipeline}
+
+\noindent A core contribution of the IoTShield framework is its dual-layer privacy-preserving data pipeline, designed to protect domestic telemetry against both external interception and internal behavioral profiling. Unlike traditional systems that transmit raw data, this architecture implements a localized security sequence on the ESP32 node prior to network transmission.
+
+\vspace{0.3cm}
+
 \subsection{Differential Privacy with Dual Gaussian Noise}
+
+\noindent The first stage of the pipeline addresses the risk of behavioral pattern mining. Even when encrypted, high-frequency sensor values can be analyzed to reveal sensitive occupant routines. To mitigate this, the system injects a calibrated level of Gaussian noise into the raw sensor telemetry. Utilizing a privacy budget of $\epsilon = 0.5$, the ESP32 adds a noise displacement that masks the exact environmental value while preserving the statistical utility required for anomaly detection. This ensures that the published telemetry represents a "noisy" version of the environment (e.g., $25.523^\circ$C instead of $25.0^\circ$C), providing a strong mathematical guaranty of differential privacy.
+
+\vspace{0.3cm}
+
 \subsection{RSA-2048 Encryption Mechanism}
+
+\noindent Following structural obfuscation, the data enters the cryptographic stage to ensure end-to-end confidentiality. The noisy payload is encrypted using the RSA-2048 algorithm, employing Optimal Asymmetric Encryption Padding (OAEP) and the SHA-256 hashing function. By utilizing an asymmetric public-key infrastructure, the "IoTShield" system secures the payload such that only the backend server, possessing the corresponding private key, can access the plaintext contents. This transformation renders the telemetry into unreadable ciphertext before it is packaged into a JSON format for MQTT publication. Consequently, the data remains mathematically protected while transiting the broker and during storage in the SQLite database.
+
+\vspace{0.5cm}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.95\textwidth]{Images/Privacy Mechanism - Diagram.png}
+    \caption{Dual-layer privacy architecture of the IoTShield system, illustrating the sequential transformation of raw sensor data through Gaussian noise injection and RSA-2048 encryption.}
+    \label{fig:privacy_mechanism}
+\end{figure}
+
+\vspace{0.5cm}
+
+\clearpage
 \section{AI-Based Anomaly Detection Framework}
+
+\noindent The final tier of the IoTShield system is the intelligent inference framework, which transforms raw environmental telemetry into actionable, human-readable insights. This framework is designed to operate entirely at the edge, utilizing a two-stage detection pipeline: a high-speed threshold-based screening layer and a context-aware Generative AI reasoning layer. By hosting the inference engine locally, the system ensures that sensitive domestic data is never exposed to third-party cloud providers, fulfilling the primary privacy objectives of the research.
+
+\vspace{0.3cm}
+
 \subsection{Threshold-Based Detection Logic}
+
+\noindent Before the data is passed to the AI model, it undergoes an initial evaluation via a multivariate threshold-based detection engine. This layer serves as a computational filter to differentiate between routine environmental fluctuations and potential hazards. Each incoming sensor reading is compared against a set of predefined boundaries that categorize the severity of the event. While a single sensor breach (e.g., a "Medium" gas reading) triggers an alert, the system is designed to recognize compound anomalies, such as simultaneous spikes in temperature and gas, which escalate the priority level. Table 3.3 defines the specific threshold parameters and the corresponding severity classifications utilized by the IoTShield backend.
+
+\vspace{0.5cm}
+
+\begin{table}[htbp]
+    \centering
+    \caption{Sensor Threshold Parameters and Severity Classification}
+    \vspace{0.2cm}
+    \renewcommand{\arraystretch}{1.5}
+    \resizebox{\textwidth}{!}{
+    \begin{tabular}{|p{3.5cm}|c|c|c|c|}
+        \hline
+        \textbf{Sensor Type} & \textbf{Normal Range} & \textbf{LOW} & \textbf{MEDIUM} & \textbf{HIGH/CRITICAL} \\
+        \hline
+        Temperature ($^\circ$C) & 18.0 -- 28.0 & 28.1 -- 35.0 & 35.1 -- 45.0 & $>$ 45.0 \\
+        \hline
+        Humidity (\%) & 30.0 -- 60.0 & 60.1 -- 75.0 & 75.1 -- 85.0 & $>$ 85.0 \\
+        \hline
+        Gas (MQ-2) & $<$ 0.20 & 0.21 -- 0.40 & 0.41 -- 0.60 & $>$ 0.60 \\
+        \hline
+        Flame (IR) & 0 (Stable) & -- & -- & 1 (Flame Detected) \\
+        \hline
+        Motion (PIR) & 0 (No Motion) & 1 (Detected) & -- & -- \\
+        \hline
+        Light (LDR) & 200 -- 800 lux & $<$ 200 & -- & $>$ 800 \\
+        \hline
+    \end{tabular}
+    }
+    \label{tab:thresholds}
+\end{table}
+
+\vspace{0.5cm}
+
 \subsection{Local LLM Integration (Llama 3.2 via Ollama)}
+
+\noindent When the threshold engine identifies a "Medium," "High," or "Critical" anomaly, the multivariate data packet is immediately routed to the localized Generative AI inference engine. This layer utilizes the Llama 3.2 model (1-billion parameter version) hosted on-premise via the Ollama platform. Unlike traditional "black-box" classifiers, the LLM performs contextual reasoning; it receives the decrypted sensor values and provides a natural language synthesis of the probable hazard. For instance, rather than simply reporting a high gas value, the model interprets the data to suggest whether the readings indicate a persistent gas leak or a sudden fire outbreak. 
+
+\vspace{0.3cm}
+
+\noindent This integration allows the system to generate "AI Suggestions," which provide users with actionable steps, such as "Immediately check the kitchen motion sensor and investigate the cause." Figure 3.4 illustrates the routing logic, showing how normal data flows directly to the database while anomalous data is intercepted and analyzed by the local LLM prior to alert generation.
+
+\vspace{0.5cm}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.95\textwidth]{Images/Anomaly Detection - Diagram.png}
+    \caption{AI-powered anomaly detection workflow illustrating the data routing logic and the localized integration of the Llama 3.2 LLM via Ollama.}
+    \label{fig:ai_anomaly_detection}
+\end{figure}
+
+\vspace{0.5cm}
+
+\clearpage
 \section{End-to-End System Workflow}
+
+\noindent The operational integrity of the IoTShield system is defined by a seamless, end-to-end data pipeline that ensures every environmental event is captured, secured, and analyzed in real-time. The workflow initiates at the physical edge, where the ESP32 microcontroller performs high-frequency polling of the connected sensor array. Upon acquisition, the raw telemetry is immediately processed through the on-device privacy engine. This involves injecting dual-layer Gaussian noise to provide structural privacy, followed by RSA-2048 encryption to secure the payload. This sequence ensures that even before the data enters the network, it is mathematically protected against both behavioral profiling and unauthorized interception.
+
+\vspace{0.3cm}
+
+\noindent Once the payload is secured, the ESP32 functions as an MQTT client, publishing the encrypted JSON packet to the designated sensors topic on the Mosquitto broker. The broker, operating as a localized gateway, routes the message to the Django-based backend system. Upon receiving the message, the backend utilizes the localized private RSA key to decrypt the payload. The resulting plaintext is then persistently stored in the SQLite database and simultaneously evaluated against the predefined multi-sensor threshold logic. This stage is critical for maintaining an immutable history of environmental trends while identifying potential safety breaches within milliseconds.
+
+\vspace{0.3cm}
+
+\noindent In the event that the threshold engine identifies a medium or high-severity anomaly, the system triggers the intelligent inference stage. The multivariate sensor data is formatted into a context-rich prompt and transmitted to the localized Llama 3.2 model via the Ollama API. The model performs contextual reasoning to generate human-readable diagnoses and actionable safety suggestions. These insights are pushed to the user's web dashboard through a real-time WebSocket connection and transmitted as an urgent notification via the SMTP relay. This comprehensive workflow ensures that the end-user receives high-context security alerts while maintaining absolute data sovereignty within the localized smart home environment.
 
 % --- CHAPTER 4 ---
 \chapter{Implementation}
