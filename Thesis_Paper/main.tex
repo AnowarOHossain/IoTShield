@@ -1438,12 +1438,105 @@ $bps$ & Bits Per Second \\
 
 \noindent In exchange for this marginal temporal cost, IoTShield provides a vastly superior security posture. Unlike traditional cloud systems that terminate encryption at the network gateway—leaving the underlying data exposed to server-side breaches or corporate monetization—IoTShield maintains payload-level encryption until the exact moment of localized processing. Furthermore, by replacing rudimentary threshold rules and external cloud APIs with an offline, 1-billion parameter Large Language Model, the proposed system stands alone among the baselines. It successfully demonstrates the ability to generate sophisticated, context-aware safety diagnostics while fully preserving the occupant's right to digital privacy.
 
+\clearpage
 % --- CHAPTER 6 ---
 \chapter{Conclusion and Future Work}
+
+\noindent This final chapter encapsulates the core achievements of the research, summarizing the design, development, and evaluation of the IoTShield framework. It highlights the primary technical findings derived from the experimental phase, transparently acknowledges the limitations encountered during implementation, and outlines potential avenues for future research to further advance privacy-preserving smart home technologies.
+
+\vspace{0.3cm}
+
 \section{Summary of the Work}
+
+\noindent The rapid proliferation of Internet of Things (IoT) devices in domestic environments has introduced unprecedented convenience, yet it has simultaneously created severe vulnerabilities regarding user data privacy. Traditional smart home architectures continuously transmit highly sensitive, unencrypted environmental telemetry to centralized cloud servers, exposing occupants to behavioral profiling, corporate monetization, and third-party data breaches. To address this critical security gap, this research proposed, developed, and evaluated \textbf{IoTShield}: a fully localized, privacy-by-design smart home monitoring framework.
+
+\vspace{0.3cm}
+
+\noindent The overarching objective of this work was to engineer a system capable of providing sophisticated hazard detection without compromising the data sovereignty of the end-user. This was achieved through the implementation of a resilient, dual-layer privacy pipeline executed directly at the hardware edge. Utilizing an ESP32-WROOM-32 microcontroller, raw multivariate sensor data (encompassing climate, gas, motion, and flame metrics) was first obfuscated using a Differential Privacy mechanism. By injecting calibrated Gaussian noise ($\epsilon = 0.5$), the system effectively masked routine behavioral patterns from historical analysis. Subsequently, the perturbed payloads were secured using RSA-2048 asymmetric cryptography with OAEP padding prior to MQTT transmission, ensuring a robust defense against network-level interception and eavesdropping.
+
+\vspace{0.3cm}
+
+\noindent To eliminate the reliance on external cloud APIs for data analysis, the framework integrated a localized intelligence layer powered by the Llama 3.2 (1B) Large Language Model. Hosted entirely on a central edge server and managed by a custom Django backend, this offline inference engine processed the decrypted telemetry to detect and diagnose environmental anomalies. 
+
+\vspace{0.3cm}
+
+\noindent Throughout the comprehensive experimental evaluation, the system successfully monitored concurrent data streams and dynamically categorized 1,568 distinct environmental anomalies. The localized AI proved highly capable of correlating multivariate triggers—such as simultaneous gas and temperature spikes—to synthesize context-aware, natural language safety directives. By securely delivering these critical insights via a real-time WebSocket dashboard and automated SMTP email relays within an average end-to-end latency of 420 milliseconds, IoTShield conclusively demonstrated that advanced, AI-driven domestic security can be efficiently realized without ever exposing sensitive data to the public internet.
+
 \section{Key Findings}
+
+\noindent The design, implementation, and rigorous testing of the IoTShield framework yielded several significant insights regarding the viability of edge-based, privacy-preserving IoT networks. The major technical findings of this research are summarized below:
+
+\vspace{0.3cm}
+
+\begin{itemize}
+    \item \textbf{Feasibility of Edge-Level Cryptography:} The research demonstrated that resource-constrained microcontrollers, specifically the ESP32, can successfully execute computationally expensive asymmetric cryptography in real-time. By leveraging the dual-core architecture to isolate RSA-2048 encryption and OAEP padding on a secondary core, the system secured payloads at the hardware level without inducing latency in the primary sensor polling loop.
+    
+    \vspace{0.2cm}
+    
+    \item \textbf{Optimal Privacy--Utility Balance:} The integration of a localized Differential Privacy mechanism proved highly effective for masking domestic telemetry. Applying Gaussian noise with a strict privacy budget ($\epsilon = 0.5$) successfully obfuscated granular human behavioral routines. Crucially, this cryptographic masking did not degrade system utility; macroscopic environmental deviations, such as gas leaks or thermal spikes, remained distinctly identifiable by the backend threshold detection engine.
+    
+    \vspace{0.2cm}
+    
+    \item \textbf{Reliability of Localized LLM Inference:} The deployment of the Llama 3.2 (1B) model via the Ollama framework confirmed that sophisticated hazard reasoning can be achieved in a strictly offline environment. By enforcing strict system prompts and a low temperature parameter (0.2), the local AI consistently generated context-aware, highly deterministic safety directives across 1,568 recorded anomalies, completely neutralizing the risk of irrelevant outputs or AI "hallucinations."
+    
+    \vspace{0.2cm}
+    
+    \item \textbf{Acceptable Latency Trade-offs:} While the dual-layer privacy pipeline inherently introduced processing overhead compared to traditional plaintext IoT networks, the system maintained an average end-to-end latency of approximately 420 milliseconds. This sub-second traversal time confirms that achieving absolute data sovereignty and payload-level encryption does not preclude the real-time responsiveness required for life-safety smart home monitoring.
+\end{itemize}
+
+\vspace{0.5cm}
+
 \section{Limitations of the Study}
+
+\noindent While the IoTShield framework successfully achieved its primary objective of localized, privacy-preserving anomaly detection, the current prototype exhibits several technical and architectural limitations that must be acknowledged. These constraints primarily stem from the trade-offs required to maintain absolute data sovereignty without relying on cloud infrastructure.
+
+\vspace{0.3cm}
+
+\begin{itemize}
+    \item \textbf{High Resource Demands for the Edge Server:} The most significant limitation of the proposed architecture is the hardware requirement for the central backend. Running a 1-billion parameter Large Language Model (Llama 3.2) locally requires a relatively powerful edge server with substantial memory (RAM) and processing power. Unlike traditional IoT setups that can be managed by a low-cost Raspberry Pi, this system requires consumer-grade PC hardware, which introduces a higher financial barrier to entry for standard residential deployments.
+    
+    \vspace{0.2cm}
+    
+    \item \textbf{Cryptographic Overhead on Edge Nodes:} Although the ESP32 successfully handles RSA-2048 encryption using its secondary core, the mathematical complexity of modular exponentiation consumes approximately 27\% of the system's temporal budget. This overhead restricts the ability to perform ultra-high-frequency sensor sampling. If a future deployment required microsecond-level telemetry reporting, the current 2048-bit asymmetric cryptographic pipeline would become a significant bottleneck.
+    
+    \vspace{0.2cm}
+    
+    \item \textbf{Single Point of Failure in the Local Network:} The framework currently relies entirely on a standard 2.4 GHz local Wi-Fi network to transmit MQTT payloads from the edge nodes to the central server. If the residential Wi-Fi router experiences a power outage, congestion, or a deliberate jamming attack, the sensor nodes lose their ability to report critical anomalies. The prototype currently lacks an out-of-band communication fallback (such as a localized mesh network or cellular module).
+    
+    \vspace{0.2cm}
+    
+    \item \textbf{Scalability of Key Management:} In the current experimental setup, the Public Key Infrastructure (PKI) was managed manually, with the ESP32 holding the public key and the Django backend storing the private key. While effective for a small-scale prototype, scaling this architecture to support hundreds of interconnected smart home devices would require an automated, dynamic key rotation and certificate management system, which was outside the scope of this study.
+\end{itemize}
+
+\vspace{0.5cm}
+
 \section{Future Research Directions}
+
+\noindent The development of the IoTShield framework establishes a robust foundation for privacy-preserving, edge-based domestic monitoring. However, as the IoT landscape rapidly evolves, several avenues for future research and optimization remain to scale this prototype into a highly deployable consumer solution. Based on the technical constraints identified during this study, the following research directions are proposed:
+
+\vspace{0.3cm}
+
+\begin{itemize}
+    \item \textbf{Transition to Elliptic Curve Cryptography (ECC):} To address the significant computational overhead introduced by RSA-2048 encryption, future iterations of the edge node firmware should explore the implementation of Elliptic Curve Cryptography. ECC can provide an equivalent level of cryptographic security with significantly smaller key sizes (e.g., a 256-bit ECC key is broadly comparable to a 3072-bit RSA key), dramatically reducing modular exponentiation times and freeing up CPU cycles on the ESP32.
+    
+    \vspace{0.2cm}
+    
+    \item \textbf{Integration of Hardware AI Accelerators:} To lower the barrier to entry for the central edge server, future research should investigate offloading the Large Language Model inference to dedicated local neural processing units (NPUs) or edge AI accelerators, such as the Google Coral TPU or NVIDIA Jetson platforms. Furthermore, utilizing highly quantized versions of Llama 3.2 (e.g., 4-bit quantization) could further reduce RAM requirements without sacrificing contextual reasoning accuracy.
+    
+    \vspace{0.2cm}
+    
+    \item \textbf{Decentralized Mesh Networking:} To eliminate the single point of failure inherent to standard 2.4 GHz residential Wi-Fi, the framework could be adapted to operate over low-power, decentralized mesh protocols such as Thread, Zigbee, or Bluetooth Mesh. Incorporating an out-of-band communication fallback, such as a localized LoRaWAN module, would ensure that critical life-safety alerts are transmitted even during targeted network jamming or localized power outages.
+    
+    \vspace{0.2cm}
+    
+    \item \textbf{Automated Public Key Infrastructure (PKI):} For large-scale commercial deployment, managing static cryptographic keys on individual nodes is impractical. Future work should design an automated, lightweight certificate enrollment protocol specifically tailored for resource-constrained IoT devices. Exploring blockchain-based identity management or secure multiparty computation (SMPC) could provide a trustless, scalable solution for dynamic key rotation.
+    
+    \vspace{0.2cm}
+    
+    \item \textbf{Federated Learning Integration:} Finally, the system's analytical capabilities could be enhanced by implementing a Federated Learning architecture. By allowing multiple independent IoTShield networks to train local anomaly detection models and share only the encrypted weight updates—rather than raw telemetry—the overall AI engine could continuously learn from diverse environmental hazards across thousands of households while mathematically guaranteeing zero exposure of private domestic data.
+\end{itemize}
+
+\vspace{0.5cm}
 
 % ==================== REFERENCES ====================
 \addcontentsline{toc}{chapter}{References}
