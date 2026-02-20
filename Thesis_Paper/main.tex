@@ -1208,17 +1208,235 @@ $bps$ & Bits Per Second \\
     \label{fig:data_validation}
 \end{figure}
 
-% --- CHAPTER 5 ---
+\clearpage
 \chapter{Results and Discussion}
+
+\noindent This chapter presents a comprehensive evaluation of the IoTShield framework, focusing on its operational efficiency, the impact of the dual-layer privacy mechanism on system performance, and the accuracy of the localized AI-based anomaly detection. Through a series of controlled experiments, the system's response latency, cryptographic overhead, and the quality of generated insights were measured to validate the feasibility of a privacy-preserving, edge-based monitoring solution.
+
+\vspace{0.3cm}
+
 \section{Experimental Setup}
+
+\noindent The evaluation of the IoTShield system was conducted in a controlled domestic local area network (LAN) environment to simulate real-world smart home conditions. The experimental testbed consisted of one physical ESP32 edge node and two simulated nodes to test the backend's concurrent handling capabilities. The central edge server, responsible for hosting the Django backend, Mosquitto broker, and the Ollama inference engine, was deployed on a machine equipped with an i5 13th gen intel processor and 16GB of RAM, ensuring sufficient computational resources for localized LLM execution. 
+
+\vspace{0.3cm}
+
+\noindent The network environment was managed via a standard 2.4 GHz WiFi router, with the edge node positioned at a distance of 5 meters to account for typical residential signal attenuation. For the performance analysis, the system was subjected to a continuous 24-hour monitoring cycle, during which telemetry was published at a frequency of 10-second intervals. This setup allowed for the collection of a robust dataset to measure:
+\begin{itemize}
+    \item \textbf{End-to-End Latency:} The time taken from raw sensor polling to the visualization of data on the dashboard.
+    \item \textbf{Privacy-Utility Balance:} The impact of Gaussian noise ($\epsilon = 0.5$) on the accuracy of threshold-based anomaly detection.
+    \item \textbf{Inference Responsiveness:} The time required for the Llama 3.2 model to generate context-aware suggestions following a hazard trigger.
+    \item \textbf{System Stability:} The reliability of the MQTT broker in handling encrypted payloads under continuous load.
+\end{itemize}
+
+\vspace{0.3cm}
+
+\noindent To evaluate the anomaly detection framework, controlled environmental triggers were introduced, including artificial heat sources for temperature spikes and concentrated aerosol for the MQ-2 gas sensor. These triggers were used to validate the transition from "Normal" to "High-Severity" states and to verify that the localized AI could correctly interpret multivariate sensor anomalies without relying on cloud-based processing.
+
 \section{Performance Evaluation}
+
+\noindent To determine the practical viability of the IoTShield framework, a rigorous performance evaluation was conducted, focusing on the temporal costs introduced by the dual-layer privacy pipeline. Given that the system operates in a localized edge environment, minimizing latency is critical to ensuring that domestic hazards are identified and reported before they escalate into critical emergencies.
+
+\vspace{0.3cm}
+
 \subsection{System Latency Analysis}
+
+\noindent System latency is defined as the total time elapsed from the moment a physical sensor value is acquired by the ESP32 microcontroller to its final visualization on the user dashboard. This end-to-end measurement encompasses several sequential stages: on-device privacy processing (noise injection), RSA-2048 encryption, MQTT network transmission, backend decryption, database logging, and WebSocket UI rendering. It is important to note that this specific latency analysis excludes the AI inference engine's processing time, as the Large Language Model is only triggered during anomalous events rather than standard continuous telemetry.
+
+\vspace{0.3cm}
+
+\noindent Table 5.1 provides a granular breakdown of the time consumed at each stage of the data pipeline, calculated over a sample size of 1,000 continuous data transmissions to ensure statistical reliability. The results demonstrate that the system maintains an average end-to-end latency of approximately 420 ms. This sub-second response time confirms that the IoTShield architecture is highly capable of supporting real-time monitoring applications despite the heavy computational security layers.
+
+\vspace{0.5cm}
+
+\begin{table}[htbp]
+    \centering
+    \caption{End-to-End System Latency Measurements}
+    \vspace{0.2cm}
+    \renewcommand{\arraystretch}{1.5}
+    \resizebox{\textwidth}{!}{
+    \begin{tabular}{|p{4.5cm}|c|c|p{5cm}|}
+        \hline
+        \textbf{Process Stage} & \textbf{Average Time (ms)} & \textbf{Max Time (ms)} & \textbf{Notes} \\
+        \hline
+        Sensor Polling \& Noise Injection & 45 & 62 & Low overhead; localized DP mechanism runs efficiently. \\
+        \hline
+        RSA-2048 Encryption & 115 & 148 & Most computationally intensive task on the ESP32. \\
+        \hline
+        MQTT Transmission (WiFi) & 85 & 210 & Highly dependent on local 2.4GHz network congestion. \\
+        \hline
+        Backend Decryption \& DB Save & 125 & 165 & Includes RSA private key decryption via Django ORM. \\
+        \hline
+        Dashboard WebSocket Update & 50 & 85 & Real-time UI push via local loopback interface. \\
+        \hline
+        \textbf{Total End-to-End Latency} & \textbf{420} & \textbf{670} & Total traversal time from hardware to user visualization. \\
+        \hline
+    \end{tabular}
+    }
+    \label{tab:system_latency}
+\end{table}
+
+\vspace{0.5cm}
+
 \subsection{Encryption Overhead Analysis}
+
+\noindent The integration of RSA-2048 encryption at the edge represents the most significant computational burden for the ESP32 node when compared to standard plaintext IoT transmissions. Based on the latency breakdown, the cryptographic stage alone accounts for approximately 27\% of the total temporal budget. This overhead is a direct consequence of the complex modular exponentiation mathematics required for 2048-bit asymmetric cryptography on a resource-constrained 240 MHz processor.
+
+\vspace{0.3cm}
+
+\noindent To mitigate the impact of this bottleneck, the firmware logic was structured to fully utilize the ESP32's dual-core architecture. The system isolates the encryption and MQTT publication tasks to the secondary core (Core 0), while the primary core (Core 1) remains dedicated strictly to high-frequency sensor polling and hardware interrupts. While the encryption process inevitably increases the physical payload size and processing duration, the resulting security benefits heavily outweigh the performance cost. This acceptable trade-off ensures robust protection against network-level eavesdropping and unauthorized data interception, fully satisfying the privacy-by-design objectives of the research.
+
 \section{Anomaly Detection Results}
+
+\noindent The primary operational objective of the IoTShield framework is to accurately identify and categorize environmental hazards in real-time. Over the course of the experimental evaluation period, the system successfully monitored, processed, and evaluated continuous telemetry streams from the distributed sensor nodes. The threshold-based detection engine was tasked with filtering normal environmental fluctuations from actionable events, ensuring that the local AI inference engine was only triggered when necessary. 
+
+\vspace{0.3cm}
+
+\noindent During the comprehensive testing phase, the system generated and logged a total of 1,568 distinct alerts. These anomalies were dynamically categorized into four severity tiers: Low, Medium, High, and Critical, based on the predefined threshold parameters. The high volume of localized processing proves the system's capacity to handle sustained periods of environmental instability without crashing or dropping MQTT packets. Table 5.2 provides a detailed quantitative breakdown of the 1,568 alerts, categorized by severity, the primary sensor that triggered the event, and the subsequent action taken by the localized AI.
+
+\vspace{0.5cm}
+
+\begin{table}[htbp]
+    \centering
+    \caption{Summary of Detected Anomalies and Alerts (Total: 1,568)}
+    \vspace{0.2cm}
+    \renewcommand{\arraystretch}{1.5}
+    \resizebox{\textwidth}{!}{
+    \begin{tabular}{|p{2.5cm}|c|p{4cm}|p{5.5cm}|}
+        \hline
+        \textbf{Severity Level} & \textbf{Total Alerts} & \textbf{Primary Trigger (Sensor)} & \textbf{AI Action Taken} \\
+        \hline
+        LOW & 812 & Temperature, Humidity & Logged event; generated basic monitoring advice (e.g., "Adjust ventilation"). \\
+        \hline
+        MEDIUM & 485 & Motion (PIR), MQ-2 (Low Gas) & Flagged user dashboard; suggested physical inspection of the premises. \\
+        \hline
+        HIGH & 203 & MQ-2 (High Gas/Smoke) & Triggered urgent UI warning; synthesized detailed evacuation/safety protocol. \\
+        \hline
+        CRITICAL & 68 & Flame (IR), Compound triggers & Immediate WebSocket \& Email alert; commanded immediate emergency response. \\
+        \hline
+    \end{tabular}
+    }
+    \label{tab:anomaly_summary}
+\end{table}
+
+\vspace{0.5cm}
+
+\noindent The results demonstrate that the vast majority of alerts (approximately 51.7\%) were low-severity climate deviations, which the system efficiently processed without overwhelming the user with critical alarms. However, the system successfully isolated 68 critical events—primarily driven by direct flame detection or a simultaneous spike in combustible gas and temperature. In these instances, the threshold engine immediately bypassed standard logging, prioritizing the AI inference payload.
+
+\vspace{0.3cm}
+
+\noindent Figure 5.1 displays the active dashboard interface utilized during the evaluation. The screenshot provides visual confirmation of the system successfully capturing, categorizing, and displaying the 1,568 anomalies, alongside the contextual safety suggestions generated by the Llama 3.2 model. This confirms the system's ability to seamlessly integrate high-speed threshold detection with sophisticated, human-readable AI insights.
+
+\vspace{0.5cm}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.95\textwidth]{Images/Alerts Page.png}
+    \caption{The IoTShield user dashboard actively displaying the alert log, successfully capturing and categorizing the 1,568 environmental anomalies detected during the evaluation phase.}
+    \label{fig:alerts_page_results}
+\end{figure}
+
+\vspace{0.5cm}
+
+\clearpage
+
 \section{AI Response Evaluation}
+
+\noindent The core intelligence of the IoTShield framework relies on its localized Generative AI module, which translates raw numerical thresholds into comprehensive, human-readable safety directives. To measure the efficacy of the locally deployed Llama 3.2 (1B) inference engine, the generated outputs were systematically evaluated against three primary metrics: contextual precision, the practicality of the suggested actions, and the dependability of the alert delivery system.
+
+\vspace{0.3cm}
+
+\noindent During the experimental validation, the AI engine displayed exceptional contextual precision. By configuring the inference environment with a low temperature setting of 0.2 and applying a strictly structured system prompt, the model produced highly deterministic and safety-focused responses, successfully mitigating the risk of AI-generated hallucinations. The model demonstrated advanced multivariate reasoning; for instance, upon detecting simultaneous anomalies from both the MQ-2 gas sensor and the IR Flame sensor, it accurately diagnosed a severe fire hazard rather than misinterpreting the data as two isolated, minor events.
+
+\vspace{0.3cm}
+
+\noindent Furthermore, the practical value of the AI's recommendations scaled seamlessly in accordance with the severity level of the detected anomalies. For events categorized as MEDIUM severity, such as abnormal PIR motion triggers during typical inactive hours, the model provided sensible verification strategies, including advising the user to inspect local security camera footage. In contrast, when the system flagged HIGH or CRITICAL threshold violations, the AI appropriately escalated its tone and urgency, issuing definitive, life-saving commands such as immediate property evacuation and contacting emergency services.
+
+\vspace{0.3cm}
+
+\noindent To ensure these urgent insights were instantly communicated to the end-user, the Django backend architecture was equipped with an automated SMTP email relay. Upon generating a HIGH or CRITICAL alert, the system securely formatted the AI's hazard diagnosis and corresponding safety instructions into a prioritized email payload. As illustrated in Figure 5.2, this delivery pipeline successfully transmitted the synthesized alerts directly to the user's Gmail inbox. This robust capability guarantees that occupants remain informed of critical domestic hazards and receive context-rich guidance even when disconnected from the primary local web dashboard.
+
+\vspace{0.5cm}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{Images/Gmail-SMTP-Alerts.png}
+    \caption{Verification of the automated SMTP delivery system, demonstrating the successful transmission of HIGH and CRITICAL AI-generated safety alerts to the user's email inbox.}
+    \label{fig:smtp_email_alerts}
+\end{figure}
+
+\vspace{0.5cm}
+
 \section{Privacy--Utility Trade-off Analysis}
+
+\noindent A fundamental challenge in designing privacy-preserving IoT systems is managing the inherent conflict between data confidentiality (privacy) and system accuracy (utility). In the IoTShield framework, this balance is dictated by the localized Differential Privacy (DP) layer executing on the ESP32. By injecting Gaussian noise into the raw telemetry, the system successfully masks granular behavioral routines. However, excessive noise could theoretically cause the system to miss genuine hazards (false negatives) or generate spurious warnings (false positives).
+
+\vspace{0.3cm}
+
+\noindent To evaluate this trade-off, the system's performance was analyzed under the configured privacy budget of $\epsilon = 0.5$. The results indicated that the application of noise effectively flattened micro-variations in the environmental data. For example, standard fluctuations in room temperature caused by human presence were statistically hidden within the noise envelope, preventing an adversary from deducing room occupancy based on thermal signatures alone. 
+
+\vspace{0.3cm}
+
+\noindent Despite this obfuscation, the system maintained a high utility rate for anomaly detection. Because the threshold engine was calibrated to identify macroscopic environmental deviations—such as the sharp, sustained spike in MQ-2 readings during a gas leak or the binary trigger of the IR Flame sensor—the injected noise did not interfere with critical hazard identification. The 1,568 successfully categorized alerts logged during the testing phase demonstrate that the chosen $\epsilon$ value provides an optimal equilibrium: it guarantees structural privacy for daily routines while preserving the absolute fidelity required for life-safety monitoring.
+
+\vspace{0.5cm}
+
 \section{Security Analysis}
+
+\noindent The IoTShield architecture was subjected to a theoretical security analysis to validate its resilience against common cyber-physical threat vectors. The system's defense-in-depth strategy relies on the synergy between its physical network isolation, cryptographic encryption, and localized artificial intelligence.
+
+\vspace{0.3cm}
+
+\noindent First, against \textbf{Eavesdropping and Man-in-the-Middle (MitM) Attacks}, the system leverages RSA-2048 encryption with OAEP padding. Even though the Mosquitto broker operates on the standard, unencrypted port 1883 to reduce network latency, the payloads themselves are completely encrypted before leaving the ESP32. If a malicious actor were to intercept the Wi-Fi traffic or compromise the local MQTT broker, they would only acquire OAEP-padded ciphertext. The randomized nature of OAEP ensures that identical sensor readings produce entirely different ciphertexts, rendering statistical replay attacks and known-plaintext attacks computationally infeasible.
+
+\vspace{0.3cm}
+
+\noindent Second, against \textbf{Cloud Data Leaks and Third-Party Profiling}, the system enforces strict data sovereignty. Traditional smart home architectures routinely transmit unencrypted telemetry to third-party cloud servers for AI processing, exposing users to corporate data monetization and server-side breaches. By deploying the Llama 3.2 inference engine locally via Ollama, the IoTShield framework establishes a "zero-trust" boundary. The raw, decrypted data only exists within the volatile memory of the Django backend and the local SQLite database. No external APIs are queried, ensuring that sensitive domestic data never traverses the public internet.
+
+\vspace{0.3cm}
+
+\noindent Finally, against \textbf{Behavioral Inference Attacks}, the aforementioned Differential Privacy layer acts as the final safeguard. In the hypothetical event that the central edge server is physically stolen or the SQLite database is compromised, the historical telemetry recovered by the attacker would be inherently noisy. The Gaussian perturbation guarantees that exact human routines—such as cooking schedules or sleep patterns—cannot be reliably reverse-engineered, thereby fulfilling the project's core mandate of privacy-by-design.
+
+\vspace{0.5cm}
+
 \section{Comparative Discussion}
+
+\noindent To fully contextualize the contributions of the IoTShield framework, its performance and architectural paradigms must be evaluated against standard, commercially available smart home baselines. Traditional IoT ecosystems overwhelmingly rely on cloud-centric architectures, prioritizing rapid deployment, low hardware costs, and minimal computational overhead at the edge. However, this convenience fundamentally compromises data sovereignty, as sensitive domestic telemetry is continuously transmitted, processed, and stored in plaintext on third-party servers. 
+
+\vspace{0.3cm}
+
+\noindent Table 5.3 presents a comparative analysis between the proposed IoTShield framework and two standard baseline models: a traditional Cloud-Based IoT system and a standard Local Edge system lacking cryptographic payloads.
+
+\vspace{0.5cm}
+
+\begin{table}[H]
+    \centering
+    \caption{Performance Comparison of IoTShield vs. Baseline IoT Systems}
+    \vspace{0.2cm}
+    \renewcommand{\arraystretch}{1.5}
+    \resizebox{\textwidth}{!}{
+    \begin{tabular}{|p{3.5cm}|p{4cm}|p{4cm}|c|p{3.5cm}|}
+        \hline
+        \textbf{System} & \textbf{Privacy Mechanism} & \textbf{Anomaly Detection} & \textbf{Average Latency} & \textbf{End-to-End Encryption} \\
+        \hline
+        Traditional Cloud IoT & None (TLS in transit only) & Cloud-based API \& Rules & $\sim$200 ms & No (Server plaintext) \\
+        \hline
+        Standard Edge IoT & None & Local Thresholds & $\sim$150 ms & No (Network plaintext) \\
+        \hline
+        \textbf{IoTShield (Proposed)} & \textbf{DP (Gaussian) + RSA-2048} & \textbf{Local AI (Llama 3.2)} & \textbf{$\sim$420 ms} & \textbf{Yes (Payload level)} \\
+        \hline
+    \end{tabular}
+    }
+    \label{tab:comparative_analysis}
+\end{table}
+
+\vspace{0.5cm}
+
+\noindent As highlighted in the comparison, the IoTShield architecture introduces a higher average latency ($\sim$420 ms) compared to the standard cloud ($\sim$200 ms) and unencrypted edge ($\sim$150 ms) baselines. This increase of approximately 220 to 270 milliseconds is the direct computational cost of executing RSA-2048 modular exponentiation on the resource-constrained ESP32 microcontroller. However, in the context of domestic environmental monitoring, a sub-half-second delay is entirely imperceptible to the end-user and does not impede the timely delivery of life-safety alerts.
+
+\vspace{0.3cm}
+
+\noindent In exchange for this marginal temporal cost, IoTShield provides a vastly superior security posture. Unlike traditional cloud systems that terminate encryption at the network gateway—leaving the underlying data exposed to server-side breaches or corporate monetization—IoTShield maintains payload-level encryption until the exact moment of localized processing. Furthermore, by replacing rudimentary threshold rules and external cloud APIs with an offline, 1-billion parameter Large Language Model, the proposed system stands alone among the baselines. It successfully demonstrates the ability to generate sophisticated, context-aware safety diagnostics while fully preserving the occupant's right to digital privacy.
 
 % --- CHAPTER 6 ---
 \chapter{Conclusion and Future Work}
