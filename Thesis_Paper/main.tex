@@ -14,6 +14,7 @@
 \usepackage{float}          % To force images to stay in place
 \usepackage{listings}       % For code snippets
 \usepackage{xcolor}         % For code coloring
+\usepackage{subcaption}     % For subfigure
 
 % ==================== PAGE SETTINGS ====================
 % Standard thesis margins: Left 1.25" (for binding), others 1"
@@ -948,15 +949,264 @@ $bps$ & Bits Per Second \\
 
 \noindent In the event that the threshold engine identifies a medium or high-severity anomaly, the system triggers the intelligent inference stage. The multivariate sensor data is formatted into a context-rich prompt and transmitted to the localized Llama 3.2 model via the Ollama API. The model performs contextual reasoning to generate human-readable diagnoses and actionable safety suggestions. These insights are pushed to the user's web dashboard through a real-time WebSocket connection and transmitted as an urgent notification via the SMTP relay. This comprehensive workflow ensures that the end-user receives high-context security alerts while maintaining absolute data sovereignty within the localized smart home environment.
 
-% --- CHAPTER 4 ---
+\clearpage
 \chapter{Implementation}
+
+\noindent This chapter provides a detailed account of the technical execution and deployment of the IoTShield system. It describes the physical assembly of hardware, the configuration of the software ecosystem, and the specific implementation of the privacy and AI algorithms. By documenting the development environment and the integration of diverse components, this chapter serves as a technical blueprint of the functioning prototype.
+
+\vspace{0.3cm}
+
 \section{Hardware Implementation Details}
+
+\noindent The physical realization of the IoTShield sensing tier was executed by interfacing a series of high-precision environmental sensors with an ESP32-WROOM-32 microcontroller. The ESP32 was selected as the central hardware hub due to its dual-core architecture, which allows for the simultaneous execution of sensor polling and intensive cryptographic operations without performance degradation. The hardware assembly was implemented on a standard breadboard, utilizing a common ground rail and a regulated 5V DC power supply to maintain signal stability across the analog and digital interfaces.
+
+\vspace{0.3cm}
+
+\noindent As illustrated in Figure 4.1, the hardware configuration includes a DHT11 sensor for climate tracking, an HC-SR501 PIR sensor for motion detection, and an MQ-2 sensor for gas and smoke monitoring. Additionally, a specialized IR Flame sensor and a Light Dependent Resistor (LDR) were integrated to provide a comprehensive multivariate data stream. To prevent electrical interference, the analog sensors (MQ-2 and LDR) were calibrated to the ESP32’s 12-bit Analog-to-Digital Converter (ADC) range to ensure accurate data granulation before the privacy-preserving noise is injected at the firmware level.
+
+\vspace{0.5cm}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.90\textwidth]{Images/IoTShield - Hardware Setup.png}
+    \caption{Physical hardware implementation of the IoTShield node, demonstrating the breadboard wiring and pinout configuration for the integrated sensor array.}
+    \label{fig:physical_hardware_setup}
+\end{figure}
+
+\vspace{0.5cm}
+
+\noindent The firmware implementation was developed using the C++ based Arduino core, optimized for the ESP32’s FreeRTOS environment. The software logic was designed to be modular, ensuring that the Wi-Fi stack, MQTT client, and the RSA-2048 encryption engine operate in a non-blocking sequence. As shown in the serial monitor output in Figure 4.2, the firmware successfully initializes the system, confirms "Privacy-Preserving IoT Monitoring System" status, and begins the batch publication of telemetry. This successful execution confirms that the hardware is capable of maintaining the required sampling rate while simultaneously performing on-device data obfuscation.
+
+\vspace{0.5cm}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.95\textwidth]{Images/System Firmware Execution.png}
+    \caption{Arduino Serial Monitor output confirming successful sensor initialization and the execution of the secure data publication loop.}
+    \label{fig:firmware_execution}
+\end{figure}
+
+\vspace{0.5cm}
+
+\clearpage
 \section{Software Development Environment}
+
+\noindent The development of the IoTShield ecosystem required a diverse and integrated software stack to manage the transition from embedded firmware to a full-stack web application. The environment was established to support high-concurrency MQTT data streams, cryptographic processing, and a responsive user interface. Table 4.1 summarizes the key components of the software stack and the development tools utilized in the implementation.
+
+\vspace{0.5cm}
+
+\begin{table}[htbp]
+    \centering
+    \caption{Software Stack and Development Tools}
+    \vspace{0.2cm}
+    \renewcommand{\arraystretch}{1.5}
+    \resizebox{\textwidth}{!}{
+    \begin{tabular}{|p{3.5cm}|p{3.5cm}|p{2cm}|p{6cm}|}
+        \hline
+        \textbf{Component} & \textbf{Technology Used} & \textbf{Version} & \textbf{Purpose} \\
+        \hline
+        Backend Framework & Django (Python) & 4.2.x & Core system logic, ORM, and secure API management. \\
+        \hline
+        Database & SQLite & 3.x & Localized relational storage for telemetry and alerts. \\
+        \hline
+        Frontend Styling & Tailwind CSS & 3.x & Mobile-optimized, responsive UI development. \\
+        \hline
+        MQTT Client & Paho-MQTT & 1.6.x & Backend subscription and communication with the broker. \\
+        \hline
+        AI Engine & Ollama & 0.3.x & Localized hosting and inference for the Llama 3.2 model. \\
+        \hline
+        Firmware Development & Arduino IDE / C++ & 2.3.x & Embedded logic, sensor polling, and RSA encryption. \\
+        \hline
+    \end{tabular}
+    }
+    \label{tab:software_stack}
+\end{table}
+
+\vspace{0.5cm}
+
+\noindent The user interface was designed with a focus on simplicity and security, ensuring that end-users can easily monitor their domestic environment while maintaining control over their devices. The implementation includes a secure authentication system, an intuitive real-time dashboard, and dedicated management pages for registered IoT nodes. Figures 4.3 and 4.4 illustrate the finalized user interface of the IoTShield platform.
+
+\vspace{0.5cm}
+
+\begin{figure}[htbp]
+    \centering
+    \begin{subfigure}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Images/Login-Page.png}
+        \caption{User Login Interface}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Images/Register-Page.png}
+        \caption{User Registration Interface}
+    \end{subfigure}
+    \caption{Authentication modules of the IoTShield dashboard, providing secure access to the localized monitoring system.}
+    \label{fig:auth_ui}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \begin{subfigure}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Images/Dashboard Homepage.png}
+        \caption{Main Dashboard View}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Images/Device-Page.png}
+        \caption{IoT Device Management View}
+    \end{subfigure}
+    \caption{Primary application interfaces showing real-time sensor analytics, system status, and active device monitoring.}
+    \label{fig:main_ui}
+\end{figure}
+
+\vspace{0.5cm}
+
+\clearpage
 \section{MQTT Broker Configuration}
+
+\noindent The communication backbone of the IoTShield system is managed by the Eclipse Mosquitto broker, an open-source implementation of the MQTT protocol. The broker is hosted locally on the central edge gateway and is configured to listen on the standard non-encrypted Port 1883 to minimize latency during the localized transmission of already-encrypted application-layer payloads. To ensure the reliability of time-sensitive environmental alerts, the broker is configured with a persistence mode that allows it to manage message queues effectively even during brief periods of network instability.
+
+\vspace{0.3cm}
+
+\noindent During the implementation phase, the broker was tested to handle simultaneous streams from both physical and simulated ESP32 nodes. The configuration utilizes a hierarchical topic structure, primarily \texttt{iotshield/sensors/data} for inbound telemetry and \texttt{iotshield/alerts} for outbound hazard notifications. To maintain high system availability, the broker's keep-alive interval was set to 60 seconds, ensuring that any disconnected nodes are rapidly identified and logged by the Django backend.
+
+\vspace{0.3cm}
+
+\noindent As shown in the terminal execution log in Figure 4.5, the Mosquitto broker actively manages the publication and subscription cycles with high efficiency. The log confirms that standard encrypted sensor batches typically range between 193 and 205 bytes, while complex AI-generated alert payloads—containing natural language suggestions—occupy approximately 391 bytes. This granular monitoring of the broker's terminal output verifies that the system maintains a low-bandwidth footprint despite the added overhead of RSA-2048 encryption.
+
+\vspace{0.5cm}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.95\textwidth]{Images/Mosquitto-Terminal.png}
+    \caption{Mosquitto broker terminal output demonstrating real-time message handling, topic routing, and payload size validation for the IoTShield network.}
+    \label{fig:mosquitto_terminal}
+\end{figure}
+
+\vspace{0.5cm}
+
+\clearpage
 \section{Differential Privacy Implementation}
+
+\noindent The implementation of structural privacy within the IoTShield framework is achieved through a localized Differential Privacy (DP) mechanism executed directly on the ESP32 microcontroller. The primary objective of this layer is to decouple the relationship between raw environmental events and the transmitted data packets, thereby preventing an adversary from reconstructing the occupant's precise behavioral routines through long-term data analysis. By applying perturbation at the point of origin, the system ensures that the data is secured before it ever encounters the network interface.
+
+\vspace{0.3cm}
+
+\noindent The core of this privacy layer is the Gaussian Mechanism, which introduces a controlled level of statistical noise to the sensor telemetry. The implementation utilizes a privacy budget of $\epsilon = 0.5$, which was selected to strike an optimal balance between high data confidentiality and the preservation of anomaly detection accuracy. Mathematically, the ESP32 draws a random variable from a Gaussian distribution and adds it to the true sensor value. This ensures that every transmitted reading is a perturbed version of the actual state (e.g., an exact temperature of 25.0$^\circ$C may be reported as 25.523$^\circ$C). Because the noise is generated locally using a pseudo-random seed on the hardware node, the "true" values are never exposed to the MQTT broker or the backend database.
+
+\vspace{0.3cm}
+
+\noindent A significant technical challenge addressed during the development phase was the potential for noise-induced false positives in the threshold detection engine. To mitigate this, the standard deviation of the injected noise was calibrated relative to the sensitivity and typical variance of each specific sensor type. For instance, climate data (temperature and humidity) receives a higher degree of perturbation compared to gas concentration levels, where accuracy is paramount for safety. This localized, sensitivity-aware implementation ensures that while the user's granular behavioral patterns are masked, the system remains fully capable of identifying high-severity hazards, successfully fulfilling the dual requirements of privacy and security.
+
+\clearpage
 \section{RSA Encryption Implementation}
+
+\noindent To ensure the absolute confidentiality of the perturbed telemetry, the IoTShield framework implements a robust second layer of security using the RSA-2048 asymmetric cryptographic standard. While the differential privacy layer masks behavioral patterns, the RSA layer provides end-to-end encryption, ensuring that even if an unauthorized entity intercepts the MQTT packets, the contents remain computationally infeasible to decrypt. This implementation utilizes a Public Key Infrastructure (PKI) where the ESP32 hardware node holds the public key for encryption, while the corresponding private key remains securely isolated within the Django backend server.
+
+\vspace{0.3cm}
+
+\noindent The implementation on the ESP32 was executed using the \texttt{mbedtls} library, which provides hardware-accelerated cryptographic primitives optimized for memory-constrained environments. Given the 2048-bit key length, the system employs Optimal Asymmetric Encryption Padding (OAEP) with a SHA-256 hash function. This choice was deliberate; unlike standard PKCS\#1 v1.5 padding, OAEP provides a higher level of security against chosen-ciphertext attacks by ensuring that the encryption process is randomized. Consequently, encrypting the same "noisy" sensor payload multiple times will result in entirely different ciphertexts, further obfuscating the system's operational state from network-level observers.
+
+\vspace{0.3cm}
+
+\noindent Due to the computational overhead of RSA operations, the implementation logic on the firmware utilizes the ESP32's dual-core capabilities. While one core handles continuous sensor polling and Wi-Fi stack maintenance, the second core is dedicated to the modular exponentiation required for RSA encryption. Once the encrypted payload is generated, it is encoded into a Base64 string to ensure compatibility with the JSON-based MQTT message format. Upon arrival at the Django backend, the \texttt{PyCryptodome} library is utilized to perform the private key decryption. This end-to-end cryptographic handshake ensures that the raw environmental data is only accessible in plaintext at the precise moment of anomaly detection, maintaining a "zero-trust" architecture across the local network.
+
+\clearpage
 \section{Local LLM Deployment Setup}
+
+\noindent The intelligence layer of the IoTShield system is powered by a localized deployment of the Llama 3.2 Large Language Model (LLM). To satisfy the core research requirement of "privacy-by-design," the system avoids the use of external cloud-based APIs, which would necessitate transmitting sensitive domestic telemetry over the public internet. Instead, the framework utilizes the Ollama inference engine, hosted on the central edge server, to provide a high-performance, localized environment for the 1-billion parameter version of Llama 3.2. This specific model was selected for its optimal balance between logical reasoning capabilities and a low memory footprint, making it ideal for real-time execution on consumer-grade edge hardware.
+
+\vspace{0.3cm}
+
+\noindent The integration between the Django backend and the LLM is achieved via a localized REST API communicating over the system's internal loopback interface on Port 11434. When the threshold engine identifies a significant environmental anomaly, the backend constructs a structured prompt containing the decrypted, multivariate sensor data. To ensure consistent and professional output, a system-level instruction is applied, directing the model to act as a "Domestic Safety Assistant." The model is tasked with analyzing the relationship between disparate sensor readings—such as correlating a sudden rise in temperature with a positive gas detection—to generate a concise, human-readable hazard diagnosis and a set of actionable safety recommendations.
+
+\vspace{0.3cm}
+
+\noindent A critical aspect of this deployment is the configuration of the model's temperature and top-p parameters to ensure deterministic and reliable outputs. By keeping the temperature low (0.2), the system ensures that the AI provides consistent safety advice for similar sensor patterns, reducing the risk of "hallucinations" or irrelevant suggestions. This localized AI-based anomaly detection framework provides sophisticated, context-aware reasoning while maintaining absolute data sovereignty, as all inference cycles occur entirely within the user's private network.
+
+\clearpage
 \section{Database Design and Storage Model}
+
+\noindent The storage layer of the IoTShield system is implemented using a relational database model managed by the Django Object-Relational Mapping (ORM) system and backed by an SQLite engine. This localized storage approach provides an efficient, file-based database that maintains the ACID (Atomicity, Consistency, Isolation, Durability) properties necessary for reliable telemetry logging without the overhead of a full-scale database server. The database schema is designed to manage the lifecycle of environmental data from its arrival at the backend to its final classification as a historical record or an active, AI-analyzed alert.
+
+\vspace{0.3cm}
+
+\noindent As illustrated in the Entity-Relationship Diagram (ERD) in Figure 4.7, the architecture follows a normalized structure primarily centered around the \texttt{Device}, \texttt{SensorData}, and \texttt{AlertLog} entities. By establishing foreign key constraints between these tables, the system ensures that every telemetry point and alert is accurately mapped to a specific hardware node. Table 4.2 provides a detailed description of the schema fields utilized for telemetry and alert management.
+
+\vspace{0.5cm}
+
+\begin{table}[htbp]
+    \centering
+    \caption{Database Schema Description (Sensor Data \& Alerts)}
+    \vspace{0.2cm}
+    \renewcommand{\arraystretch}{1.5}
+    \resizebox{\textwidth}{!}{
+    \begin{tabular}{|p{3cm}|p{3.5cm}|p{2.5cm}|p{5cm}|}
+        \hline
+        \textbf{Table Name} & \textbf{Field Name} & \textbf{Data Type} & \textbf{Description} \\
+        \hline
+        SensorData & temperature, humidity & Float & Decrypted climate metrics with Gaussian noise. \\
+        \hline
+        SensorData & gas\_level, light\_level & Float & Analog sensor readings (MQ-2 and LDR). \\
+        \hline
+        SensorData & is\_motion, is\_flame & Boolean & Binary indicators for occupancy and fire. \\
+        \hline
+        AlertLog & severity\_level & CharField & Classification (Low, Medium, High, Critical). \\
+        \hline
+        AlertLog & ai\_suggestions & TextField & Contextual insights generated by Llama 3.2. \\
+        \hline
+    \end{tabular}
+    }
+    \label{tab:db_schema}
+\end{table}
+
+\vspace{0.5cm}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{Images/Database Entity-Relationship - Diagram.png}
+    \caption{Relational database schema for the IoTShield system, illustrating the connectivity between device registration, telemetry logs, and AI-generated alert reports.}
+    \label{fig:database_erd}
+\end{figure}
+
+\vspace{0.3cm}
+
+\noindent During the testing phase, the system’s ability to handle concurrent data streams was validated by inspecting the raw database records. Figure 4.8 demonstrates the successful storage of incoming sensor telemetry, confirming that the decrypted values are correctly mapped to their respective timestamps. Similarly, Figure 4.9 provides proof of the alert storage mechanism, showcasing how the system persists the AI-generated suggestions alongside the original sensor readings that triggered the anomaly.
+
+\vspace{0.5cm}
+
+\begin{figure}[htbp]
+    \centering
+    \begin{subfigure}{0.95\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Images/Sensor Datas saved in Database.png}
+        \caption{Telemetry logging within the SQLite database.}
+    \end{subfigure}
+    \par\bigskip
+    \begin{subfigure}{0.95\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Images/Alerts Saved in the Database.png}
+        \caption{Historical storage of AI-enriched alert logs.}
+    \end{subfigure}
+    \caption{Database state verification, demonstrating the persistence of raw telemetry and localized AI-based insights.}
+    \label{fig:database_records}
+\end{figure}
+
+\vspace{0.3cm}
+
+\noindent Finally, to ensure the integrity of the data pipeline, the backend was monitored to validate the handshake between the Django framework and the Ollama inference engine. As shown in Figure 4.8, the backend processing logs confirm that sensor payloads are correctly routed through the validation logic before being permanently stored, ensuring that only valid, decrypted data reaches the persistent storage layer.
+
+\vspace{0.5cm}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.95\textwidth]{Images/Backend Data Validation Output.png}
+    \caption{Backend validation log demonstrating the successful processing and validation of sensor data prior to database commitment.}
+    \label{fig:data_validation}
+\end{figure}
 
 % --- CHAPTER 5 ---
 \chapter{Results and Discussion}
