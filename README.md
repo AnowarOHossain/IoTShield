@@ -856,10 +856,10 @@ All rights reserved © 2025 Anowar Hossain & Shihab Sarker
 **Anowar Hossain** & **Shihab Sarker**
 - CSE Student, SMUCT
 - Full-Stack Developer
+- IoT & Hardware Specialist
 - Email: anowarhossain.dev@gmail.com
 - GitHub: [Anowar Hossain](https://github.com/AnowarOHossain)
 - LinkedIn: [Anowar Hossain](https://www.linkedin.com/in/anowarohossain/)
-- IoT & Hardware Specialist
 
 ### Academic Supervision
 
@@ -889,10 +889,10 @@ We would like to express our deepest gratitude to:
 | **Backend Development** | Oct 2025 | Complete |
 | **Llama AI Integration** | Oct-Nov 2025 | Complete |
 | **Dashboard Implementation** | Oct-Nov 2025 | Complete |
-| **Integration & Testing** | Nov-Dec 2025 | In Progress |
-| **Documentation** | Jan 2026 | In Progress |
-| **Thesis Writing** | Jan 2026 | Planned |
-| **Final Presentation** | Jan 2026 | Planned |
+| **Integration & Testing** | Nov-Dec 2025 | Complete |
+| **Documentation** | Jan 2026 | Complete |
+| **Thesis Writing** | Jan 2026 | Complete |
+| **Final Presentation** | Feb 2026 | Complete |
 
 ---
 
