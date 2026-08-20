@@ -951,6 +951,18 @@ We would like to express our deepest gratitude to:
 ![Sensor Data](Screenshots/Sensor%20Datas.png)
 *Complete sensor data records showing 13244 readings from both ESP32 and Raspberry Pi devices with timestamps and values*
 
+### Hardware Setup
+![Hardware Setup](Screenshots/IoTShield%20-%20Hardware%20Setup.png)
+*ESP32 and hardware integration setup showing the physical sensor configuration and wiring for the smart home prototype*
+
+### MQTT Broker Terminal
+![Mosquitto Terminal](Screenshots/Mosquitto-Terminal.png)
+*Live Mosquitto broker terminal output confirming MQTT message exchange between devices and the backend*
+
+### Arduino Firmware
+![Arduino Firmware](Screenshots/arduino.png)
+*Arduino-based firmware setup and sensor node code used for IoT device communication and data collection*
+
 ---
 
 ## Project Goals & Objectives
