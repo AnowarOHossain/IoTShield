@@ -965,6 +965,11 @@ We would like to express our deepest gratitude to:
 
 ---
 
+## Demo Video & Preview
+Watch the system in action: [Click here to watch the project demo](https://drive.google.com/file/d/1qk1jKC4oZJVbpMyvBBJ8xoSeJ06m4dDl/view?usp=drive_link)
+
+---
+
 ## Project Goals & Objectives
 
 ### Primary Goals
