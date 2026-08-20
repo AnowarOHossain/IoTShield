@@ -927,14 +927,6 @@ We would like to express our deepest gratitude to:
 ![Dashboard Homepage](Screenshots/Dashboard-Homepage.png)
 *Real-time system statistics with active device count, total readings, active alerts, and system status indicator*
 
-### User Authentication - Login
-![Login Page](Screenshots/Login-Page.png)
-*Secure user login interface with modern gradient design and session-based authentication*
-
-### User Authentication - Register
-![Register Page](Screenshots/Register-Page.png)
-*User registration page with email validation and password security*
-
 ### Devices Page
 ![Devices Page](Screenshots/Device-Page.png)
 *Connected IoT device management interface showing ESP32 real sensors and Raspberry Pi simulator with real-time status*
@@ -962,6 +954,14 @@ We would like to express our deepest gratitude to:
 ### Arduino Firmware
 ![Arduino Firmware](Screenshots/arduino.png)
 *Arduino-based firmware setup and sensor node code used for IoT device communication and data collection*
+
+### User Authentication - Login
+![Login Page](Screenshots/Login-Page.png)
+*Secure user login interface with modern gradient design and session-based authentication*
+
+### User Authentication - Register
+![Register Page](Screenshots/Register-Page.png)
+*User registration page with email validation and password security*
 
 ---
 
