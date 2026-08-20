@@ -853,15 +853,12 @@ All rights reserved © 2025 Anowar Hossain & Shihab Sarker
 
 ### Development Team
 
-**Anowar Hossain**
+**Anowar Hossain** & **Shihab Sarker**
 - CSE Student, SMUCT
 - Full-Stack Developer
 - Email: anowarhossain.dev@gmail.com
 - GitHub: [Anowar Hossain](https://github.com/AnowarOHossain)
 - LinkedIn: [Anowar Hossain](https://www.linkedin.com/in/anowarohossain/)
-
-**Shihab Sarker**
-- CSE Student, SMUCT
 - IoT & Hardware Specialist
 
 ### Academic Supervision
